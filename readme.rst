@@ -1,4 +1,49 @@
 ###################
+What is InfaqOnline
+###################
+
+INFAQ ONLINE - web based application with 3rd payment gateway (midtrans)
+
+*******************
+Abstract
+*******************
+
+- Kehadiran internet memudahkan kegiatan manusia salah satunya dalam beribadah khususnya berinfaq/sodakoh.
+- Diperlukan portal/wadah untuk mempermudah infaq bagi orang-orang yang ingin bersedekah.
+- Dibuatkan sebuah aplikasi berbasis web dengan fitur rest api, agar kedepannya aplikasi ini bisa dikembangkan
+tidak hanya dalam bentuk web tetapi bisa juga untuk android, atau basis aplikasi lainnya.
+
+*******************
+Tujuan
+*******************
+
+- Membentuk website seperti cms agar website ini tidak hanya digunakan oleh satu kepentingan organisasi, tetapi bisa juga dikembangkan oleh organisasi lain yang membutuhkan jenis aplikasi yang serupa.
+- Maka dalam project ini dibentuklah backend (api) dan frontend (user interface).
+
+*******************
+Fitur Aplikasi
+*******************
+
+#### Landing page
+-	Menu (laporan donasi)
+-	Banner
+-	Artikel (blog)
+-	Pilih program dilanjut pembayaran
+-	Footer
+-	Ex: https://yatimmandiri.org/donasi  (pilih program), https://wahanavisi.org/  (artikel)
+
+#### Login donator
+-	Edit data user (nama lengkap, email, nomer)
+-	Record donasi oleh user tersebut
+
+#### Login admin
+-	Identitas organisai (nama, logo (image), alamat
+-	Aplod artikel (image banner, judul, isi berita
+-	Menejemen program
+-	Menejemen akun
+-	Menejemen pembayaran backend
+
+###################
 What is CodeIgniter
 ###################
 
@@ -65,6 +110,7 @@ or via our `page on HackerOne <https://hackerone.com/codeigniter>`_, thank you.
 
 ***************
 Acknowledgement
+<<<<<<< HEAD
 ***************
 
 The CodeIgniter team would like to thank EllisLab, all the
@@ -73,3 +119,5 @@ contributors to the CodeIgniter project and you, the CodeIgniter user.
 dicob
 
 dicobaaaa lagee test
+=======
+***************
