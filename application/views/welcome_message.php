@@ -88,7 +88,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <body>
 
 	<div id="container">
-		<h1>Welcome to CodeIgniter!</h1>
+		<h1>BISAAAAAAAAAAAAAAAAAAAAA</h1>
 
 		<div id="body">
 			<p>The page you are looking at is being generated dynamically by CodeIgniter.</p>
