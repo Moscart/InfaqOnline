@@ -43,26 +43,6 @@ class Snap extends CI_Controller
 			'order_id' => rand(),
 			'gross_amount' => $nominal, // no decimal allowed for creditcard
 		);
-
-		// Optional
-		$item1_details = array(
-			'id' => 'a1',
-			'price' => 18000,
-			'quantity' => 3,
-			'name' => "Apple"
-		);
-
-		// Optional
-		$item2_details = array(
-			'id' => 'a2',
-			'price' => 20000,
-			'quantity' => 2,
-			'name' => "Orange"
-		);
-
-		// Optional
-		$item_details = array($item1_details, $item2_details);
-
 		// Optional
 		$billing_address = array(
 			'first_name'    => "Andri",
@@ -109,7 +89,6 @@ class Snap extends CI_Controller
 
 		$transaction_data = array(
 			'transaction_details' => $transaction_details,
-			// 'item_details'       => $item_details,
 			// 'customer_details'   => $customer_details,
 			'credit_card'        => $credit_card,
 			// 'expiry'             => $custom_expiry

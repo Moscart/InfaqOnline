@@ -1,21 +1,38 @@
 *{
     margin: 0;
     padding: 0;
+    font-family: 'Montserrat';
 }
 main{
     min-height: calc(100vh - 112px);
+    overflow: hidden;
 }
 .img-container{
     position: relative;
     width: 100%;
     padding-top: 56.25%;
 }
-.card-img-top{
+.img-content{
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
-    
+}
+.banner-container{
+    position: relative;
+    width: 100%;
+    padding-top: 42.553191489361702127659574468085%;
+}
+.banner-content{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+.fs-7{
+    font-size: small;
 }
