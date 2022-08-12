@@ -4,7 +4,7 @@
     font-family: 'Montserrat';
 }
 main{
-    min-height: calc(100vh - 112px);
+    min-height: calc(100vh - 144px);
     overflow: hidden;
 }
 .img-container{
@@ -35,4 +35,7 @@ main{
 }
 .fs-7{
     font-size: small;
+}
+.w-max{
+    width: max-content;
 }

@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-dark navbar-expand-lg bg-dark">
+    <nav class="navbar navbar-dark navbar-expand-lg bg-dark py-3">
         <div class="container">
             <a class="navbar-brand" href="#">Navbar</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,11 +64,38 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
-        <div class="bg-light py-5">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-6">
+                    <div class="card shadow bg-dark border-0 position-relative">
+                        <div class="w-max pe-4 mt-4 p-3 rounded-start rounded-pill bg-warning fs-7 fw-bold text-uppercase">
+                            Total Infaq
+                        </div>
+                        <div class="position-absolute text-white end-0 top-0">
+                            <div class="row gx-2 me-3">
+                                <div class="col">
+                                    <div class="bg-warning rounded-pill rounded-top p-1" style="height: 50px;"></div>
+                                </div>
+                                <div class="col">
+                                    <div class="bg-warning rounded-pill rounded-top p-1" style="height: 50px;"></div>
+                                </div>
+                                <div class="col">
+                                    <div class="bg-warning rounded-pill rounded-top p-1" style="height: 50px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body fw-bold text-muted">
+                            Rp<span class="fs-1 text-white">1.000.000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-dark py-5">
             <div class="container">
-                <div class="fs-4 fw-bold text-center mb-4">ARTIKEL</div>
-                <div class="row gy-4">
-                    <div class="col-lg-4 col-12">
+                <div class="fs-4 fw-bold text-center mb-4 text-white">ARTIKEL</div>
+                <div class="row gy-4 justify-content-center">
+                    <div class="col-lg-4 col-md-6 col-12">
                         <div class="card h-100 rounded-4 shadow overflow-hidden">
                             <div class="img-container">
                                 <img src="https://t3.ftcdn.net/jpg/04/62/93/66/360_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg" class="img-content" alt="...">
@@ -80,7 +107,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-12">
+                    <div class="col-lg-4 col-md-6 col-12">
                         <div class="card h-100 rounded-4 shadow overflow-hidden">
                             <div class="img-container">
                                 <img src="https://t3.ftcdn.net/jpg/04/62/93/66/360_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg" class="img-content" alt="...">
@@ -92,7 +119,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-12">
+                    <div class="col-lg-4 col-md-6 col-12">
                         <div class="card h-100 rounded-4 shadow overflow-hidden">
                             <div class="img-container">
                                 <img src="https://t3.ftcdn.net/jpg/04/62/93/66/360_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg" class="img-content" alt="...">
@@ -115,7 +142,6 @@
                 </div>
                 <div class="col-lg-4 col-12">
                     <div class="fs-4 fw-bold text-center mb-3">INFAQ</div>
-                    Masukkan Nominal Infaq
                     <div class="input-group mb-3">
                         <span class="input-group-text">Rp</span>
                         <div class="form-floating">
@@ -124,27 +150,27 @@
                         </div>
                     </div>
                     <div class="row mb-3 g-2">
-                        <div class="col-xl-4 col-6">
+                        <div class="col-xl-4 col-lg-6 col-md-4 col-6">
                             <input type="radio" class="btn-check" name="list-nominal" id="list-nominal1" value="10000" autocomplete="off" onclick="checkRadio(event)">
                             <label class="btn btn-outline-primary w-100" for="list-nominal1">Rp10.000</label>
                         </div>
-                        <div class="col-xl-4 col-6">
+                        <div class="col-xl-4 col-lg-6 col-md-4 col-6">
                             <input type="radio" class="btn-check" name="list-nominal" id="list-nominal2" value="15000" autocomplete="off" onclick="checkRadio(event)">
                             <label class="btn btn-outline-primary w-100" for="list-nominal2">Rp15.000</label>
                         </div>
-                        <div class="col-xl-4 col-6">
+                        <div class="col-xl-4 col-lg-6 col-md-4 col-6">
                             <input type="radio" class="btn-check" name="list-nominal" id="list-nominal3" value="20000" autocomplete="off" onclick="checkRadio(event)">
                             <label class="btn btn-outline-primary w-100" for="list-nominal3">Rp20.000</label>
                         </div>
-                        <div class="col-xl-4 col-6">
+                        <div class="col-xl-4 col-lg-6 col-md-4 col-6">
                             <input type="radio" class="btn-check" name="list-nominal" id="list-nominal4" value="25000" autocomplete="off" onclick="checkRadio(event)">
                             <label class="btn btn-outline-primary w-100" for="list-nominal4">Rp25.000</label>
                         </div>
-                        <div class="col-xl-4 col-6">
+                        <div class="col-xl-4 col-lg-6 col-md-4 col-6">
                             <input type="radio" class="btn-check" name="list-nominal" id="list-nominal5" value="50000" autocomplete="off" onclick="checkRadio(event)">
                             <label class="btn btn-outline-primary w-100" for="list-nominal5">Rp50.000</label>
                         </div>
-                        <div class="col-xl-4 col-6">
+                        <div class="col-xl-4 col-lg-6 col-md-4 col-6">
                             <input type="radio" class="btn-check" name="list-nominal" id="list-nominal6" value="100000" autocomplete="off" onclick="checkRadio(event)">
                             <label class="btn btn-outline-primary w-100" for="list-nominal6">Rp100.000</label>
                         </div>
@@ -154,7 +180,7 @@
             </div>
         </div>
     </main>
-    <footer class="navbar navbar-dark bg-dark">
+    <footer class="navbar navbar-dark bg-dark py-3">
         <div class="container justify-content-center">
             <span class="navbar-text">© 2022 Infaq Online. All Rights Reserved</span>
         </div>
@@ -177,7 +203,7 @@
         function checkNominal(event) {
             const nominal = event.path[0];
             const radio = [...document.querySelectorAll("[name='list-nominal']")];
-            if (nominal.value < "10000" && nominal.value !== "") {
+            if (parseInt(nominal.value) < 10000 && nominal.value !== "") {
                 nominal.value = "10000";
             }
             radio.map((e) => {
