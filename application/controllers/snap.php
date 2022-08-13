@@ -1,4 +1,5 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');
 class Snap extends CI_Controller
@@ -36,12 +37,13 @@ class Snap extends CI_Controller
 	}
 
 
-	public function token($nominal)
+
+	public function token($harga)
 	{
 		// Required
 		$transaction_details = array(
 			'order_id' => rand(),
-			'gross_amount' => $nominal, // no decimal allowed for creditcard
+			'gross_amount' => $harga, // no decimal allowed for creditcard
 		);
 		// Optional
 		$billing_address = array(
