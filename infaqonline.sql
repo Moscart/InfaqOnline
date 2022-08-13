@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 13, 2022 at 02:57 PM
+-- Generation Time: Aug 13, 2022 at 08:44 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.2.34
 
@@ -32,6 +32,7 @@ CREATE TABLE `artikel` (
   `link` varchar(150) NOT NULL,
   `tgl` datetime NOT NULL,
   `judul` varchar(100) NOT NULL,
+  `banner` varchar(250) NOT NULL,
   `isi` text NOT NULL,
   `dillihat` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -123,8 +124,11 @@ CREATE TABLE `transaksi` (
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
+  `username` varchar(50) NOT NULL,
   `email` varchar(128) NOT NULL,
-  `image` varchar(128) NOT NULL,
+  `no_telp` varchar(15) DEFAULT NULL,
+  `alamat` varchar(150) DEFAULT NULL,
+  `image` varchar(128) NOT NULL DEFAULT 'default.jpg',
   `password` varchar(256) NOT NULL,
   `role_id` int(11) NOT NULL,
   `is_active` int(11) NOT NULL,
@@ -135,9 +139,9 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `name`, `email`, `image`, `password`, `role_id`, `is_active`, `date_created`) VALUES
-(1, 'Yusuf Bahtiar', 'administrator@gmail.com', 'tenor.gif', '$2y$10$ou.RH9G5wUyYGiFqTnM4LuhZI.Gut1W1sM7J9R2up5xo2PaMEbAV6', 1, 1, 1587030576),
-(2, 'User', 'user@gmail.com', 'default.jpg', '$2y$10$WiDX9h7lToAVoyk3CqKztuppHGOOqVYYhQvxI4a0Q0Ru2VMeKXBsu', 2, 1, 1602322568);
+INSERT INTO `user` (`id`, `name`, `username`, `email`, `no_telp`, `alamat`, `image`, `password`, `role_id`, `is_active`, `date_created`) VALUES
+(1, 'Admin', 'admin', 'admin@gmail.com', '', '', 'default.jpg', '$2y$10$XR2C./ESawnYWfsb7y9NQ.CR5iKnvulCAhriXHT0xxfXPrvrEiP1.', 1, 1, 1587030576),
+(2, 'User', 'user', 'user@gmail.com', '', '', 'default.jpg', '$2y$10$WiDX9h7lToAVoyk3CqKztuppHGOOqVYYhQvxI4a0Q0Ru2VMeKXBsu', 2, 1, 1602322568);
 
 -- --------------------------------------------------------
 
@@ -158,7 +162,8 @@ CREATE TABLE `user_access_menu` (
 INSERT INTO `user_access_menu` (`id`, `role_id`, `menu_id`) VALUES
 (1, 1, 1),
 (2, 1, 2),
-(3, 1, 3);
+(3, 1, 3),
+(4, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -220,8 +225,6 @@ CREATE TABLE `user_sub_menu` (
 
 INSERT INTO `user_sub_menu` (`id`, `menu_id`, `title`, `url`, `icon`, `is_active`) VALUES
 (1, 1, 'Dashboard', 'admin', 'fas fa-fw fa-tachometer-alt', 1),
-(2, 2, 'My Profile', 'user', 'fas fa-fw fa-user', 1),
-(3, 2, 'Edit Profile', 'user/edit', 'fas fa-fw fa-user-edit', 0),
 (4, 3, 'Menu Management', 'menu', 'fas fa-fw fa-folder', 1),
 (5, 3, 'Submenu Management', 'menu/submenu', 'fas fa-fw fa-folder-open', 1),
 (7, 1, 'Role', 'admin/role', 'fas fa-fw fa-user-shield', 1);
@@ -364,7 +367,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `user_access_menu`
 --
 ALTER TABLE `user_access_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `user_menu`
