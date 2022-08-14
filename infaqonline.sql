@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 13, 2022 at 08:44 PM
+-- Generation Time: Aug 14, 2022 at 08:20 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.2.34
 
@@ -29,13 +29,21 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `artikel` (
   `artikel_id` int(11) NOT NULL,
+  `user_email` varchar(128) NOT NULL,
   `link` varchar(150) NOT NULL,
-  `tgl` datetime NOT NULL,
+  `tgl_upload` datetime NOT NULL,
   `judul` varchar(100) NOT NULL,
-  `banner` varchar(250) NOT NULL,
+  `banner` varchar(250) NOT NULL DEFAULT 'default-banner-infaq-online-4x4.jpg',
   `isi` text NOT NULL,
-  `dillihat` int(11) NOT NULL
+  `dilihat` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `artikel`
+--
+
+INSERT INTO `artikel` (`artikel_id`, `user_email`, `link`, `tgl_upload`, `judul`, `banner`, `isi`, `dilihat`) VALUES
+(1, 'admin@gmail.com', 'test-posting-dan-edit-artikel', '2022-08-14 20:16:54', 'Test Posting dan Edit Artikel', 'blog-header-design.jpg', '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi suscipit libero ratione, similique voluptatem vel, pariatur quibusdam, expedita provident perspiciatis repudiandae ipsam aperiam vero praesentium amet facilis autem ullam explicabo.</p>', 0);
 
 -- --------------------------------------------------------
 
@@ -44,12 +52,21 @@ CREATE TABLE `artikel` (
 --
 
 CREATE TABLE `identitas` (
-  `id_iden` int(11) NOT NULL,
+  `id_iden` int(2) NOT NULL,
   `nama_organisasi` varchar(100) NOT NULL,
-  `alamat` int(250) NOT NULL,
+  `no_telp` varchar(15) NOT NULL,
+  `alamat` varchar(250) NOT NULL,
   `nama_pimpinan` varchar(100) NOT NULL,
-  `favicon` varchar(250) NOT NULL
+  `favicon` varchar(250) NOT NULL,
+  `icon` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `identitas`
+--
+
+INSERT INTO `identitas` (`id_iden`, `nama_organisasi`, `no_telp`, `alamat`, `nama_pimpinan`, `favicon`, `icon`) VALUES
+(1, 'Masjid Fikom UDB Surakarta', '(0271) 719552', 'Fakultas Ilmu Komputer Universitas Duta Bangsa, Jl. Bhayangkara No.55, Tipes, Kec. Serengan, Kota Surakarta, Jawa Tengah 57154', 'Takmir Masjid Fikom UDB Surakarta', 'default.ico', 'hand-holding-usd');
 
 -- --------------------------------------------------------
 
@@ -162,8 +179,8 @@ CREATE TABLE `user_access_menu` (
 INSERT INTO `user_access_menu` (`id`, `role_id`, `menu_id`) VALUES
 (1, 1, 1),
 (2, 1, 2),
-(3, 1, 3),
-(4, 2, 2);
+(3, 2, 2),
+(4, 1, 3);
 
 -- --------------------------------------------------------
 
@@ -227,7 +244,9 @@ INSERT INTO `user_sub_menu` (`id`, `menu_id`, `title`, `url`, `icon`, `is_active
 (1, 1, 'Dashboard', 'admin', 'fas fa-fw fa-tachometer-alt', 1),
 (4, 3, 'Menu Management', 'menu', 'fas fa-fw fa-folder', 1),
 (5, 3, 'Submenu Management', 'menu/submenu', 'fas fa-fw fa-folder-open', 1),
-(7, 1, 'Role', 'admin/role', 'fas fa-fw fa-user-shield', 1);
+(7, 1, 'Role', 'admin/role', 'fas fa-fw fa-user-shield', 1),
+(8, 1, 'Identitas', 'admin/identitas', 'fas fa-fw fa-id-card', 1),
+(9, 1, 'Artikel', 'admin/artikel', 'fas fa-fw fa-newspaper', 1);
 
 -- --------------------------------------------------------
 
@@ -325,7 +344,7 @@ ALTER TABLE `user_token`
 -- AUTO_INCREMENT for table `artikel`
 --
 ALTER TABLE `artikel`
-  MODIFY `artikel_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `artikel_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `menu_front`
@@ -385,7 +404,7 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT for table `user_sub_menu`
 --
 ALTER TABLE `user_sub_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `user_token`
