@@ -33,7 +33,7 @@ class Snap extends CI_Controller
 
 	public function index()
 	{
-		$this->load->view('checkout_snap');
+		$this->load->view('home');
 	}
 
 

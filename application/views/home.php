@@ -219,20 +219,21 @@
 
                         onSuccess: function(result) {
                             changeResult('success', result);
-                            console.log(result.status_message);
-                            console.log(result);
-                            $("#payment-form").submit();
-                        },
-                        onPending: function(result) {
-                            changeResult('pending', result);
-                            console.log(result.status_message);
-                            $("#payment-form").submit();
-                        },
-                        onError: function(result) {
-                            changeResult('error', result);
-                            console.log(result.status_message);
-                            $("#payment-form").submit();
+                            // console.log(result.status_message);
+                            // console.log(result);
+
+                            // $("#payment-form").submit();
                         }
+                        // onPending: function(result) {
+                        //     changeResult('pending', result);
+                        //     console.log(result.status_message);
+                        //     $("#payment-form").submit();
+                        // },
+                        // onError: function(result) {
+                        //     changeResult('error', result);
+                        //     console.log(result.status_message);
+                        //     $("#payment-form").submit();
+                        // }
                     });
                 }
             });
