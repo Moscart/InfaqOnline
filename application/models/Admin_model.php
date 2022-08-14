@@ -57,4 +57,95 @@ class Admin_model extends CI_Model
         // kembalikan nilai dari function ke echo
         return $string;
     }
+
+    public function showListArtikel()
+    {
+        $this->db->select('artikel.artikel_id, artikel.link, artikel.judul, artikel.banner, artikel.tgl_upload, artikel.dilihat, user.name');
+        $this->db->from('artikel');
+        $this->db->join('user', 'user.email = artikel.user_email');
+        $this->db->order_by('artikel.tgl_upload', 'DESC');
+        return $this->db->get()->result_array();
+    }
+
+    public function cekRowLinkArtikel($linkSlug)
+    {
+        $cek = $this->db->select('link')->from('artikel')->where('link', $linkSlug)->get()->num_rows();
+        if ($cek > 0) {
+            $resp = 'err';
+        } else {
+            $resp = 'ok';
+        }
+        return $resp;
+    }
+
+    public function handleArtikelAction($post, $file = null)
+    {
+        $cekToken = base64_decode($post['tokenArtikel']);
+        if ($cekToken == 'posting') {
+            // handle upload bannerArtikel
+            $upload_image = $file['name'];
+            if ($upload_image) {
+                $config['allowed_types'] = 'gif|jpg|png';
+                $config['max_size']     = '8192';
+                $config['upload_path'] = './assets/img/artikel/';
+                $this->load->library('upload', $config);
+                if ($this->upload->do_upload('bannerArtikel')) {
+                    $banner = $this->upload->data('file_name');
+                } else {
+                    $banner = NULL;
+                }
+            }
+            // jika tidak ada foto gagalkan proses insert pembelian
+            if ($banner != NULL) {
+                // masukkan ke variabel dulu, semua yang $this->input->post()
+                $data = [
+                    'link' => $post['linkUrlSlug'],
+                    'judul' => $post['judulArtikel'],
+                    'isi' => $post['isiArtikel'],
+                    'user_email' => $this->session->userdata('email'),
+                    'tgl_upload' => date('Y-m-d H:i:s', time()),
+                    'banner' => $banner
+                ];
+                $resp =  ($this->db->insert('artikel', $data)) ? 'ok' : 'errInsert';
+            } else $resp = 'errFoto';
+        } else if ($cekToken == 'edit') {
+            // define upload status
+            $banner = true;
+            // get file gambar lama n baru
+            if ($file['name'] != '' && $file['name'] != $post['bannerOldArtikel']) {
+                // upload gambar baru bannerArtikel\
+                $config['allowed_types'] = 'gif|jpg|png';
+                $config['max_size']     = '8192';
+                $config['upload_path'] = './assets/img/artikel/';
+                $this->load->library('upload', $config);
+                if ($this->upload->do_upload('bannerArtikel')) {
+                    $banner = $this->upload->data('file_name');
+                    // hapus gambar lama
+                    unlink($config['upload_path'] . $post['bannerOldArtikel']);
+                    // inisial update
+                    $data   = [
+                        'link' => $post['linkUrlSlug'],
+                        'judul' => $post['judulArtikel'],
+                        'isi' => $post['isiArtikel'],
+                        'banner' => $banner
+                    ];
+                } else $banner = false;
+            } else {
+                // gambar masih pakai yang lama, inisial update
+                $data = [
+                    'link' => $post['linkUrlSlug'],
+                    'judul' => $post['judulArtikel'],
+                    'isi' => $post['isiArtikel'],
+                    'banner' => $post['bannerOldArtikel']
+                ];
+            }
+            // jika upload berhasil update db
+            if ($banner) {
+                $this->db->set($data);
+                $this->db->where('link', $post['LinkUrlSlugOldArtikel']);
+                $resp = ($this->db->update('artikel')) ? 'ok' : 'err';
+            } else $resp = 'errFoto';
+        }
+        return $resp;
+    }
 }

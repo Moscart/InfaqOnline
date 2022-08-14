@@ -20,6 +20,12 @@ $('#showPass').on('click', function (event) {
     }
 });
 
+// modify iput name file upload
+$('.custom-file-input').on('change', function () {
+    let fileName = $(this).val().split('\\').pop();
+    $(this).next('.custom-file-label').addClass("selected").html(fileName);
+});
+
 // show hdie pass on /user
 $('#showPass').on('click', function (event) {
     event.preventDefault();
@@ -60,6 +66,24 @@ $('#showPass2').on('click', function (event) {
         $('#toggle2').removeClass('fa-eye');
         $('#toggle2').addClass('fa-eye text-primary');
     }
+});
+
+// admin/role changeacces user
+$('.toChangeRoleAccess').on('click', function () {
+    const menuId = $(this).data('menu');
+    const roleId = $(this).data('role');
+
+    $.ajax({
+        url: `${windowOrigin}admin/changeaccess`,
+        type: "post",
+        data: {
+            menuId: menuId,
+            roleId: roleId
+        },
+        success: function () {
+            document.location.href = `${windowOrigin}admin/roleaccess/${roleId}`;
+        }
+    });
 });
 
 // admin editRole
@@ -119,4 +143,70 @@ $(document).on('click', '#delMenu', function () {
 // admin deleteSubmenu
 $(document).on('click', '#delSubmenu', function () {
     $('#cDelSubmenu').attr('href', $(this).data('href'));
+});
+
+// admin/artikelaction make a slug url
+$('#judulArtikel').keyup(function () {
+    let title = $(this).val();
+    $('#linkUrlSlug').val(generateSlug(title).substring(0, 150)).change();
+});
+
+// admin/artikelaction cek ketersediaan link url
+$(document).on('keyup, change', '#linkUrlSlug', function () {
+    const linkSlug = $(this).val();
+    if (linkSlug != '')
+        $.ajax({
+            url: `${windowOrigin}admin/isLinkAvailable`,
+            type: "post",
+            data: {
+                linkSlug: linkSlug
+            },
+            success: function (resp) {
+                if (resp == 'ok') $('#linkUrlSlug').removeClass('is-invalid').addClass('is-valid').attr('title', 'Link aman, belum terpakai');
+                else $('#linkUrlSlug').removeClass('is-valid').addClass('is-invalid').attr('title', 'Error, link sudah terpakai');
+            }
+        });
+    else $('#linkUrlSlug').removeClass('is-valid').addClass('is-invalid').attr('title', 'Inputan tidak boleh kosong');
+});
+
+// tampilkan gambar sehabis pilih file
+$('#bannerArtikel').change(function (e) {
+    let allowedTypes = ['image/gif', 'image/png', 'image/jpg', 'image/jpeg'];
+    let allowedSize = ['8388608']; //8 MB limit
+
+    let file = e.target.files[0];
+    let fileType = file.type;
+    let fileSize = file.size;
+
+    // jika format file diluar kriteria
+    if (!allowedTypes.includes(fileType)) {
+        $('#bannerArtikel').next('.custom-file-label').removeClass('selected').html('Pilih file');
+        document.getElementById('previewBannerArtikel').src = `${windowOrigin}assets/img/artikel/default-banner-infaq-online-4x4.jpg`;
+        $('#isiErrorNotifModal').html(`Maaf ya, silakan pilih file yang valid (<strong>${allowedTypes.join(', ')}</strong>). File Anda : ${fileType}`);
+        $('#errorNotifModal').modal('show');
+        return false;
+    }
+    // jika file lebih besar dari ketentuan size
+    else if (fileSize > allowedSize) {
+        $('#bannerArtikel').next('.custom-file-label').removeClass('selected').html('Pilih file');
+        document.getElementById('previewBannerArtikel').src = `${windowOrigin}assets/img/artikel/default-banner-infaq-online-4x4.jpg`;
+        $('#isiErrorNotifModal').html(`Ukuran file terlalu besar, maksimal ukuran yg disarankan <stong>${formatBytes(alloweSize)}</strong>`);
+        $('#errorNotifModal').modal('show');
+        return false;
+    }
+    // tampilkan preview gambar jika syarat terpenuhi 
+    else {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            // get loaded data and render thumbnail.
+            document.getElementById('previewBannerArtikel').src = e.target.result;
+        };
+        // read the image file as a data URL.
+        reader.readAsDataURL(this.files[0]);
+    }
+});
+
+// admin/artikel delartikel
+$(document).on('click', '#delArtikel', function () {
+    $('#cDelArtikel').attr('href', $(this).data('href'));
 });

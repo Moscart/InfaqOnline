@@ -13,7 +13,7 @@ class Admin extends CI_Controller
     {
         $data['title'] = 'Dashboard';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-        // $data['identitas'] = $this->db->get('identitas')->row_array();
+        $data['identitas'] = $this->db->get('identitas')->row_array();
 
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar', $data);
@@ -84,7 +84,8 @@ class Admin extends CI_Controller
     {
         $data['title'] = 'Role';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-        // $data['identitas'] = $this->db->get('identitas')->row_array();
+        $data['identitas'] = $this->db->get('identitas')->row_array();
+
         $data['role'] = $this->db->get_where('user_role', ['id' => $role_id])->row_array();
         // menu_id
         $this->db->where('id !=', 1);
@@ -205,5 +206,182 @@ class Admin extends CI_Controller
         $this->db->delete('user');
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert"><strong>' . $email . '</strong> dihapus dari user.</div>');
         redirect('admin/role');
+    }
+
+    public function identitas()
+    {
+        $data['title'] = 'Identitas';
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $data['identitas'] = $this->db->get('identitas')->row_array();
+
+        $this->form_validation->set_rules('typePost', 'Type postingan', 'required');
+        if ($this->form_validation->run() == false) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/topbar', $data);
+            $this->load->view('admin/identitas', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $type = base64_decode($this->input->post('typePost'));
+            switch ($type) {
+                case 'umum':
+                    $nama = htmlspecialchars($this->input->post('namaOrganisasi'));
+                    $alamat = htmlspecialchars($this->input->post('alamat'));
+                    $no_telp = htmlspecialchars($this->input->post('noTelp'));
+                    $pemilik = htmlspecialchars($this->input->post('namaPimpinan'));
+                    $this->db->set('nama_organisasi', $nama);
+                    $this->db->set('alamat', $alamat);
+                    $this->db->set('no_telp', $no_telp);
+                    $this->db->set('nama_pimpinan', $pemilik);
+                    $this->db->where('id_iden', 1);
+                    if ($this->db->update('identitas')) {
+                        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert"> Berhasil memperbarui identitas.</div>');
+                    } else {
+                        $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert"><strong>Gagal memperbarui identitas.</div>');
+                    }
+                    break;
+                case 'favicon':
+                    $config['allowed_types'] = 'ico|jpg|png';
+                    $config['max_size']     = '2048'; //in KB
+                    $config['upload_path'] = './assets/img/favicon/';
+
+                    $this->load->library('upload', $config);
+
+                    if ($this->upload->do_upload('faviconOrganisasi')) {
+                        $old_image = $data['identitas']['favicon'];
+                        if ($old_image != 'default.ico') {
+                            unlink(FCPATH . 'assets/img/favicon/' . $old_image);
+                        }
+                        $new_image = $this->upload->data('file_name');
+                        $this->db->set('favicon', $new_image);
+                        $this->db->where('id_iden', 1);
+                        $this->db->update('identitas');
+                        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil mengganti favicon.</div>');
+                    } else {
+                        $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Oops! Maaf, tidak dapat mengganti favicon. Silakan coba lagi nanti ya.</div>');
+                    }
+                    break;
+                case 'icon':
+                    $icon = htmlspecialchars($this->input->post('iconOrganisasi'));
+                    $this->db->set('icon', $icon);
+                    $this->db->where('id_iden', 1);
+                    if ($this->db->update('identitas')) {
+                        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil memperbarui icon.</div>');
+                    } else {
+                        $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert"><strong>Gagal memperbarui icon.</div>');
+                    }
+                    break;
+                case 'defaultFavicon':
+                    $old_image = $data['identitas']['favicon'];
+                    if ($old_image != 'default.ico') {
+                        unlink(FCPATH . 'assets/img/favicon/' . $old_image);
+                    }
+                    $this->db->set('favicon', 'default.ico');
+                    $this->db->where('id_iden', 1);
+                    if ($this->db->update('identitas')) {
+                        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil reset favicon ke default.</div>');
+                    } else {
+                        $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert"><strong>Gagal reset favicon.</div>');
+                    }
+                    break;
+                case 'defaultIcon':
+                    $this->db->set('icon', 'hand-holding-usd');
+                    $this->db->where('id_iden', 1);
+                    if ($this->db->update('identitas')) {
+                        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert"> Berhasil reset icon.</div>');
+                    } else {
+                        $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert"><strong>Gagal memperbarui icon.</div>');
+                    }
+                    break;
+            }
+            redirect('admin/identitas');
+        }
+    }
+
+    public function artikel()
+    {
+        $data['title'] = 'Artikel';
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $data['identitas'] = $this->db->get('identitas')->row_array();
+        $this->load->model('Admin_model', 'admin');
+        $data['artikel'] = $this->admin->showListArtikel();
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('templates/topbar', $data);
+        $this->load->view('admin/artikel', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function artikelAction()
+    {
+        // echo '<pre>';
+        // print_r($this->input->post());
+        // print_r($_FILES);
+        // echo '</pre>';
+        // die;
+
+        $data['title'] = 'Artikel';
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $data['identitas'] = $this->db->get('identitas')->row_array();
+        // set form validation
+        $this->form_validation->set_rules('judulArtikel', 'Judul artikel', 'required|trim');
+        if ($this->input->post('LinkUrlSlugOldArtikel') == null)
+            $this->form_validation->set_rules('linkUrlSlug', 'URL Slug artikel', 'required|trim|max_length[150]|is_unique[artikel.link]', [
+                'is_unique' => 'Link sudah pernah dipakai',
+                'max_length' => 'Link terlalu panjang, max. 150 karakter'
+            ]);
+        else if ($this->input->post('linkUrlSlug') == $this->input->post('LinkUrlSlugOldArtikel')) $this->form_validation->set_rules('linkUrlSlug', 'URL Slug artikel', 'required|trim');
+        $this->form_validation->set_rules('isiArtikel', 'Isi artikel', 'required|trim');
+        $this->form_validation->set_rules('tokenArtikel', 'Token artikel', 'required|trim');
+        if ($this->form_validation->run() == false) {
+            // jika ada segment ketiga brti edit artikel
+            if ($this->uri->segment(3)) {
+                $cekRow = $this->db->select('link')->from('artikel')->where('link', $this->uri->segment(3))->get()->num_rows();
+                if ($cekRow == 0) {
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert"><strong>Periksa slug url artikel, mungkin sudah dihapus atau belum dibuat.</div>');
+                    redirect('admin/artikel');
+                } else {
+                    $data['artikelDetail'] = $this->db->get('artikel')->row_array();
+                    $this->load->view('templates/header', $data);
+                    $this->load->view('templates/sidebar', $data);
+                    $this->load->view('templates/topbar', $data);
+                    $this->load->view('admin/artikel-action', $data);
+                    $this->load->view('templates/footer');
+                }
+            }
+            // jika tidak ada segment ketiga berti add artikel
+            else {
+                $this->load->view('templates/header', $data);
+                $this->load->view('templates/sidebar', $data);
+                $this->load->view('templates/topbar', $data);
+                $this->load->view('admin/artikel-action', $data);
+                $this->load->view('templates/footer');
+            }
+        } else {
+            // insert to db
+            $this->load->model('Admin_model', 'admin');
+            // var_dump($this->admin->handleArtikelAction($this->input->post(), $_FILES['bannerArtikel']));
+            if ($this->admin->handleArtikelAction($this->input->post(), $_FILES['bannerArtikel']) == 'ok') $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil menyimpan artikel.</div>');
+            else $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal menyimpan artikel.</div>');
+            redirect('admin/artikel');
+        }
+    }
+
+    public function isLinkAvailable()
+    {
+        $this->load->model('Admin_model', 'admin');
+        echo $this->admin->cekRowLinkArtikel($this->input->post('linkSlug'));
+    }
+
+    public function deleteArtikel($link)
+    {
+        $cariAsset = $this->db->select('banner')->get_where('artikel', ['link' => $link])->row_array();
+        if (unlink('./assets/img/artikel/' . $cariAsset['banner'])) {
+            // delete db
+            $this->db->delete('artikel', ['link' => $link]);
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil hapus artikel.</div>');
+        } else $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal hapus artikel.</div>');
+        redirect('admin/artikel');
     }
 }

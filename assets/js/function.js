@@ -243,3 +243,13 @@ function formatBytes(bytes, decimals = 2) {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
+
+// membuat slug url
+function generateSlug(text) {
+    return text.toString().toLowerCase()
+        .replace(/^-+/, '')
+        .replace(/-+$/, '')
+        .replace(/\s+/g, '-')
+        .replace(/\-\-+/g, '-')
+        .replace(/[^\w\-]+/g, '');
+}

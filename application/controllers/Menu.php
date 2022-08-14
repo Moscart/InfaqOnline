@@ -13,8 +13,7 @@ class Menu extends CI_Controller
     {
         $data['title'] = 'Menu Management';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-
-        // $data['identitas'] = $this->db->get('identitas')->row_array();
+        $data['identitas'] = $this->db->get('identitas')->row_array();
 
         $data['menu'] = $this->db->get('user_menu')->result_array();
         $this->load->model('Admin_model', 'admin');
@@ -47,8 +46,8 @@ class Menu extends CI_Controller
     {
         $data['title'] = 'Submenu Management';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $data['identitas'] = $this->db->get('identitas')->row_array();
 
-        // $data['identitas'] = $this->db->get('identitas')->row_array();
         $this->load->model('Menu_model', 'menu');
         $data['subMenu'] = $this->menu->getSubMenu();
         $data['menu'] = $this->db->get('user_menu')->result_array();
@@ -73,7 +72,7 @@ class Menu extends CI_Controller
                 'is_active' => $this->input->post('is_active')
             ];
             $this->db->insert('user_sub_menu', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert"><strong>' . $data['judul'] . '</strong> telah ditambahkan ke Submenu.</div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert"><strong>' . $data['title'] . '</strong> telah ditambahkan ke Submenu.</div>');
             redirect('menu/submenu');
         }
     }
@@ -82,8 +81,7 @@ class Menu extends CI_Controller
     {
         $data['title'] = 'Submenu Management';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-
-        // $data['identitas'] = $this->db->get('identitas')->row_array();
+        $data['identitas'] = $this->db->get('identitas')->row_array();
 
         $this->load->model('Menu_model', 'menu');
 

@@ -20,6 +20,7 @@ class Auth extends CI_Controller
 
         if ($this->form_validation->run() == false) {
             $data['title'] = 'Infaq Online Login';
+            $data['identitas'] = $this->db->get('identitas')->row_array();
             $this->load->view('templates/auth_header', $data);
             $this->load->view('auth/login');
             $this->load->view('templates/auth_footer');
@@ -42,7 +43,7 @@ class Auth extends CI_Controller
             // imel
             $user = $this->db->get_where('user', ['email' => $usernameOrEmail])->row_array();
         }
-        
+
         // kalo ada usernya
         if ($user) {
             // jika usernya aktif
@@ -96,6 +97,7 @@ class Auth extends CI_Controller
 
         if ($this->form_validation->run() == false) {
             $data['title'] = 'Infaq Online Resgistrasi Akun';
+            $data['identitas'] = $this->db->get('identitas')->row_array();
             $this->load->view('templates/auth_header', $data);
             $this->load->view('auth/registration');
             $this->load->view('templates/auth_footer');
@@ -178,6 +180,7 @@ class Auth extends CI_Controller
 
         if ($this->form_validation->run() == false) {
             $data['title'] = 'Infaq Online User Verify';
+            $data['identitas'] = $this->db->get('identitas')->row_array();
             $this->load->view('templates/auth_header', $data);
             $this->load->view('auth/verify');
             $this->load->view('templates/auth_footer');
@@ -223,13 +226,13 @@ class Auth extends CI_Controller
     {
         $this->session->unset_userdata('email');
         $this->session->unset_userdata('role_id');
-
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil logout.</div>');
         redirect('auth');
     }
 
     public function blocked()
     {
+        $data['identitas'] = $this->db->get('identitas')->row_array();
         $this->load->view('auth/blocked');
     }
 
@@ -239,6 +242,7 @@ class Auth extends CI_Controller
 
         if ($this->form_validation->run() == false) {
             $data['title'] = 'Forgot Password';
+            $data['identitas'] = $this->db->get('identitas')->row_array();
             $this->load->view('templates/auth_header', $data);
             $this->load->view('auth/forgot-password');
             $this->load->view('templates/auth_footer');
@@ -270,6 +274,7 @@ class Auth extends CI_Controller
 
         if ($this->form_validation->run() == false) {
             $data['title'] = 'Infaq Online Reset Password';
+            $data['identitas'] = $this->db->get('identitas')->row_array();
             $this->load->view('templates/auth_header', $data);
             $this->load->view('auth/reset-password');
             $this->load->view('templates/auth_footer');
@@ -310,6 +315,7 @@ class Auth extends CI_Controller
 
         if ($this->form_validation->run() == false) {
             $data['title'] = 'Infaq Online Change Password';
+            $data['identitas'] = $this->db->get('identitas')->row_array();
             $this->load->view('templates/auth_header', $data);
             $this->load->view('auth/change-password');
             $this->load->view('templates/auth_footer');

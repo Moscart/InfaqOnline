@@ -2,7 +2,7 @@
 <footer class="sticky-footer bg-white">
     <div class="container my-auto">
         <div class="copyright text-center my-auto">
-            Made With <i class="fas fa-heart text-danger"></i> Infaq Online
+            Made With <i class="fas fa-heart text-danger"></i> Infaq Online<br><?= $identitas['nama_organisasi']; ?>
         </div>
     </div>
 </footer>
@@ -67,27 +67,6 @@
 
 <!-- customJs -->
 <script src="<?= base_url(); ?>assets/js/custom.js"></script>
-
-<script>
-    $(document).ready(function() {
-        $('.toChangeRoleAccess').on('click', function() {
-            const menuId = $(this).data('menu');
-            const roleId = $(this).data('role');
-
-            $.ajax({
-                url: "<?= base_url('admin/changeaccess'); ?>",
-                type: "post",
-                data: {
-                    menuId: menuId,
-                    roleId: roleId
-                },
-                success: function() {
-                    document.location.href = "<?= base_url('admin/roleaccess/'); ?>" + roleId;
-                }
-            });
-        });
-    });
-</script>
 
 </body>
 

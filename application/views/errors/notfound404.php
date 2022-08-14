@@ -7,17 +7,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>403 Access Blocked</title>
+    <title>404 Halaman Tidak Ditemukan</title>
 
     <!-- load favico -->
     <link rel="icon" href="<?= base_url('assets/img/favicon/') . $identitas['favicon']; ?>" type="image/x-icon">
-
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0-12/css/all.min.css" integrity="sha512-pn4RwKFKdSvaTRSYO5WIUGz89e1tJvWWUGRIBym1/k467SuMMjKKw/X5TXJYp2+WLmHumHivCJ2JAJppXF9SoA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="<?= base_url('assets/css/sb-admin-2.min.css') ?>" rel="stylesheet">
+    <link href="<?= base_url('assets/'); ?>css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
 
@@ -37,10 +36,9 @@
 
                     <!-- 404 Error Text -->
                     <div class="text-center">
-                        <div class="error mx-auto" data-text="403">403</div>
-                        <p class="lead text-gray-800 mb-5">Access Forbidden</p>
-                        <p class="text-gray-500 mb-0">It looks like you found a glitch in the matrix...</p>
-                        <a href="<?= base_url('user'); ?>">&larr; Back to Dashboard</a>
+                        <div class="error mx-auto" data-text="404">404</div>
+                        <p class="lead text-gray-800 mb-5">Halaman Tidak Ditemukan</p>
+                        <p class="text-gray-500 mb-0">Halaman mungkin sudah dihapus atau belum dibuat</p>
                     </div>
 
                 </div>
@@ -61,14 +59,14 @@
     </a>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="<?= base_url('assets/vendor/jquery/jquery.min.js'); ?>"></script>
-    <script src="<?= base_url('assets/vendor/bootstrap/js/bootstrap.bundle.min.js'); ?>"></script>
+    <script src="<?= base_url('assets/'); ?>vendor/jquery/jquery.min.js"></script>
+    <script src="<?= base_url('assets/'); ?>vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="<?= base_url('assets/vendor/jquery-easing/jquery.easing.min.js'); ?>"></script>
+    <script src="<?= base_url('assets/'); ?>vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="<?= base_url('assets/js/sb-admin-2.min.js'); ?>"></script>
+    <script src="<?= base_url('assets/'); ?>js/sb-admin-2.min.js"></script>
 
 </body>
 

@@ -28,6 +28,10 @@
                                         Confirm
                                     </button>
                                 </form>
+                                <hr>
+                                <div class="text-center">
+                                    <a class="small" href="<?= base_url('auth'); ?>">Back to Login</a>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -12,6 +12,7 @@ class User extends CI_Controller
     public function index()
     {
         $data['title'] = 'My Profile';
+        $data['identitas'] = $this->db->get('identitas')->row_array();
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
         $this->load->view('templates/header', $data);
@@ -24,6 +25,7 @@ class User extends CI_Controller
     public function edit()
     {
         $data['title'] = 'Edit Profile';
+        $data['identitas'] = $this->db->get('identitas')->row_array();
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
         if ($this->input->post('username') != trim($this->input->post('usernameNew'))) $this->form_validation->set_rules('usernameNew', 'Username', 'required|trim|is_unique[user.username]', [
@@ -97,6 +99,7 @@ class User extends CI_Controller
     public function changePassword()
     {
         $data['title'] = 'Change Password';
+        $data['identitas'] = $this->db->get('identitas')->row_array();
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
         $this->form_validation->set_rules('current_password', 'Current Password', 'required|trim');
