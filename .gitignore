@@ -19,6 +19,7 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 assets/img/favicon/*
 assets/img/profile/*
 assets/img/artikel/*
+assets/img/program/*
 
 # IDE Files
 #-------------------------
