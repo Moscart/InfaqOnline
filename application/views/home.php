@@ -66,7 +66,7 @@
         </div>
         <div class="container py-5">
             <div class="row">
-                <div class="col-6">
+                <div class="col-md-6 col-12">
                     <div class="card shadow bg-dark border-0 position-relative">
                         <div class="w-max pe-4 mt-4 p-3 rounded-start rounded-pill bg-warning fs-7 fw-bold text-uppercase">
                             Total Infaq
@@ -182,7 +182,9 @@
     </main>
     <footer class="navbar navbar-dark bg-dark py-3">
         <div class="container justify-content-center">
-            <span class="navbar-text">© 2022 Infaq Online. All Rights Reserved</span>
+            <span class="navbar-text">© <script>
+                    document.write(new Date().getFullYear())
+                </script> Infaq Online. All Rights Reserved</span>
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
@@ -203,7 +205,7 @@
         function checkNominal(event) {
             const nominal = event.path[0];
             const radio = [...document.querySelectorAll("[name='list-nominal']")];
-            if (parseInt(nominal.value) < 10000 && nominal.value !== "") {
+            if (parseInt(nominal.value) < 0 && nominal.value !== "") {
                 nominal.value = "10000";
             }
             radio.map((e) => {
