@@ -18,54 +18,47 @@
   <script type="text/javascript">
     $('#pay-button').click(function(event) {
       event.preventDefault();
-      let nominal = Number($('#result-type').val());
-      if (nominal >= 10000) {
-        $(this).attr("disabled", "disabled");
+      let harga = Number($('#result-type').val());
+      $(this).attr("disabled", "disabled");
 
-        $.ajax({
-          url: '<?= site_url() ?>/snap/token/' + nominal,
-          cache: false,
+      $.ajax({
+        url: '<?= site_url() ?>/snap/token/' + harga,
+        cache: false,
 
-          success: function(data) {
-            //location = data;
+        success: function(data) {
+          //location = data;
 
-            console.log('token = ' + data);
+          console.log('token = ' + data);
 
-            var resultType = document.getElementById('result-type');
-            var resultData = document.getElementById('result-data');
+          var resultType = document.getElementById('result-type');
 
-            function changeResult(type, data) {
-              $("#result-type").val(type);
-              $("#result-data").val(JSON.stringify(data));
-              //resultType.innerHTML = type;
-              //resultData.innerHTML = JSON.stringify(data);
-            }
-
-            snap.pay(data, {
-
-              onSuccess: function(result) {
-                changeResult('success', result);
-                console.log(result.status_message);
-                console.log(result);
-                $("#payment-form").submit();
-              },
-              onPending: function(result) {
-                changeResult('pending', result);
-                console.log(result.status_message);
-                $("#payment-form").submit();
-              },
-              onError: function(result) {
-                changeResult('error', result);
-                console.log(result.status_message);
-                $("#payment-form").submit();
-              }
-            });
+          function changeResult(type, data) {
+            $("#result-type").val(type);
+            //resultType.innerHTML = type;
+            //resultData.innerHTML = JSON.stringify(data);
           }
-        });
-      } else {
-        alert('Nominal minimal Rp. 10.000');
-      }
 
+          snap.pay(data, {
+
+            onSuccess: function(result) {
+              changeResult('success', result);
+              console.log(result.status_message);
+              console.log(result);
+              $("#payment-form").submit();
+            },
+            onPending: function(result) {
+              changeResult('pending', result);
+              console.log(result.status_message);
+              $("#payment-form").submit();
+            },
+            onError: function(result) {
+              changeResult('error', result);
+              console.log(result.status_message);
+              $("#payment-form").submit();
+            }
+          });
+        }
+      });
     });
   </script>
 

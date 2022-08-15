@@ -8,6 +8,8 @@
     <title>Infaq Online</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <link rel="stylesheet" href="<?= base_url(); ?>assets/css/style.css">
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-HCprc-t2i590xFMn"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 </head>
 
 <body>
@@ -142,13 +144,17 @@
                 </div>
                 <div class="col-lg-4 col-12">
                     <div class="fs-4 fw-bold text-center mb-3">INFAQ</div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">Rp</span>
-                        <div class="form-floating">
-                            <input type="number" class="form-control" min="10000" id="nominal" placeholder="Masukkan Nominal" onkeyup="checkNominal(event)">
-                            <label for="nominal">Nominal</label>
+                    <form id="payment-form" method="post" action="<?= site_url() ?>/snap/finish">
+                        <div class="input-group mb-3">
+
+                            <span class="input-group-text">Rp</span>
+                            <div class="form-floating">
+                                <input type="number" class="form-control" min="10000" id="nominal" placeholder="Masukkan Nominal" onkeyup="checkNominal(event)">
+                                <label for="nominal">Nominal</label>
+                            </div>
+
                         </div>
-                    </div>
+                    </form>
                     <div class="row mb-3 g-2">
                         <div class="col-xl-4 col-lg-6 col-md-4 col-6">
                             <input type="radio" class="btn-check" name="list-nominal" id="list-nominal1" value="10000" autocomplete="off" onclick="checkRadio(event)">
@@ -175,7 +181,7 @@
                             <label class="btn btn-outline-primary w-100" for="list-nominal6">Rp100.000</label>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-warning rounded-pill fs-7 fw-bold w-100 text-uppercase py-3">Lanjutkan Pembayaran</button>
+                    <button type="button" id="pay-button" class="btn btn-warning rounded-pill fs-7 fw-bold w-100 text-uppercase py-3">Lanjutkan Pembayaran</button>
                 </div>
             </div>
         </div>
@@ -188,7 +194,53 @@
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
-    <script>
+    <script type="text/javascript">
+        $('#pay-button').click(function(event) {
+            event.preventDefault();
+            let nominal = Number($('#nominal').val());
+            $(this).attr("disabled", "disabled");
+
+            $.ajax({
+                url: '<?= site_url() ?>/snap/token/' + nominal,
+                cache: false,
+
+                success: function(data) {
+                    //location = data;
+
+                    console.log('token = ' + data);
+
+                    var resultType = document.getElementById('nominal');
+
+                    function changeResult(type, data) {
+                        $("#nominal").val(type);
+                        //resultType.innerHTML = type;
+                        //resultData.innerHTML = JSON.stringify(data);
+                    }
+
+                    snap.pay(data, {
+
+                        onSuccess: function(result) {
+                            changeResult('success', result);
+                            // console.log(result.status_message);
+                            // console.log(result);
+
+                            // $("#payment-form").submit();
+                        }
+                        // onPending: function(result) {
+                        //     changeResult('pending', result);
+                        //     console.log(result.status_message);
+                        //     $("#payment-form").submit();
+                        // },
+                        // onError: function(result) {
+                        //     changeResult('error', result);
+                        //     console.log(result.status_message);
+                        //     $("#payment-form").submit();
+                        // }
+                    });
+                }
+            });
+        });
+
         function checkRadio(event) {
             const nominal = document.getElementById('nominal');
             const listNominal = event.path[0];
