@@ -241,7 +241,7 @@ class Admin extends CI_Controller
                     }
                     break;
                 case 'favicon':
-                    $config['allowed_types'] = 'ico|jpg|png';
+                    $config['allowed_types'] = 'ico|jpg|jpeg|png|webp';
                     $config['max_size']     = '2048'; //in KB
                     $config['upload_path'] = './assets/img/favicon/';
 
@@ -315,12 +315,6 @@ class Admin extends CI_Controller
 
     public function artikelAction()
     {
-        // echo '<pre>';
-        // print_r($this->input->post());
-        // print_r($_FILES);
-        // echo '</pre>';
-        // die;
-
         $data['title'] = 'Artikel';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $data['identitas'] = $this->db->get('identitas')->row_array();
@@ -383,5 +377,97 @@ class Admin extends CI_Controller
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil hapus artikel.</div>');
         } else $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal hapus artikel.</div>');
         redirect('admin/artikel');
+    }
+
+    public function program()
+    {
+        $data['title'] = 'Program';
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $data['identitas'] = $this->db->get('identitas')->row_array();
+        $this->load->model('Admin_model', 'admin');
+        $data['program'] = $this->db->get('program')->result_array();
+        $data['subProgram'] = $this->admin->showListSubProgram();
+        // set form validation
+        $this->form_validation->set_rules('program', 'Program', 'trim|required|is_unique[program.nama_program]', [
+            'is_unique' => 'Program ini sudah terdaftar.'
+        ]);
+        if ($this->form_validation->run() == false) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/topbar', $data);
+            $this->load->view('admin/program', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $data = [
+                'nama_program' => htmlspecialchars($this->input->post('program'))
+            ];
+            $this->db->insert('program', $data);
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert"><strong>' . $data['nama_program'] . '</strong> berhasil ditambahkan.</div>');
+            redirect('admin/program');
+        }
+    }
+
+    public function updateProgram()
+    {
+        $this->form_validation->set_rules('inputEditProgram', 'Nama program', 'trim|required|is_unique[program.nama_program]', [
+            'is_unique' => 'Program ini sudah terdaftar.'
+        ]);
+        if ($this->form_validation->run() == false) {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal update program.</div>');
+            redirect('admin/program');
+        } else {
+            $this->db->set('nama_program', htmlspecialchars($this->input->post('inputEditProgram')));
+            $this->db->where('id_program', $this->input->post('inputIdProgram'));
+            $this->db->update('program');
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Program has been updates.</div>');
+            redirect('admin/program');
+        }
+    }
+
+    public function deleteProgram($id_program)
+    {
+        $this->db->where('id_program', $id_program);
+        $this->db->delete('program');
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Role has been deleted.</div>');
+        redirect('admin/program');
+    }
+
+    public function subProgramAction()
+    {
+        // insert to db
+        $this->load->model('Admin_model', 'admin');
+        if (base64_decode($this->input->post('token')) == 'add') {
+            $this->form_validation->set_rules('id_program', 'Parent program', 'trim|required');
+            $this->form_validation->set_rules('nama_detailprogram', 'Nama sub program', 'trim|required');
+            if ($this->form_validation->run() == false) {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal menyimpan sub program.</div>');
+                redirect('admin/program');
+            } else {
+                if ($this->admin->handleSubProgramAction($this->input->post(), $_FILES['bannerSubProgram']) == 'ok') $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil menyimpan sub program.</div>');
+                else $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal menyimpan sub program.</div>');
+            }
+        } else if (base64_decode($this->input->post('token')) == 'edit') {
+            $this->form_validation->set_rules('id_programEdit', 'Parent program', 'trim|required');
+            $this->form_validation->set_rules('nama_detailprogramEdit', 'Nama sub program', 'trim|required');
+            if ($this->form_validation->run() == false) {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal menyimpan sub program.</div>');
+                redirect('admin/program');
+            } else {
+                if ($this->admin->handleSubProgramAction($this->input->post(), $_FILES['bannerSubProgramEdit']) == 'ok') $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil menyimpan sub program.</div>');
+                else $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal menyimpan sub program.</div>');
+            }
+        }
+        redirect('admin/program');
+    }
+
+    public function deleteSubProgram($id_programdetail)
+    {
+        $cariAsset = $this->db->select('banner')->get_where('program_detail', ['id_programdetail' => $id_programdetail])->row_array();
+        if (unlink('./assets/img/program/' . $cariAsset['banner'])) {
+            // delete db
+            $this->db->delete('program_detail', ['id_programdetail' => $id_programdetail]);
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil hapus sub program.</div>');
+        } else $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal hapus sub program.</div>');
+        redirect('admin/program');
     }
 }

@@ -80,7 +80,7 @@
                                 </div>
                             <?php else : ?>
                                 <div class="form-group mb-3 text-center">
-                                    <img src="<?= base_url('assets/img/artikel/default-banner-infaq-online-4x4.jpg'); ?>" alt="banner artikel" class="img-thumbnail w-25" id="previewBannerArtikel">
+                                    <img src="<?= base_url('assets/img/default-banner-infaq-online-4x4.jpg'); ?>" alt="banner artikel" class="img-thumbnail w-25" id="previewBannerArtikel">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="judulArtikel">Judul <span class="text-danger">*</span></label>

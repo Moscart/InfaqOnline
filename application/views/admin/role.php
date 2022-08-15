@@ -97,9 +97,9 @@
                 <!-- Card Content - Collapse -->
                 <div class="collapse show" id="collapseCardExample">
                     <div class="card-body">
-
+                        <!-- btn modal trigger -->
                         <a href="" class="btn btn-primary mb-3 d-block" data-toggle="modal" data-target="#newAkunModal">Buka Form Akun Baru</a>
-
+                        <!-- list user -->
                         <table class="table table-striped table-hover dtableExportResponsive">
                             <thead class="text-center">
                                 <th style="width: 5%;">#</th>
@@ -188,7 +188,7 @@
 </div>
 
 <!-- Modal Tambah akun -->
-<div class="modal fade" id="newAkunModal" tabindex="-1" role="dialog" aria-labelledby="newAkunModalLabel" aria-hidden="true">
+<div class="modal fade" id="newAkunModal" tabindex="-1" role="dialog" aria-labelledby="newAkunModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog scrollable" role="document" data-backdrop="static" data-keyboard="false">
         <div class="modal-content">
             <div class="modal-header">
@@ -305,7 +305,7 @@
     </div>
 </div>
 
-<!-- Role Delete Modal-->
+<!-- User Delete Modal-->
 <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

@@ -23,7 +23,7 @@ $('#showPass').on('click', function (event) {
 // modify iput name file upload
 $('.custom-file-input').on('change', function () {
     let fileName = $(this).val().split('\\').pop();
-    $(this).next('.custom-file-label').addClass("selected").html(fileName);
+    $(this).next('.custom-file-label').addClass('selected').html(fileName);
 });
 
 // show hdie pass on /user
@@ -105,6 +105,7 @@ $(document).on('click', '#editUser', function () {
     $('#inputEditFullname').val($(this).data('fullname'));
 });
 
+// admin onclose modal edit user
 $('.closeEditUserModal').click(function () {
     var selectedRole = $('#inputEditRoleUser option:contains(" (terakhir dipilih)")');
     var textRoleSelected = $('#inputEditRoleUser option:contains(" (terakhir dipilih)")').text().split(' (terakhir dipilih)')[0];
@@ -169,7 +170,7 @@ $(document).on('keyup, change', '#linkUrlSlug', function () {
     else $('#linkUrlSlug').removeClass('is-valid').addClass('is-invalid').attr('title', 'Inputan tidak boleh kosong');
 });
 
-// tampilkan gambar sehabis pilih file
+// tampilkan gambar banner artikel sehabis pilih file
 $('#bannerArtikel').change(function (e) {
     let allowedTypes = ['image/gif', 'image/png', 'image/jpg', 'image/jpeg'];
     let allowedSize = ['8388608']; //8 MB limit
@@ -181,7 +182,7 @@ $('#bannerArtikel').change(function (e) {
     // jika format file diluar kriteria
     if (!allowedTypes.includes(fileType)) {
         $('#bannerArtikel').next('.custom-file-label').removeClass('selected').html('Pilih file');
-        document.getElementById('previewBannerArtikel').src = `${windowOrigin}assets/img/artikel/default-banner-infaq-online-4x4.jpg`;
+        document.getElementById('previewBannerArtikel').src = `${windowOrigin}assets/img/default-banner-infaq-online-4x4.jpg`;
         $('#isiErrorNotifModal').html(`Maaf ya, silakan pilih file yang valid (<strong>${allowedTypes.join(', ')}</strong>). File Anda : ${fileType}`);
         $('#errorNotifModal').modal('show');
         return false;
@@ -189,7 +190,7 @@ $('#bannerArtikel').change(function (e) {
     // jika file lebih besar dari ketentuan size
     else if (fileSize > allowedSize) {
         $('#bannerArtikel').next('.custom-file-label').removeClass('selected').html('Pilih file');
-        document.getElementById('previewBannerArtikel').src = `${windowOrigin}assets/img/artikel/default-banner-infaq-online-4x4.jpg`;
+        document.getElementById('previewBannerArtikel').src = `${windowOrigin}assets/img/default-banner-infaq-online-4x4.jpg`;
         $('#isiErrorNotifModal').html(`Ukuran file terlalu besar, maksimal ukuran yg disarankan <stong>${formatBytes(alloweSize)}</strong>`);
         $('#errorNotifModal').modal('show');
         return false;
@@ -209,4 +210,114 @@ $('#bannerArtikel').change(function (e) {
 // admin/artikel delartikel
 $(document).on('click', '#delArtikel', function () {
     $('#cDelArtikel').attr('href', $(this).data('href'));
+});
+
+// admin/program editProgram
+$(document).on('click', '#editProgram', function () {
+    $('#inputIdProgram').val($(this).data('idprogram'));
+    $('#inputEditProgram').val($(this).data('program'));
+});
+
+// admin/program deleteProgram
+$(document).on('click', '#delProgram', function () {
+    $('#cDelProgram').attr('href', $(this).data('href'));
+});
+
+// tampilkan gambar banner add sub program sehabis pilih file
+$('#bannerSubProgram').change(function (e) {
+    let allowedTypes = ['image/gif', 'image/png', 'image/jpg', 'image/jpeg'];
+    let allowedSize = ['8388608']; //8 MB limit
+
+    let file = e.target.files[0];
+    let fileType = file.type;
+    let fileSize = file.size;
+
+    // jika format file diluar kriteria
+    if (!allowedTypes.includes(fileType)) {
+        $('#bannerSubProgram').next('.custom-file-label').removeClass('selected').html('Pilih file');
+        document.getElementById('previewBannerSubProgram').src = `${windowOrigin}assets/img/default-banner-infaq-online-4x4.jpg`;
+        $('#errorNotifUploadAddSubProgram').html(`<div class="alert alert-danger alert-dismissible fade show mb-2" role="alert">Maaf ya, silakan pilih file yang valid (<strong>${allowedTypes.join(', ')}</strong>). File Anda : ${fileType}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>`);
+        return false;
+    }
+    // jika file lebih besar dari ketentuan size
+    else if (fileSize > allowedSize) {
+        $('#bannerSubProgram').next('.custom-file-label').removeClass('selected').html('Pilih file');
+        document.getElementById('previewBannerSubProgram').src = `${windowOrigin}assets/img/default-banner-infaq-online-4x4.jpg`;
+        $('#errorNotifUploadAddSubProgram').html(`<div class="alert alert-danger alert-dismissible fade show mb-2" role="alert"><strong>Ukuran file terlalu besar, maksimal ukuran yg disarankan <stong>${formatBytes(alloweSize)}</strong><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>`);
+        return false;
+    }
+    // tampilkan preview gambar jika syarat terpenuhi 
+    else {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            // get loaded data and render thumbnail.
+            document.getElementById('previewBannerSubProgram').src = e.target.result;
+        };
+        // read the image file as a data URL.
+        reader.readAsDataURL(this.files[0]);
+    }
+});
+
+// admin ketika close modl addSubProgram
+$('.closeAddSubProgramModal').click(function () {
+    $('#previewBannerSubProgram').attr('src', windowOrigin + 'assets/img/default-banner-infaq-online-4x4.jpg');
+    $('.custom-file-label').removeClass('selected').html('Pilih file');
+});
+
+// tampilkan gambar banner edit sub program sehabis pilih file
+$('#bannerSubProgramEdit').change(function (e) {
+    let allowedTypes = ['image/gif', 'image/png', 'image/jpg', 'image/jpeg'];
+    let allowedSize = ['8388608']; //8 MB limit
+
+    let file = e.target.files[0];
+    let fileType = file.type;
+    let fileSize = file.size;
+
+    // jika format file diluar kriteria
+    if (!allowedTypes.includes(fileType)) {
+        $('#bannerSubProgramEdit').next('.custom-file-label').removeClass('selected').html('Pilih file');
+        document.getElementById('previewBannerSubProgramEdit').src = `${windowOrigin}assets/img/default-banner-infaq-online-4x4.jpg`;
+        $('#errorNotifUploadEditSubProgram').html(`<div class="alert alert-danger alert-dismissible fade show mb-2" role="alert">Maaf ya, silakan pilih file yang valid (<strong>${allowedTypes.join(', ')}</strong>). File Anda : ${fileType}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>`);
+        return false;
+    }
+    // jika file lebih besar dari ketentuan size
+    else if (fileSize > allowedSize) {
+        $('#bannerSubProgramEdit').next('.custom-file-label').removeClass('selected').html('Pilih file');
+        document.getElementById('previewBannerSubProgramEdit').src = `${windowOrigin}assets/img/default-banner-infaq-online-4x4.jpg`;
+        $('#errorNotifUploadEditSubProgram').html(`<div class="alert alert-danger alert-dismissible fade show mb-2" role="alert"><strong>Ukuran file terlalu besar, maksimal ukuran yg disarankan <stong>${formatBytes(alloweSize)}</strong><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>`);
+        return false;
+    }
+    // tampilkan preview gambar jika syarat terpenuhi 
+    else {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            // get loaded data and render thumbnail.
+            document.getElementById('previewBannerSubProgramEdit').src = e.target.result;
+        };
+        // read the image file as a data URL.
+        reader.readAsDataURL(this.files[0]);
+    }
+});
+
+// admin editSubProgram
+$(document).on('click', '#editSubProgram', function () {
+    $('#previewBannerSubProgramEdit').attr('src', windowOrigin + 'assets/img/program/' + $(this).data('banner'));
+    $('#bannerSubProgramOld').val($(this).data('banner'));
+    $('#id_programEdit option:contains("' + $(this).data('program') + '")').text($(this).data('program') + ' (terakhir dipilih)').attr('selected', true);
+    $('#nama_detailprogramEdit').val($(this).data('nama'));
+    $('#hiddenIdSubProgram').val($(this).data('idprogramdetail'));
+});
+
+// admin ketika close modl editSubProgram
+$('.closeEditSubProgramModal').click(function () {
+    var selectedRole = $('#id_programEdit option:contains(" (terakhir dipilih)")');
+    var textRoleSelected = $('#id_programEdit option:contains(" (terakhir dipilih)")').text().split(' (terakhir dipilih)')[0];
+    selectedRole.text(textRoleSelected).attr('selected', false);
+    $('#previewBannerSubProgramEdit').attr('src', windowOrigin + 'assets/img/default-banner-infaq-online-4x4.jpg');
+    $('.custom-file-label').removeClass('selected').html('Pilih file');
+});
+
+// admin deleteSubProgram
+$(document).on('click', '#delSubProgram', function () {
+    $('#cDelSubProgram').attr('href', $(this).data('href'));
 });
