@@ -34,7 +34,6 @@ class Auth extends CI_Controller
     {
         $usernameOrEmail = $this->input->post('username');
         $password = $this->input->post('password');
-
         // cek dulu yg di input imel atau username
         if (!filter_var($usernameOrEmail, FILTER_VALIDATE_EMAIL)) {
             // username
@@ -43,7 +42,6 @@ class Auth extends CI_Controller
             // imel
             $user = $this->db->get_where('user', ['email' => $usernameOrEmail])->row_array();
         }
-
         // kalo ada usernya
         if ($user) {
             // jika usernya aktif
@@ -84,7 +82,7 @@ class Auth extends CI_Controller
         if ($this->session->userdata('email')) {
             redirect('user');
         }
-
+        // set form validation
         $this->form_validation->set_rules('name', 'Name', 'required|trim');
         $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]', [
             'is_unique' => 'Email ini sudah terdaftar.'
@@ -94,7 +92,6 @@ class Auth extends CI_Controller
             'min_length' => 'Password terlalu pendek, min. 8 karakter'
         ]);
         $this->form_validation->set_rules('password2', 'Password', 'required|trim|matches[password1]');
-
         if ($this->form_validation->run() == false) {
             $data['title'] = 'Infaq Online Resgistrasi Akun';
             $data['identitas'] = $this->db->get('identitas')->row_array();
@@ -112,29 +109,24 @@ class Auth extends CI_Controller
                 'is_active' => 0,
                 'date_created' => time()
             ];
-
             // siapkan token
             $token = rand(1000, 9999);
             $user_token = [
                 'token' => $token,
                 'date_created' => time()
             ];
-
             $this->db->insert('user', $data);
             $this->db->insert('user_token', $user_token);
-
+            // panggil method sendemail
             $this->_sendEmail($token, 'verify');
-
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil membuat akun. Masukkan kode yang sudah dikirim ke email untuk aktivasi akun!</div>');
             redirect('auth/verify');
         }
     }
 
-
     private function _sendEmail($token, $type)
     {
         $email = $this->input->post('email');
-
         $config = [
             'protocol'  => 'smtp',
             'smtp_host' => 'ssl://smtp.gmail.com',
@@ -145,11 +137,10 @@ class Auth extends CI_Controller
             'charset'   => 'utf-8',
             'newline'   => "\r\n"
         ];
-
+        // panggi library
         $this->load->library('email', $config);
-
         $this->email->initialize($config);
-
+        // cek type kirim email
         if ($type == 'verify') {
             $this->email->from('info.infaqonline@gmail.com', 'Infaq Online Aktivasi Akun - ' . $token);
             $this->email->to($email);
@@ -163,7 +154,7 @@ class Auth extends CI_Controller
             $this->email->message('Masukkan kode di bawah ini untuk melakukan reset password akun Anda, kode hanya berlaku satu jam setelah diterbitkan. Apabila Anda tidak melakukan aktivitas ini, maka abaikan E-mail ini.<center><h1>' . $token . '</h1>©InfaqOnline One-Time Code</center>');
             $this->session->set_userdata('forgot_password', $email);
         }
-
+        // jika terjadi error saat kirim
         if ($this->email->send()) {
             return true;
         } else {
@@ -175,9 +166,7 @@ class Auth extends CI_Controller
     public function verify()
     {
         $data['email'] = $this->session->userdata('verify_email');
-
         $this->form_validation->set_rules('token', 'Token', 'trim|required');
-
         if ($this->form_validation->run() == false) {
             $data['title'] = 'Infaq Online User Verify';
             $data['identitas'] = $this->db->get('identitas')->row_array();
@@ -187,9 +176,7 @@ class Auth extends CI_Controller
         } else {
             $email = $this->input->post('email');
             $token = $this->input->post('token');
-
             $user = $this->db->get_where('user', ['email' => $email])->row_array();
-
             if ($user) {
                 $user_token = $this->db->get_where('user_token', ['token' => $token])->row_array();
 
@@ -198,15 +185,12 @@ class Auth extends CI_Controller
                         $this->db->set('is_active', 1);
                         $this->db->where('email', $email);
                         $this->db->update('user');
-
                         $this->db->delete('user_token', ['token' => $token]);
-
                         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">' . $email . ' sudah aktif, silakan login.</div>');
                         redirect('auth');
                     } else {
                         $this->db->delete('user', ['email' => $email]);
                         $this->db->delete('user_token', ['token' => $token]);
-
                         $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Aktivasi akun gagal! kode token sudah expired.</div>');
                         redirect('auth/verify');
                     }
@@ -249,14 +233,13 @@ class Auth extends CI_Controller
         } else {
             $email = $this->input->post('email');
             $user = $this->db->get_where('user', ['email' => $email, 'is_active' => 1])->row_array();
-
+            // jika usernya ada
             if ($user) {
                 $token = rand(1000, 9999);
                 $user_token = [
                     'token' => $token,
                     'date_created' => time()
                 ];
-
                 $this->db->insert('user_token', $user_token);
                 $this->_sendEmail($token, 'forgot');
                 $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Masukkan kode yang sudah dikirim ke email untuk reset password akun.</div>');
@@ -281,11 +264,10 @@ class Auth extends CI_Controller
         } else {
             $email = $this->input->post('email');
             $token = $this->input->post('token');
-
+            // jadikan emailnya session untuk ditampilkan di form
             $this->session->set_userdata('forgot_password', $email);
-
             $user = $this->db->get_where('user', ['email' => $email])->row_array();
-
+            // jika usernya ada
             if ($user) {
                 $user_token = $this->db->get_where('user_token', ['token' => $token])->row_array();
 
@@ -309,10 +291,9 @@ class Auth extends CI_Controller
         if (!$this->session->userdata('reset_email')) {
             redirect('auth');
         }
-
+        // set form validation
         $this->form_validation->set_rules('password1', 'Password', 'trim|required|min_length[8]|matches[password2]');
         $this->form_validation->set_rules('password2', 'Repeat Password', 'trim|required|min_length[8]|matches[password1]');
-
         if ($this->form_validation->run() == false) {
             $data['title'] = 'Infaq Online Change Password';
             $data['identitas'] = $this->db->get('identitas')->row_array();
@@ -323,15 +304,13 @@ class Auth extends CI_Controller
             $password = password_hash($this->input->post('password1'), PASSWORD_DEFAULT);
             $email = $this->session->userdata('reset_email');
             $token = $this->session->userdata('reset_token');
-
             $this->db->set('password', $password);
             $this->db->where('email', $email);
             $this->db->update('user');
-
+            // hilangan session reset email ygg tadi dibuat
             $this->session->unset_userdata('reset_email');
-
+            // hapus token dari db
             $this->db->delete('user_token', ['token' => $token]);
-
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil reset password, silakan login.</div>');
             redirect('auth');
         }

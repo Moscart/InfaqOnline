@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 15, 2022 at 08:48 AM
+-- Generation Time: Aug 15, 2022 at 05:05 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.2.34
 
@@ -81,6 +81,14 @@ CREATE TABLE `menu_front` (
   `is_active` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `menu_front`
+--
+
+INSERT INTO `menu_front` (`mf_id`, `title`, `url`, `is_active`) VALUES
+(1, 'Home', 'http://localhost/InfaqOnline/', 1),
+(2, 'Program', '#', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -94,6 +102,13 @@ CREATE TABLE `menu_front_detail` (
   `url` varchar(150) NOT NULL,
   `is_active` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `menu_front_detail`
+--
+
+INSERT INTO `menu_front_detail` (`mfd_id`, `parent_id`, `title`, `url`, `is_active`) VALUES
+(1, 2, 'Infak', 'http://localhost/InfaqOnline/donasi', 1);
 
 -- --------------------------------------------------------
 
@@ -257,12 +272,13 @@ CREATE TABLE `user_sub_menu` (
 
 INSERT INTO `user_sub_menu` (`id`, `menu_id`, `title`, `url`, `icon`, `is_active`) VALUES
 (1, 1, 'Dashboard', 'admin', 'fas fa-fw fa-tachometer-alt', 1),
-(4, 3, 'Menu Backend', 'menu', 'fas fa-fw fa-folder', 1),
-(5, 3, 'Submenu Backend', 'menu/submenu', 'fas fa-fw fa-folder-open', 1),
-(7, 1, 'Role', 'admin/role', 'fas fa-fw fa-user-shield', 1),
-(8, 1, 'Identitas', 'admin/identitas', 'fas fa-fw fa-id-card', 1),
-(9, 1, 'Artikel', 'admin/artikel', 'fas fa-fw fa-newspaper', 1),
-(10, 3, 'Frontend Navbar', 'menu/frontendnav', 'fas fa-fw fa-link', 1);
+(2, 3, 'Menu Backend', 'menu', 'fas fa-fw fa-folder', 1),
+(3, 3, 'Submenu Backend', 'menu/submenu', 'fas fa-fw fa-folder-open', 1),
+(4, 1, 'Role', 'admin/role', 'fas fa-fw fa-user-shield', 1),
+(5, 1, 'Identitas', 'admin/identitas', 'fas fa-fw fa-id-card', 1),
+(6, 1, 'Artikel', 'admin/artikel', 'fas fa-fw fa-newspaper', 1),
+(7, 1, 'Program', 'admin/program', 'fas fa-fw fa-project-diagram', 1),
+(8, 3, 'Frontend Navbar', 'menu/frontendnav', 'fas fa-fw fa-link', 1);
 
 -- --------------------------------------------------------
 
@@ -296,7 +312,8 @@ ALTER TABLE `menu_front`
 -- Indexes for table `menu_front_detail`
 --
 ALTER TABLE `menu_front_detail`
-  ADD PRIMARY KEY (`mfd_id`);
+  ADD PRIMARY KEY (`mfd_id`),
+  ADD KEY `parent_id` (`parent_id`);
 
 --
 -- Indexes for table `program`
@@ -367,13 +384,13 @@ ALTER TABLE `artikel`
 -- AUTO_INCREMENT for table `menu_front`
 --
 ALTER TABLE `menu_front`
-  MODIFY `mf_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `mf_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `menu_front_detail`
 --
 ALTER TABLE `menu_front_detail`
-  MODIFY `mfd_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `mfd_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `program`
@@ -421,7 +438,7 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT for table `user_sub_menu`
 --
 ALTER TABLE `user_sub_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `user_token`
@@ -432,6 +449,12 @@ ALTER TABLE `user_token`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `menu_front_detail`
+--
+ALTER TABLE `menu_front_detail`
+  ADD CONSTRAINT `menu_front_detail_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `menu_front` (`mf_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `program_detail`

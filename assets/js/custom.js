@@ -107,8 +107,8 @@ $(document).on('click', '#editUser', function () {
 
 // admin onclose modal edit user
 $('.closeEditUserModal').click(function () {
-    var selectedRole = $('#inputEditRoleUser option:contains(" (terakhir dipilih)")');
-    var textRoleSelected = $('#inputEditRoleUser option:contains(" (terakhir dipilih)")').text().split(' (terakhir dipilih)')[0];
+    let selectedRole = $('#inputEditRoleUser option:contains(" (terakhir dipilih)")');
+    let textRoleSelected = $('#inputEditRoleUser option:contains(" (terakhir dipilih)")').text().split(' (terakhir dipilih)')[0];
     selectedRole.text(textRoleSelected).attr('selected', false);
     $('#inputEditPassword').val('');
 });
@@ -310,9 +310,9 @@ $(document).on('click', '#editSubProgram', function () {
 
 // admin ketika close modl editSubProgram
 $('.closeEditSubProgramModal').click(function () {
-    var selectedRole = $('#id_programEdit option:contains(" (terakhir dipilih)")');
-    var textRoleSelected = $('#id_programEdit option:contains(" (terakhir dipilih)")').text().split(' (terakhir dipilih)')[0];
-    selectedRole.text(textRoleSelected).attr('selected', false);
+    let selectedSubProgram = $('#id_programEdit option:contains(" (terakhir dipilih)")');
+    let textSubProgramSelected = $('#id_programEdit option:contains(" (terakhir dipilih)")').text().split(' (terakhir dipilih)')[0];
+    selectedSubProgram.text(textSubProgramSelected).attr('selected', false);
     $('#previewBannerSubProgramEdit').attr('src', windowOrigin + 'assets/img/default-banner-infaq-online-4x4.jpg');
     $('.custom-file-label').removeClass('selected').html('Pilih file');
 });
@@ -321,3 +321,52 @@ $('.closeEditSubProgramModal').click(function () {
 $(document).on('click', '#delSubProgram', function () {
     $('#cDelSubProgram').attr('href', $(this).data('href'));
 });
+
+// admin ketika close modl addMenuFe
+$('.closeAddMenuFeModal').click(function () {
+    $('#titleMenuFe').val('');
+    $('#urlMenuFe').val('');
+});
+
+// admin ketika close modl addMenuFe
+$('.closeAddSubmenuFeModal').click(function () {
+    $('#titleSubmenuFeEdit').val('');
+    $('#urlSubmenuFeEdit').val('');
+});
+
+// admin ketika close modl editMenuFe
+$('.closeEditMenuFeModal').click(function () {
+    let selectedMenuFe = $('#isActiveMenuFeEdit option:contains(" (terakhir dipilih)")');
+    let textMenuFeSelected = $('#isActiveMenuFeEdit option:contains(" (terakhir dipilih)")').text().split(' (terakhir dipilih)')[0];
+    selectedMenuFe.text(textMenuFeSelected).attr('selected', false);
+});
+
+// admin ketika close modl editSubmenuFe
+$('.closeEditSubmenuFeModal').click(function () {
+    let selectedSubmenuFe = $('#isActiveSubmenuFeEdit option:contains(" (terakhir dipilih)")');
+    let textSubmenuFeSelected = $('#isActiveSubmenuFeEdit option:contains(" (terakhir dipilih)")').text().split(' (terakhir dipilih)')[0];
+    selectedSubmenuFe.text(textSubmenuFeSelected).attr('selected', false);
+});
+
+// admin deleteNavbarFrontend
+$(document).on('click', '#delFrontendNav', function () {
+    $('#cDelFrontendNav').attr('href', $(this).data('href'));
+});
+
+// admin editMenuFe
+$(document).on('click', '#editMenuFront', function () {
+    $('#titleMenuFeEdit, #hiddenTitleMfOld').val($(this).data('title'));
+    $('#urlMenuFeEdit').val($(this).data('url'));
+    $('#isActiveMenuFeEdit option:contains("' + $(this).data('strisactive') + '")').text($(this).data('strisactive') + ' (terakhir dipilih)').attr('selected', true);
+    $('#hiddenMfId').val($(this).data('idmf'));
+});
+
+// admin editSubmenuFe
+$(document).on('click', '#editSubmenuFront', function () {
+    $('#parent_idSubmenuFeEdit option:contains("' + $(this).data('parent') + '")').text($(this).data('parent') + ' (terakhir dipilih)').attr('selected', true);
+    $('#titleSubmenuFeEdit, #hiddenTitleMfdOld').val($(this).data('title'));
+    $('#urlSubmenuFeEdit').val($(this).data('url'));
+    $('#isActiveSubmenuFeEdit option:contains("' + $(this).data('strisactive') + '")').text($(this).data('strisactive') + ' (terakhir dipilih)').attr('selected', true);
+    $('#hiddenMfdId').val($(this).data('idmfd'));
+});
+

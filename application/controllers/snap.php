@@ -18,8 +18,6 @@ class Snap extends CI_Controller
 		$this->load->view('home');
 	}
 
-
-
 	public function token($harga)
 	{
 		// Required
