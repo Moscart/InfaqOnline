@@ -8,8 +8,9 @@
     <title>Infaq Online</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <link rel="stylesheet" href="<?= base_url(); ?>assets/css/style.css">
-    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-HCprc-t2i590xFMn"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <link rel="shortcut icon" href="<?= base_url(); ?>assets/img/favicon/<?= $identitas['favicon']; ?>" type="image/x-icon">
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?= $apiKey; ?>"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 </head>
 
 <body>
@@ -97,42 +98,20 @@
             <div class="container">
                 <div class="fs-4 fw-bold text-center mb-4 text-white">ARTIKEL</div>
                 <div class="row gy-4 justify-content-center">
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="card h-100 rounded-4 shadow overflow-hidden">
-                            <div class="img-container">
-                                <img src="https://t3.ftcdn.net/jpg/04/62/93/66/360_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg" class="img-content" alt="...">
-                            </div>
-                            <div class="card-body d-flex flex-column p-4">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis suscipit voluptates quibusdam vero eveniet. Sint similique eveniet beatae maiores vitae.</p>
-                                <a href="#" class="btn btn-outline-primary d-block rounded-pill mx-5 mt-auto">Selengkapnya</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="card h-100 rounded-4 shadow overflow-hidden">
-                            <div class="img-container">
-                                <img src="https://t3.ftcdn.net/jpg/04/62/93/66/360_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg" class="img-content" alt="...">
-                            </div>
-                            <div class="card-body d-flex flex-column p-4">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text text-muted">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn btn-outline-primary d-block rounded-pill mx-5 mt-auto">Selengkapnya</a>
+                    <?php foreach ($artikel as $art) : ?>
+                        <div class="col-lg-4 col-md-6 col-12">
+                            <div class="card h-100 rounded-4 border-0 shadow overflow-hidden">
+                                <div class="img-container">
+                                    <img src="<?= base_url(); ?>assets/img/artikel/<?= $art['banner']; ?>" class="img-content" alt="<?= $art['judul']; ?>">
+                                </div>
+                                <div class="card-body d-flex flex-column p-4">
+                                    <h5 class="card-title"><?= $art['judul']; ?></h5>
+                                    <p class="card-text text-muted"><?= strip_tags(substr($art['isi'], 0, 100)) . ' [...]'; ?></p>
+                                    <a href="<?= base_url(); ?>artikel/<?= $art['link']; ?>" class="btn btn-outline-primary d-block rounded-pill mx-5 mt-auto">Selengkapnya</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="card h-100 rounded-4 shadow overflow-hidden">
-                            <div class="img-container">
-                                <img src="https://t3.ftcdn.net/jpg/04/62/93/66/360_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg" class="img-content" alt="...">
-                            </div>
-                            <div class="card-body d-flex flex-column p-4">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text text-muted">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn btn-outline-primary d-block rounded-pill mx-5 mt-auto">Selengkapnya</a>
-                            </div>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
                 <button type="button" class="btn btn-warning rounded-pill fs-7 fw-bold text-uppercase py-3 px-5 mt-5 mx-auto d-block">Lihat lainnya</button>
             </div>
@@ -244,8 +223,6 @@
         function checkRadio(event) {
             const nominal = document.getElementById('nominal');
             const listNominal = event.path[0];
-            console.log(typeof nominal.value);
-            console.log(event.path[0].value);
             if (nominal.value === listNominal.value) {
                 event.path[0].checked = false;
                 nominal.value = "";
