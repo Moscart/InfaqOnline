@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 14, 2022 at 08:20 PM
+-- Generation Time: Aug 15, 2022 at 08:48 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.2.34
 
@@ -106,6 +106,13 @@ CREATE TABLE `program` (
   `nama_program` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `program`
+--
+
+INSERT INTO `program` (`id_program`, `nama_program`) VALUES
+(1, 'Infak');
+
 -- --------------------------------------------------------
 
 --
@@ -115,8 +122,16 @@ CREATE TABLE `program` (
 CREATE TABLE `program_detail` (
   `id_programdetail` int(11) NOT NULL,
   `id_program` int(11) NOT NULL,
-  `nama_detailprogram` int(11) NOT NULL
+  `nama_detailprogram` varchar(100) NOT NULL,
+  `banner` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `program_detail`
+--
+
+INSERT INTO `program_detail` (`id_programdetail`, `id_program`, `nama_detailprogram`, `banner`) VALUES
+(1, 1, 'Infak', 'infaq.jpeg');
 
 -- --------------------------------------------------------
 
@@ -242,11 +257,12 @@ CREATE TABLE `user_sub_menu` (
 
 INSERT INTO `user_sub_menu` (`id`, `menu_id`, `title`, `url`, `icon`, `is_active`) VALUES
 (1, 1, 'Dashboard', 'admin', 'fas fa-fw fa-tachometer-alt', 1),
-(4, 3, 'Menu Management', 'menu', 'fas fa-fw fa-folder', 1),
-(5, 3, 'Submenu Management', 'menu/submenu', 'fas fa-fw fa-folder-open', 1),
+(4, 3, 'Menu Backend', 'menu', 'fas fa-fw fa-folder', 1),
+(5, 3, 'Submenu Backend', 'menu/submenu', 'fas fa-fw fa-folder-open', 1),
 (7, 1, 'Role', 'admin/role', 'fas fa-fw fa-user-shield', 1),
 (8, 1, 'Identitas', 'admin/identitas', 'fas fa-fw fa-id-card', 1),
-(9, 1, 'Artikel', 'admin/artikel', 'fas fa-fw fa-newspaper', 1);
+(9, 1, 'Artikel', 'admin/artikel', 'fas fa-fw fa-newspaper', 1),
+(10, 3, 'Frontend Navbar', 'menu/frontendnav', 'fas fa-fw fa-link', 1);
 
 -- --------------------------------------------------------
 
@@ -292,7 +308,8 @@ ALTER TABLE `program`
 -- Indexes for table `program_detail`
 --
 ALTER TABLE `program_detail`
-  ADD PRIMARY KEY (`id_programdetail`);
+  ADD PRIMARY KEY (`id_programdetail`),
+  ADD KEY `id_program` (`id_program`);
 
 --
 -- Indexes for table `transaksi`
@@ -362,13 +379,13 @@ ALTER TABLE `menu_front_detail`
 -- AUTO_INCREMENT for table `program`
 --
 ALTER TABLE `program`
-  MODIFY `id_program` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_program` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `program_detail`
 --
 ALTER TABLE `program_detail`
-  MODIFY `id_programdetail` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_programdetail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `transaksi`
@@ -404,13 +421,23 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT for table `user_sub_menu`
 --
 ALTER TABLE `user_sub_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `user_token`
 --
 ALTER TABLE `user_token`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `program_detail`
+--
+ALTER TABLE `program_detail`
+  ADD CONSTRAINT `program_detail_ibfk_1` FOREIGN KEY (`id_program`) REFERENCES `program` (`id_program`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

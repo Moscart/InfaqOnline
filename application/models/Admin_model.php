@@ -44,7 +44,7 @@ class Admin_model extends CI_Model
     public function autoString($panjang)
     {
         // tentukan karakter random
-        $karakter = 'QASZDCXWERVRTCYFGHCBVNMKNYIOIPGLMAGEZACUOQNDFTUZMXRJKOAMWPEXBUQI';
+        $karakter = 'QASZDCXWERVRTCYFGHCBVNMKNYIOIPGLMAGEZACUOQNDFTUZMXRJKOAMWPEXBUQIqazplmwsoknedcijnrfvuhbtgy';
         // buat variabel kosong untuke kembalian nilai retur
         $string = '';
         // lakukan proses looping 
@@ -80,12 +80,11 @@ class Admin_model extends CI_Model
 
     public function handleArtikelAction($post, $file = null)
     {
-        $cekToken = base64_decode($post['tokenArtikel']);
-        if ($cekToken == 'posting') {
+        if (base64_decode($post['tokenArtikel']) == 'posting') {
             // handle upload bannerArtikel
             $upload_image = $file['name'];
             if ($upload_image) {
-                $config['allowed_types'] = 'gif|jpg|png';
+                $config['allowed_types'] = 'gif|jpg|jpeg|png|webp';
                 $config['max_size']     = '8192';
                 $config['upload_path'] = './assets/img/artikel/';
                 $this->load->library('upload', $config);
@@ -108,13 +107,13 @@ class Admin_model extends CI_Model
                 ];
                 $resp =  ($this->db->insert('artikel', $data)) ? 'ok' : 'errInsert';
             } else $resp = 'errFoto';
-        } else if ($cekToken == 'edit') {
+        } else if (base64_decode($post['tokenArtikel']) == 'edit') {
             // define upload status
             $banner = true;
             // get file gambar lama n baru
             if ($file['name'] != '' && $file['name'] != $post['bannerOldArtikel']) {
-                // upload gambar baru bannerArtikel\
-                $config['allowed_types'] = 'gif|jpg|png';
+                // upload gambar baru bannerArtikel
+                $config['allowed_types'] = 'gif|jpg|jpeg|png|webp';
                 $config['max_size']     = '8192';
                 $config['upload_path'] = './assets/img/artikel/';
                 $this->load->library('upload', $config);
@@ -144,6 +143,79 @@ class Admin_model extends CI_Model
                 $this->db->set($data);
                 $this->db->where('link', $post['LinkUrlSlugOldArtikel']);
                 $resp = ($this->db->update('artikel')) ? 'ok' : 'err';
+            } else $resp = 'errFoto';
+        }
+        return $resp;
+    }
+
+    public function showListSubProgram()
+    {
+        $this->db->select('program_detail.*, program.nama_program');
+        $this->db->from('program_detail');
+        $this->db->join('program', 'program.id_program = program_detail.id_program');
+        return $this->db->get()->result_array();
+    }
+
+    public function handleSubProgramAction($post, $file = null)
+    {
+        if (base64_decode($post['token']) == 'add') {
+            // handle upload bannerSubProgram
+            $upload_image = $file['name'];
+            if ($upload_image) {
+                $config['allowed_types'] = 'gif|jpg|jpeg|png|webp';
+                $config['max_size']     = '8192';
+                $config['upload_path'] = './assets/img/program/';
+                $this->load->library('upload', $config);
+                if ($this->upload->do_upload('bannerSubProgram')) {
+                    $banner = $this->upload->data('file_name');
+                } else {
+                    $banner = NULL;
+                }
+            }
+            // jika tidak ada foto gagalkan proses insert pembelian
+            if ($banner != NULL) {
+                // masukkan ke variabel dulu, semua yang $this->input->post()
+                $data = [
+                    'id_program' => $post['id_program'],
+                    'nama_detailprogram' => $post['nama_detailprogram'],
+                    'banner' => $banner
+                ];
+                $resp =  ($this->db->insert('program_detail', $data)) ? 'ok' : 'errInsert';
+            } else $resp = 'errFoto';
+        } else if (base64_decode($post['token']) == 'edit') {
+            // define upload status
+            $banner = true;
+            // get file gambar lama n baru
+            if ($file['name'] != '' && $file['name'] != $post['bannerSubProgramOld']) {
+                // upload gambar baru bannerSubProgramEdit
+                $config['allowed_types'] = 'gif|jpg|jpeg|png|webp';
+                $config['max_size']     = '8192';
+                $config['upload_path'] = './assets/img/program/';
+                $this->load->library('upload', $config);
+                if ($this->upload->do_upload('bannerSubProgramEdit')) {
+                    $banner = $this->upload->data('file_name');
+                    // hapus gambar lama
+                    unlink($config['upload_path'] . $post['bannerSubProgramOld']);
+                    // inisial update
+                    $data   = [
+                        'id_program' => $post['id_programEdit'],
+                        'nama_detailprogram' => $post['nama_detailprogramEdit'],
+                        'banner' => $banner
+                    ];
+                } else $banner = false;
+            } else {
+                // gambar masih pakai yang lama, inisial update
+                $data = [
+                    'id_program' => $post['id_programEdit'],
+                    'nama_detailprogram' => $post['nama_detailprogramEdit'],
+                    'banner' => $post['bannerSubProgramOld']
+                ];
+            }
+            // jika upload berhasil update db
+            if ($banner) {
+                $this->db->set($data);
+                $this->db->where('id_programdetail', $post['hiddenIdSubProgram']);
+                $resp = ($this->db->update('program_detail')) ? 'ok' : 'err';
             } else $resp = 'errFoto';
         }
         return $resp;

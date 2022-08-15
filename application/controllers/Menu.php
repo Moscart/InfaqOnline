@@ -11,7 +11,7 @@ class Menu extends CI_Controller
 
     public function index()
     {
-        $data['title'] = 'Menu Management';
+        $data['title'] = 'Menu Backend';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $data['identitas'] = $this->db->get('identitas')->row_array();
 
@@ -44,7 +44,7 @@ class Menu extends CI_Controller
 
     public function submenu()
     {
-        $data['title'] = 'Submenu Management';
+        $data['title'] = 'Submenu Backend';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $data['identitas'] = $this->db->get('identitas')->row_array();
 
@@ -79,7 +79,7 @@ class Menu extends CI_Controller
 
     public function editSubMenu($id_submenu)
     {
-        $data['title'] = 'Submenu Management';
+        $data['title'] = 'Submenu Backend';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $data['identitas'] = $this->db->get('identitas')->row_array();
 
@@ -122,5 +122,18 @@ class Menu extends CI_Controller
         $this->db->delete('user_sub_menu');
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Submenu has been deleted.</div>');
         redirect('menu/submenu');
+    }
+
+    public function frontendNav()
+    {
+        $data['title'] = 'Frontend Navbar';
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $data['identitas'] = $this->db->get('identitas')->row_array();
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('templates/topbar', $data);
+        $this->load->view('menu/frontendNav', $data);
+        $this->load->view('templates/footer');
     }
 }

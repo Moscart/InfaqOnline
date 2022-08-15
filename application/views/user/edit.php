@@ -3,23 +3,24 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                <h5 class="modal-title" id="deletePictureLabel">Halo...</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <h5 class="modal-title" id="deletePictureLabel">Are You sure to delete Your profile picture?</h5>
-                <form action="<?= base_url('user/edit'); ?>" method="post">
+                Are You sure to delete Your profile picture?
             </div>
             <div class="modal-footer">
-                <input type="hidden" id="email" name="email" value="<?= $user['email']; ?>">
-                <input type="hidden" id="name" name="name" value="<?= $user['name']; ?>">
-                <input type="hidden" id="image" name="image" value="<?= $user['image']; ?>">
-                <input type="hidden" id="status" name="status" value="ZGVsZXRl">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                <button type="submit" class="btn btn-danger">Yes</button>
+                <form action="<?= base_url('user/edit'); ?>" method="post">
+                    <input type="hidden" id="email" name="email" value="<?= $user['email']; ?>">
+                    <input type="hidden" id="name" name="name" value="<?= $user['name']; ?>">
+                    <input type="hidden" id="image" name="image" value="<?= $user['image']; ?>">
+                    <input type="hidden" id="status" name="status" value="ZGVsZXRl">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                    <button type="submit" class="btn btn-danger">Yes</button>
+                </form>
             </div>
-            </form>
         </div>
     </div>
 </div>

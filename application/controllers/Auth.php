@@ -233,7 +233,7 @@ class Auth extends CI_Controller
     public function blocked()
     {
         $data['identitas'] = $this->db->get('identitas')->row_array();
-        $this->load->view('auth/blocked');
+        $this->load->view('auth/blocked', $data);
     }
 
     public function forgotPassword()

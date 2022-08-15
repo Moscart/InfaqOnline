@@ -27,7 +27,7 @@
                     <label for="menu_id" class="col-sm-2 col-form-label">Menu_id</label>
                     <div class="col-sm-10">
                         <select name="menu_id" id="menu_id" class="form-control selectpicker" data-live-search="true">
-                            <option value="<?= $submenu['id']; ?>"><?= $menuName['menu']; ?> (Terakhir dipilih)</option>
+                            <option value="<?= $submenu['menu_id']; ?>"><?= $menuName['menu']; ?> (Terakhir dipilih)</option>
                             <?php foreach ($menu as $m) : ?>
                                 <option value="<?= $m['id']; ?>"><?= $m['menu'] ?></option>
                             <?php endforeach; ?>
