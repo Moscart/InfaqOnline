@@ -225,4 +225,33 @@ class Admin_model extends CI_Model
     {
         return $this->db->select('program AS nama_program, SUM(nominal) AS dana_program')->from('transaksi_masuk')->group_by('program')->get()->result_array();
     }
+
+    public function showProgram()
+    {
+        if ($this->db->get('program')->num_rows() == 0) $data = [];
+        else $program = $this->db->get('program')->result_array();
+        $data = ['program' => array()];
+        foreach ($program as $p) {
+            $addMenu = [
+                'nama_program' => $p['nama_program'],
+                'program_detail' => $this->_getProgramDetail($p['id_program'])
+            ];
+            array_push($data['program'], $addMenu);
+        }
+        return $data;
+    }
+
+    private function _getProgramDetail($id_program)
+    {
+        $detailProgram =  $this->db->select('nama_detailprogram, banner')->from('program_detail')->where('id_program', $id_program)->get()->result_array();
+        $data = [];
+        foreach ($detailProgram as $dp) {
+            $add = [
+                'nama_detailprogram' => $dp['nama_detailprogram'],
+                'banner_detailprogram' => base_url('assets/img/program/') . $dp['banner']
+            ];
+            array_push($data, $add);
+        }
+        return $data;
+    }
 }
