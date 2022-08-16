@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 15, 2022 at 05:05 PM
+-- Generation Time: Aug 16, 2022 at 05:43 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.2.34
 
@@ -53,7 +53,7 @@ INSERT INTO `artikel` (`artikel_id`, `user_email`, `link`, `tgl_upload`, `judul`
 
 CREATE TABLE `identitas` (
   `id_iden` int(2) NOT NULL,
-  `nama_organisasi` varchar(100) NOT NULL,
+  `nama_instansi` varchar(100) NOT NULL,
   `no_telp` varchar(15) NOT NULL,
   `alamat` varchar(250) NOT NULL,
   `nama_pimpinan` varchar(100) NOT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE `identitas` (
 -- Dumping data for table `identitas`
 --
 
-INSERT INTO `identitas` (`id_iden`, `nama_organisasi`, `no_telp`, `alamat`, `nama_pimpinan`, `favicon`, `icon`) VALUES
+INSERT INTO `identitas` (`id_iden`, `nama_instansi`, `no_telp`, `alamat`, `nama_pimpinan`, `favicon`, `icon`) VALUES
 (1, 'Masjid Fikom UDB Surakarta', '(0271) 719552', 'Fakultas Ilmu Komputer Universitas Duta Bangsa, Jl. Bhayangkara No.55, Tipes, Kec. Serengan, Kota Surakarta, Jawa Tengah 57154', 'Takmir Masjid Fikom UDB Surakarta', 'default.ico', 'hand-holding-usd');
 
 -- --------------------------------------------------------
@@ -151,16 +151,54 @@ INSERT INTO `program_detail` (`id_programdetail`, `id_program`, `nama_detailprog
 -- --------------------------------------------------------
 
 --
--- Table structure for table `transaksi`
+-- Table structure for table `transaksi_keluar`
 --
 
-CREATE TABLE `transaksi` (
-  `id_transaksi` int(11) NOT NULL,
-  `order_id` int(11) NOT NULL,
-  `gross_amount` int(11) NOT NULL,
-  `tgl_transaksi` datetime NOT NULL,
-  `id_user` int(11) NOT NULL
+CREATE TABLE `transaksi_keluar` (
+  `id` int(11) NOT NULL,
+  `petugas` varchar(128) NOT NULL,
+  `program` varchar(100) DEFAULT NULL,
+  `penerima_nama` varchar(60) NOT NULL,
+  `penerima_telp` varchar(15) NOT NULL,
+  `penerima_alamat_instansi` varchar(250) DEFAULT NULL,
+  `tgl` date NOT NULL,
+  `nominal` int(11) NOT NULL,
+  `keterangan` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `transaksi_keluar`
+--
+
+INSERT INTO `transaksi_keluar` (`id`, `petugas`, `program`, `penerima_nama`, `penerima_telp`, `penerima_alamat_instansi`, `tgl`, `nominal`, `keterangan`) VALUES
+(2, 'Admin', 'Infak', 'Bp. Sanusi', '086537824356', 'Indonesia', '2022-08-16', 250000, 'Bantu pembangunan masjid tahap I');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transaksi_masuk`
+--
+
+CREATE TABLE `transaksi_masuk` (
+  `id` int(11) NOT NULL,
+  `tgl` datetime NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `user_nama` varchar(50) NOT NULL,
+  `user_email` varchar(128) DEFAULT NULL,
+  `user_telp` varchar(15) DEFAULT NULL,
+  `nominal` int(11) NOT NULL,
+  `status` varchar(15) NOT NULL,
+  `program` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `transaksi_masuk`
+--
+
+INSERT INTO `transaksi_masuk` (`id`, `tgl`, `order_id`, `user_nama`, `user_email`, `user_telp`, `nominal`, `status`, `program`) VALUES
+(1, '2022-08-15 20:26:02', 1947493830, 'User', 'user@gmail.com', '', 250000, 'settlement', 'Infak'),
+(2, '2022-08-15 20:34:12', 836550940, 'Hamba Allah', '', '', 10000, 'pending', 'Infak'),
+(3, '2022-08-16 03:35:38', 1234900917, 'User', 'user@gmail.com', '', 100000, 'settlement', 'Infak');
 
 -- --------------------------------------------------------
 
@@ -210,7 +248,8 @@ INSERT INTO `user_access_menu` (`id`, `role_id`, `menu_id`) VALUES
 (1, 1, 1),
 (2, 1, 2),
 (3, 2, 2),
-(4, 1, 3);
+(4, 1, 3),
+(5, 2, 4);
 
 -- --------------------------------------------------------
 
@@ -230,7 +269,8 @@ CREATE TABLE `user_menu` (
 INSERT INTO `user_menu` (`id`, `menu`) VALUES
 (1, 'Admin'),
 (2, 'User'),
-(3, 'Menu');
+(3, 'Menu'),
+(4, 'Donatur');
 
 -- --------------------------------------------------------
 
@@ -278,7 +318,10 @@ INSERT INTO `user_sub_menu` (`id`, `menu_id`, `title`, `url`, `icon`, `is_active
 (5, 1, 'Identitas', 'admin/identitas', 'fas fa-fw fa-id-card', 1),
 (6, 1, 'Artikel', 'admin/artikel', 'fas fa-fw fa-newspaper', 1),
 (7, 1, 'Program', 'admin/program', 'fas fa-fw fa-project-diagram', 1),
-(8, 3, 'Frontend Navbar', 'menu/frontendnav', 'fas fa-fw fa-link', 1);
+(8, 3, 'Frontend Navbar', 'menu/frontendnav', 'fas fa-fw fa-link', 1),
+(9, 4, 'Dashboard', 'donatur', 'fas fa-fw fa-tachometer-alt', 1),
+(10, 1, 'Transaksi Masuk', 'admin/trsmasuk', 'fas fa-fw fa-hand-holding-usd', 1),
+(11, 1, 'Transaksi Keluar', 'admin/trskeluar', 'fas fa-fw fa-shopping-cart', 1);
 
 -- --------------------------------------------------------
 
@@ -329,10 +372,16 @@ ALTER TABLE `program_detail`
   ADD KEY `id_program` (`id_program`);
 
 --
--- Indexes for table `transaksi`
+-- Indexes for table `transaksi_keluar`
 --
-ALTER TABLE `transaksi`
-  ADD PRIMARY KEY (`id_transaksi`);
+ALTER TABLE `transaksi_keluar`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `transaksi_masuk`
+--
+ALTER TABLE `transaksi_masuk`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `user`
@@ -405,10 +454,16 @@ ALTER TABLE `program_detail`
   MODIFY `id_programdetail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `transaksi`
+-- AUTO_INCREMENT for table `transaksi_keluar`
 --
-ALTER TABLE `transaksi`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `transaksi_keluar`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `transaksi_masuk`
+--
+ALTER TABLE `transaksi_masuk`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -420,13 +475,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `user_access_menu`
 --
 ALTER TABLE `user_access_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `user_menu`
 --
 ALTER TABLE `user_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `user_role`
@@ -438,7 +493,7 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT for table `user_sub_menu`
 --
 ALTER TABLE `user_sub_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `user_token`
