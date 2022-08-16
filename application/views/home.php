@@ -9,14 +9,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <link rel="stylesheet" href="<?= base_url(); ?>assets/css/style.css">
     <link rel="shortcut icon" href="<?= base_url(); ?>assets/img/favicon/<?= $identitas['favicon']; ?>" type="image/x-icon">
-    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?= $apiKey; ?>"></script>
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?= CLIENT_KEY; ?>"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 </head>
 
 <body>
     <nav class="navbar navbar-dark navbar-expand-lg bg-dark py-3">
         <div class="container">
-            <a class="navbar-brand" href="#">Navbar</a>
+            <a class="navbar-brand" href="#">LOGO</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -29,17 +29,7 @@
                         <a class="nav-link" href="#">Artikel</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Pricing</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Dropdown link
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
+                        <a class="btn btn-warning nav-link text-dark fw-bold fs-7 px-4 text-uppercase ms-lg-4 w-max" href="<?= base_url(); ?>auth">Login</a>
                     </li>
                 </ul>
             </div>
@@ -92,6 +82,21 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-6 col-12">
+                    <h3 class="fw-bold">Infaq Terbaru</h3>
+                    <div class="bg-dark my-2 text-white rounded-pill p-3 row">
+                        <div class="col-6">20 Agustus 2022 22:23</div>
+                        <div class="col-6 text-end ">Rp100.000</div>
+                    </div>
+                    <div class="bg-dark my-2 text-white rounded-pill p-3 row">
+                        <div class="col-6">20 Agustus 2022 22:23</div>
+                        <div class="col-6 text-end ">Rp100.000</div>
+                    </div>
+                    <div class="bg-dark my-2 text-white rounded-pill p-3 row">
+                        <div class="col-6">20 Agustus 2022 22:23</div>
+                        <div class="col-6 text-end ">Rp100.000</div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="bg-dark py-5">
@@ -113,7 +118,7 @@
                         </div>
                     <?php endforeach; ?>
                 </div>
-                <button type="button" class="btn btn-warning rounded-pill fs-7 fw-bold text-uppercase py-3 px-5 mt-5 mx-auto d-block">Lihat lainnya</button>
+                <a type="button" class="btn btn-warning rounded-pill fs-7 fw-bold text-uppercase py-3 px-5 mt-5 mx-auto d-block w-max" href="<?= base_url(); ?>artikel">Lihat lainnya</a>
             </div>
         </div>
         <div class="container py-5">
@@ -175,46 +180,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     <script type="text/javascript">
         $('#pay-button').click(function(event) {
-            event.preventDefault();
             let nominal = Number($('#nominal').val());
-            $(this).attr("disabled", "disabled");
-
             $.ajax({
                 url: '<?= site_url() ?>/snap/token/' + nominal,
                 cache: false,
-
                 success: function(data) {
                     //location = data;
-
                     console.log('token = ' + data);
-
-                    var resultType = document.getElementById('nominal');
-
-                    function changeResult(type, data) {
-                        $("#nominal").val(type);
-                        //resultType.innerHTML = type;
-                        //resultData.innerHTML = JSON.stringify(data);
-                    }
-
                     snap.pay(data, {
-
                         onSuccess: function(result) {
-                            changeResult('success', result);
+                            console.log(result);
                             // console.log(result.status_message);
                             // console.log(result);
-
                             // $("#payment-form").submit();
                         }
-                        // onPending: function(result) {
-                        //     changeResult('pending', result);
-                        //     console.log(result.status_message);
-                        //     $("#payment-form").submit();
-                        // },
-                        // onError: function(result) {
-                        //     changeResult('error', result);
-                        //     console.log(result.status_message);
-                        //     $("#payment-form").submit();
-                        // }
                     });
                 }
             });
