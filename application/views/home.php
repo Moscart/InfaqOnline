@@ -1,40 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infaq Online</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-    <link rel="stylesheet" href="<?= base_url(); ?>assets/css/style.css">
-    <link rel="shortcut icon" href="<?= base_url(); ?>assets/img/favicon/<?= $identitas['favicon']; ?>" type="image/x-icon">
-    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?= CLIENT_KEY; ?>"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-</head>
-
-<body>
-    <nav class="navbar navbar-dark navbar-expand-lg bg-dark py-3">
-        <div class="container">
-            <a class="navbar-brand" href="#">LOGO</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Artikel</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="btn btn-warning nav-link text-dark fw-bold fs-7 px-4 text-uppercase ms-lg-4 w-max" href="<?= base_url(); ?>auth">Login</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <?php $this->load->view('./header.php') ?>
     <main>
         <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
@@ -58,8 +22,8 @@
             </button>
         </div>
         <div class="container py-5">
-            <div class="row">
-                <div class="col-md-6 col-12">
+            <div class="row gy-4">
+                <div class="col-lg-6 col-12">
                     <div class="card shadow bg-dark border-0 position-relative">
                         <div class="w-max pe-4 mt-4 p-3 rounded-start rounded-pill bg-warning fs-7 fw-bold text-uppercase">
                             Total Infaq
@@ -82,19 +46,33 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-12">
-                    <h3 class="fw-bold">Infaq Terbaru</h3>
-                    <div class="bg-dark my-2 text-white rounded-pill p-3 row">
-                        <div class="col-6">20 Agustus 2022 22:23</div>
-                        <div class="col-6 text-end ">Rp100.000</div>
-                    </div>
-                    <div class="bg-dark my-2 text-white rounded-pill p-3 row">
-                        <div class="col-6">20 Agustus 2022 22:23</div>
-                        <div class="col-6 text-end ">Rp100.000</div>
-                    </div>
-                    <div class="bg-dark my-2 text-white rounded-pill p-3 row">
-                        <div class="col-6">20 Agustus 2022 22:23</div>
-                        <div class="col-6 text-end ">Rp100.000</div>
+                <div class="col-lg-6 col-12">
+                    <h3 class="fw-bolder text-uppercase fs-4">Infaq Terbaru</h3>
+                    <div class="row gy-1">
+                        <div class="col-12">
+                            <div class="bg-dark fs-7 text-white rounded-pill p-2">
+                                <div class="row px-3">
+                                    <div class="col-6 align-self-center fw-bold">20/08/2022 22:23</div>
+                                    <div class="col-6 text-end fw-bold text-muted">Rp<span class="text-warning fs-6">100.000</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="bg-dark fs-7 text-white rounded-pill p-2">
+                                <div class="row px-3">
+                                    <div class="col-6 align-self-center fw-bold">20/08/2022 22:23</div>
+                                    <div class="col-6 text-end fw-bold text-muted">Rp<span class="text-warning fs-6">100.000</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="bg-dark fs-7 text-white rounded-pill p-2">
+                                <div class="row px-3">
+                                    <div class="col-6 align-self-center fw-bold">20/08/2022 22:23</div>
+                                    <div class="col-6 text-end fw-bold text-muted">Rp<span class="text-warning fs-6">100.000</span></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -170,14 +148,7 @@
             </div>
         </div>
     </main>
-    <footer class="navbar navbar-dark bg-dark py-3">
-        <div class="container justify-content-center">
-            <span class="navbar-text">© <script>
-                    document.write(new Date().getFullYear())
-                </script> Infaq Online. All Rights Reserved</span>
-        </div>
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+
     <script type="text/javascript">
         $('#pay-button').click(function(event) {
             let nominal = Number($('#nominal').val());
@@ -225,6 +196,5 @@
             })
         }
     </script>
-</body>
 
-</html>
+    <?php $this->load->view('./footer.php') ?>
