@@ -12,7 +12,8 @@ class Post extends CI_Controller
             ],
             'url' => [
                 'tambah data transaksi masuk' => base_url('post/addtransaksiMasuk')
-            ]
+            ],
+            'note' => 'di post pake ajax ya, or langsung form di html php. link diarahken ke url di atas.. #bukanRestAPI'
         ]);
     }
 
