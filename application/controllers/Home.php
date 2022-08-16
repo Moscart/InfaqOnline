@@ -8,6 +8,8 @@ class Home extends CI_Controller
 		$data['identitas'] = $this->db->get('identitas')->row_array();
 		$data['artikel'] = $this->db->get('artikel', 3)->result_array();
 		$data['nav'] = "home";
+		$this->load->model('Menu_model', 'menu');
+		$data['frontendNav'] = $this->menu->showFrontendNav();
 		$this->load->view('home', $data);
 	}
 }

@@ -16,18 +16,32 @@
 <body>
     <nav class="navbar navbar-dark navbar-expand-lg bg-dark py-3">
         <div class="container">
-            <a class="navbar-brand" href="<?= base_url(); ?>">LOGO</a>
+            <a class="navbar-brand" href="<?= base_url(); ?>"><?= $identitas['nama_instansi']; ?></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link <?= $nav == "home" ? "active" : ""; ?>" aria-current="page" href="<?= base_url(); ?>">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= $nav == "artikel" ? "active" : ""; ?>" href="<?= base_url(); ?>artikel">Artikel</a>
-                    </li>
+                    <?php if (count($frontendNav) > 0) :
+                        foreach ($frontendNav['menu'] as $m) :
+                            if (count($m['submenu']) > 0) : ?>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="<?= $m['url_menu']; ?>" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <?= $m['title_menu']; ?>
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                        <?php foreach ($m['submenu'] as $sm) : ?>
+                                            <li><a class="dropdown-item" href="<?= $sm['url_submenu']; ?>"><?= $sm['title_submenu']; ?></a></li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </li>
+                            <?php else : ?>
+                                <li class="nav-item">
+                                    <a class="nav-link <?= strtolower($nav) == strtolower($m['title_menu']) ? 'active' : ''; ?>" href="<?= $m['url_menu']; ?>"><?= $m['title_menu']; ?></a>
+                                </li>
+                    <?php endif;
+                        endforeach;
+                    endif; ?>
                     <li class="nav-item">
                         <a class="btn btn-warning nav-link text-dark fw-bold fs-7 px-4 text-uppercase ms-lg-4 w-max" href="<?= $this->session->userdata('email') ? base_url() . 'user' : base_url() . 'auth'; ?>"><?= $this->session->userdata('email') ? "Dashboard" : "Login"; ?></a>
                     </li>

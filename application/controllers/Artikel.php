@@ -7,6 +7,8 @@ class Artikel extends CI_Controller
     {
         $data['identitas'] = $this->db->get('identitas')->row_array();
         $data['nav'] = "artikel";
+        $this->load->model('Menu_model', 'menu');
+        $data['frontendNav'] = $this->menu->showFrontendNav();
         if (isset($slug)) {
             $data['artikel'] = $this->db->get_where('artikel', ['link' => $slug])->row_array();
             $this->load->view('artikel_detail', $data);
