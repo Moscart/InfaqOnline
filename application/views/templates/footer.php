@@ -97,7 +97,7 @@
         }
     </script>
 
-    <?php if ($this->uri->segment(1) == 'donatur' && $totalInfaqDonatur['total'] > 0) : ?>
+    <?php if ($this->uri->segment(1) == 'donatur' && $this->uri->segment(2) == null && $totalInfaqDonatur['total'] > 0) : ?>
         <script>
             $(document).ready(function() {
                 // Set new default font family and font color to mimic Bootstrap's default styling
@@ -199,7 +199,7 @@
                 });
             });
         </script>
-    <?php elseif ($this->uri->segment(1) == 'admin' && $totalSettlement['total'] > 0) : ?>
+    <?php elseif ($this->uri->segment(1) == 'admin' && $this->uri->segment(2) == null && $totalSettlement['total'] > 0) : ?>
         <script>
             $(document).ready(function() {
                 // Set new default font family and font color to mimic Bootstrap's default styling
