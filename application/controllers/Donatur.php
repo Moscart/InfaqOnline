@@ -11,9 +11,15 @@ class Donatur extends CI_Controller
 
     public function index()
     {
+        $this->load->model('Donatur_model', 'donatur');
         $data['title'] = 'Dashboard';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $data['identitas'] = $this->db->get('identitas')->row_array();
+        $data['chart'] = $this->donatur->getDataChart();
+        $data['totalInfaqDonatur'] = $this->donatur->getTotalInfaqDonatur($this->session->userdata('email'));
+        $data['countInfaqPending'] = $this->donatur->countStatusPending($this->session->userdata('email'));
+        $data['totalInfaqPending'] = $this->donatur->getTotalNominalPending($this->session->userdata('email'));
+        $data['transaksi'] = $this->donatur->getHistoryDonatur($this->session->userdata('email'));
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar', $data);
         $this->load->view('templates/topbar', $data);

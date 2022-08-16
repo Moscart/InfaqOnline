@@ -134,3 +134,11 @@ function terbilang($nilai)
     }
     return $hasil;
 }
+
+function monthSqlToIndo($month)
+{
+    // $toArr = str_replace("0", "", $month);
+    $toArr = ltrim($month, '0');
+    $fm = array("Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember");
+    return $fm[$toArr - 1];
+}
