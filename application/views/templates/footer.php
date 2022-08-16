@@ -104,7 +104,7 @@
                 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
                 Chart.defaults.global.defaultFontColor = '#858796';
 
-                // Area Chart Example
+                // Area Chart
                 var ctx = document.getElementById("myAreaChart");
                 var myLineChart = new Chart(ctx, {
                     type: 'line',
@@ -150,12 +150,12 @@
                                     drawBorder: false
                                 },
                                 ticks: {
-                                    maxTicksLimit: 12
+                                    maxTicksLimit: 7
                                 }
                             }],
                             yAxes: [{
                                 ticks: {
-                                    maxTicksLimit: 8,
+                                    maxTicksLimit: 5,
                                     padding: 10,
                                     // Include a dollar sign in the ticks
                                     callback: function(value, index, values) {
@@ -199,17 +199,23 @@
                 });
             });
         </script>
-    <?php elseif ($this->uri->segment(1) == 'admin') : ?>
+    <?php elseif ($this->uri->segment(1) == 'admin' && $totalSettlement['total'] > 0) : ?>
         <script>
             $(document).ready(function() {
-                // Area Chart Example
+                // Set new default font family and font color to mimic Bootstrap's default styling
+                Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+                Chart.defaults.global.defaultFontColor = '#858796';
+
+                // Area Chart
                 var ctx = document.getElementById("myAreaChart");
                 var myLineChart = new Chart(ctx, {
                     type: 'line',
                     data: {
-                        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                        labels: [<?php foreach ($chart as $dc) {
+                                        echo '"' . monthSqlToIndo($dc['bulan']) . ' ' . $dc['tahun'] . '",';
+                                    } ?>],
                         datasets: [{
-                            label: "Earnings",
+                            label: "Total",
                             lineTension: 0.3,
                             backgroundColor: "rgba(78, 115, 223, 0.05)",
                             borderColor: "rgba(78, 115, 223, 1)",
@@ -221,7 +227,9 @@
                             pointHoverBorderColor: "rgba(78, 115, 223, 1)",
                             pointHitRadius: 10,
                             pointBorderWidth: 2,
-                            data: [0, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000],
+                            data: [<?php foreach ($chart as $dc) {
+                                        echo '"' . $dc['nominal'] . '",';
+                                    } ?>],
                         }],
                     },
                     options: {
@@ -230,7 +238,7 @@
                             padding: {
                                 left: 10,
                                 right: 25,
-                                top: 0,
+                                top: 25,
                                 bottom: 0
                             }
                         },
@@ -253,7 +261,7 @@
                                     padding: 10,
                                     // Include a dollar sign in the ticks
                                     callback: function(value, index, values) {
-                                        return '$' + number_format(value);
+                                        return 'Rp' + number_format(value);
                                     }
                                 },
                                 gridLines: {
@@ -285,11 +293,47 @@
                             callbacks: {
                                 label: function(tooltipItem, chart) {
                                     var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-                                    return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+                                    return datasetLabel + ': Rp' + number_format(tooltipItem.yLabel);
                                 }
                             }
                         }
                     }
+                });
+
+                // Pie Chart
+                var ctx = document.getElementById("myPieChart");
+                var myPieChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: [<?php foreach ($pie as $pe) {
+                                        echo '"' . $pe['status'] . '",';
+                                    } ?>],
+                        datasets: [{
+                            data: [<?php foreach ($pie as $pe) {
+                                        echo '"' . $pe['total'] . '",';
+                                    } ?>],
+                            backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#FF1E00', '#FFCB42', '#277BC0', '#E64848', '#D4F6CC', '#AF7AB3', '#E4D192'],
+                            hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf', '#FF1E11', '#FFB200', '#1F4690', '#C21010', '#3CCF4E', '#80558C', '#E8AA42'],
+                            hoverBorderColor: "rgba(234, 236, 244, 1)",
+                        }],
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        tooltips: {
+                            backgroundColor: "rgb(255,255,255)",
+                            bodyFontColor: "#858796",
+                            borderColor: '#dddfeb',
+                            borderWidth: 1,
+                            xPadding: 15,
+                            yPadding: 15,
+                            displayColors: false,
+                            caretPadding: 10,
+                        },
+                        legend: {
+                            display: false
+                        },
+                        cutoutPercentage: 80,
+                    },
                 });
             });
         </script>

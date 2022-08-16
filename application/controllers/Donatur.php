@@ -15,7 +15,7 @@ class Donatur extends CI_Controller
         $data['title'] = 'Dashboard';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $data['identitas'] = $this->db->get('identitas')->row_array();
-        $data['chart'] = $this->donatur->getDataChart();
+        $data['chart'] = $this->donatur->getDataChart($this->session->userdata('email'));
         $data['totalInfaqDonatur'] = $this->donatur->getTotalInfaqDonatur($this->session->userdata('email'));
         $data['countInfaqPending'] = $this->donatur->countStatusPending($this->session->userdata('email'));
         $data['totalInfaqPending'] = $this->donatur->getTotalNominalPending($this->session->userdata('email'));
