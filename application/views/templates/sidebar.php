@@ -6,7 +6,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-<?= $identitas['icon']; ?>"></i>
         </div>
-        <div class="sidebar-brand-text mx-3"><?= $identitas['nama_organisasi']; ?></div>
+        <div class="sidebar-brand-text mx-3"><?= $identitas['nama_instansi']; ?></div>
     </a>
 
     <!-- Divider -->

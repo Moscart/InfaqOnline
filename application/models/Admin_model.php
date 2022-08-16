@@ -220,4 +220,9 @@ class Admin_model extends CI_Model
         }
         return $resp;
     }
+
+    public function getProgramWithSumDana()
+    {
+        return $this->db->select('program AS nama_program, SUM(nominal) AS dana_program')->from('transaksi_masuk')->group_by('program')->get()->result_array();
+    }
 }

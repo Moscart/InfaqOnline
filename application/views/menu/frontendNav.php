@@ -12,52 +12,6 @@
     <!-- Content Row -->
     <div class="row mb-3">
 
-        <!-- preview menu submenu frontend -->
-        <div class="col-md-12">
-            <!-- Collapsable preview fe -->
-            <div class="card shadow mb-4">
-                <!-- Card Header - Accordion -->
-                <a href="#collapsePreviewFrontendNav" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapsePreviewFrontendNav">
-                    <h6 class="m-0 font-weight-bold text-primary">Preview Frontend Navbar</h6>
-                </a>
-                <!-- Card Content - Collapse -->
-                <div class="collapse show" id="collapsePreviewFrontendNav">
-                    <div class="card-body">
-                        <?php if (count($frontendNav) > 0) : ?>
-                            <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: #e3f2fd;">
-                                <a class="navbar-brand" href="#"><?= $identitas['nama_organisasi']; ?></a>
-                                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                                    <span class="navbar-toggler-icon"></span>
-                                </button>
-                                <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                                    <ul class="nav ml-auto">
-                                        <?php foreach ($frontendNav['menu'] as $m) : ?>
-                                            <?php if (count($m['submenu']) > 0) : ?>
-                                                <li class="nav-item dropdown">
-                                                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="<?= $m['url_menu']; ?>" role="button" aria-haspopup="true" aria-expanded="false"><?= $m['title_menu']; ?></a>
-                                                    <div class="dropdown-menu">
-                                                        <?php foreach ($m['submenu'] as $sm) : ?>
-                                                            <a class="dropdown-item" href="<?= $sm['url_submenu']; ?>"><?= $sm['title_submenu']; ?></a>
-                                                        <?php endforeach; ?>
-                                                    </div>
-                                                </li>
-                                            <?php else : ?>
-                                                <li class="nav-item">
-                                                    <a class="nav-link" href="<?= $m['url_menu']; ?>"><?= $m['title_menu']; ?></a>
-                                                </li>
-                                            <?php endif; ?>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                </div>
-                            </nav>
-                        <?php else : ?>
-                            <p class="text-center">Kosong</p>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- list menu -->
         <div class="col-md-5">
             <!-- Collapsable menufe -->
@@ -151,6 +105,52 @@
                                 endforeach; ?>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- preview menu submenu frontend -->
+        <div class="col-md-12">
+            <!-- Collapsable preview fe -->
+            <div class="card shadow mb-4">
+                <!-- Card Header - Accordion -->
+                <a href="#collapsePreviewFrontendNav" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapsePreviewFrontendNav">
+                    <h6 class="m-0 font-weight-bold text-primary">Preview Frontend Navbar</h6>
+                </a>
+                <!-- Card Content - Collapse -->
+                <div class="collapse show" id="collapsePreviewFrontendNav">
+                    <div class="card-body">
+                        <?php if (count($frontendNav) > 0) : ?>
+                            <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: #e3f2fd;">
+                                <a class="navbar-brand" href="#"><?= $identitas['nama_instansi']; ?></a>
+                                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                                    <span class="navbar-toggler-icon"></span>
+                                </button>
+                                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                                    <ul class="nav ml-auto">
+                                        <?php foreach ($frontendNav['menu'] as $m) : ?>
+                                            <?php if (count($m['submenu']) > 0) : ?>
+                                                <li class="nav-item dropdown">
+                                                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="<?= $m['url_menu']; ?>" role="button" aria-haspopup="true" aria-expanded="false"><?= $m['title_menu']; ?></a>
+                                                    <div class="dropdown-menu">
+                                                        <?php foreach ($m['submenu'] as $sm) : ?>
+                                                            <a class="dropdown-item" href="<?= $sm['url_submenu']; ?>"><?= $sm['title_submenu']; ?></a>
+                                                        <?php endforeach; ?>
+                                                    </div>
+                                                </li>
+                                            <?php else : ?>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="<?= $m['url_menu']; ?>"><?= $m['title_menu']; ?></a>
+                                                </li>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
+                            </nav>
+                        <?php else : ?>
+                            <p class="text-center">Kosong</p>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

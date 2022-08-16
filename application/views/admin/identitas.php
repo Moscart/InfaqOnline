@@ -23,9 +23,9 @@
                         <!-- form edit identitas -->
                         <form action="<?= base_url('admin/identitas'); ?>" method="post" class="mb-3">
                             <div class="form-group">
-                                <label for="namaOrganisasi">Nama Organisasi</label>
-                                <input type="text" class="form-control" id="namaOrganisasi" name="namaOrganisasi" placeholder="Nama Organisasi..." value="<?= $identitas['nama_organisasi']; ?>" required>
-                                <?= form_error('namaOrganisasi', '<small class="text-danger pl-1">', '</small>'); ?>
+                                <label for="namaInstansi">Nama Organisasi</label>
+                                <input type="text" class="form-control" id="namaInstansi" name="namaInstansi" placeholder="Nama Organisasi..." value="<?= $identitas['nama_instansi']; ?>" required>
+                                <?= form_error('namaInstansi', '<small class="text-danger pl-1">', '</small>'); ?>
                             </div>
                             <div class="form-group">
                                 <label for="alamat">Alamat</label>

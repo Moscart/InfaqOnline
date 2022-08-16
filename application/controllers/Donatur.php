@@ -11,6 +11,13 @@ class Donatur extends CI_Controller
 
     public function index()
     {
-        echo 'Donatur => <a href="' . base_url('auth/logout') . '">logout</a>';
+        $data['title'] = 'Dashboard';
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $data['identitas'] = $this->db->get('identitas')->row_array();
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('templates/topbar', $data);
+        $this->load->view('donatur/index', $data);
+        $this->load->view('templates/footer');
     }
 }

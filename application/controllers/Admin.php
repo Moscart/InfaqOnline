@@ -225,11 +225,11 @@ class Admin extends CI_Controller
             $type = base64_decode($this->input->post('typePost'));
             switch ($type) {
                 case 'umum':
-                    $nama = htmlspecialchars($this->input->post('namaOrganisasi'));
+                    $nama = htmlspecialchars($this->input->post('namaInstansi'));
                     $alamat = htmlspecialchars($this->input->post('alamat'));
                     $no_telp = htmlspecialchars($this->input->post('noTelp'));
                     $pemilik = htmlspecialchars($this->input->post('namaPimpinan'));
-                    $this->db->set('nama_organisasi', $nama);
+                    $this->db->set('nama_instansi', $nama);
                     $this->db->set('alamat', $alamat);
                     $this->db->set('no_telp', $no_telp);
                     $this->db->set('nama_pimpinan', $pemilik);
@@ -469,5 +469,161 @@ class Admin extends CI_Controller
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil hapus sub program.</div>');
         } else $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal hapus sub program.</div>');
         redirect('admin/program');
+    }
+
+    public function trsMasuk()
+    {
+        $data['title'] = 'Transaksi Masuk';
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $data['identitas'] = $this->db->get('identitas')->row_array();
+        $data['program'] = $this->db->select('nama_detailprogram')->get('program_detail')->result_array();
+        $data['transaksi'] = $this->db->order_by('tgl', 'DESC')->get('transaksi_masuk')->result_array();
+        // set form validation
+        $this->form_validation->set_rules('order_id', 'ID order', 'trim|required|is_unique[transaksi_masuk.order_id]', [
+            'is_unique' => 'Id order ini sudah terdaftar.'
+        ]);
+        $this->form_validation->set_rules('tgl', 'Tanggal transaksi', 'trim|required');
+        $this->form_validation->set_rules('user_nama', 'Nama', 'trim|required');
+        $this->form_validation->set_rules('user_email', 'Email', 'trim|valid_email');
+        $this->form_validation->set_rules('user_telp', 'No. HP', 'trim');
+        $this->form_validation->set_rules('nominal', 'Nominal', 'trim|required');
+        $this->form_validation->set_rules('status', 'Status', 'trim|required');
+        $this->form_validation->set_rules('program', 'Program', 'trim');
+        if ($this->form_validation->run() == false) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/topbar', $data);
+            $this->load->view('admin/transaksi-masuk', $data);
+            $this->load->view('templates/footer');
+        } else {
+            // insert data
+            if ($this->db->insert('transaksi_masuk', [
+                'order_id' => htmlspecialchars($this->input->post('order_id')),
+                'tgl' => htmlspecialchars($this->input->post('tgl')),
+                'user_nama' => htmlspecialchars($this->input->post('user_nama')),
+                'user_email' => htmlspecialchars($this->input->post('user_email')),
+                'user_telp' => htmlspecialchars($this->input->post('user_telp')),
+                'nominal' => reset_rupiah($this->input->post('nominal')),
+                'status' => htmlspecialchars($this->input->post('status')),
+                'program' => htmlspecialchars($this->input->post('program'))
+            ])) $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil menyimpan transaksi masuk.</div>');
+            else $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal menyimpan transaksi masuk.</div>');
+            redirect('admin/trsmasuk');
+        }
+    }
+
+    public function updateTrsMasuk()
+    {
+        $this->form_validation->set_rules('idTrsMasuk', 'ID transaksi', 'trim|required');
+        $this->form_validation->set_rules('user_namaEdit', 'Nama', 'trim|required');
+        $this->form_validation->set_rules('user_emailEdit', 'Email', 'trim|valid_email');
+        $this->form_validation->set_rules('user_telpEdit', 'No. HP', 'trim');
+        $this->form_validation->set_rules('nominalEdit', 'Nominal', 'trim|required');
+        $this->form_validation->set_rules('statusEdit', 'Status', 'trim|required');
+        $this->form_validation->set_rules('programEdit', 'Program', 'trim');
+        if ($this->form_validation->run() == false) {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal update transaksi masuk.</div>');
+            redirect('admin/trsmasuk');
+        } else {
+            // update data
+            $this->db->set([
+                'user_nama' => htmlspecialchars($this->input->post('user_namaEdit')),
+                'user_email' => htmlspecialchars($this->input->post('user_emailEdit')),
+                'user_telp' => htmlspecialchars($this->input->post('user_telpEdit')),
+                'nominal' => reset_rupiah($this->input->post('nominalEdit')),
+                'status' => htmlspecialchars($this->input->post('statusEdit')),
+                'program' => htmlspecialchars($this->input->post('programEdit'))
+            ]);
+            $this->db->where('id', $this->input->post('idTrsMasuk'));
+            if ($this->db->update('transaksi_masuk')) $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil menyimpan transaksi masuk.</div>');
+            else $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal menyimpan transaksi masuk.</div>');
+            redirect('admin/trsmasuk');
+        }
+    }
+
+    public function deleteTrsMasuk($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete('transaksi_masuk');
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Transaksi has been deleted.</div>');
+        redirect('admin/trsmasuk');
+    }
+
+    public function trsKeluar()
+    {
+        $this->load->model('Admin_model', 'admin');
+        $data['title'] = 'Transaksi Keluar';
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $data['identitas'] = $this->db->get('identitas')->row_array();
+        $data['program'] = $this->admin->getProgramWithSumDana();
+        $data['transaksi'] = $this->db->order_by('tgl', 'DESC')->get('transaksi_keluar')->result_array();
+        $this->form_validation->set_rules('program', 'Program', 'trim');
+        $this->form_validation->set_rules('penerima_nama', 'Penanggungjawab penerima', 'trim|required');
+        $this->form_validation->set_rules('penerima_telp', 'No. HP penanggung jawab', 'trim|required');
+        $this->form_validation->set_rules('penerima_alamat_instansi', 'Alamat instansi penerima', 'trim|required');
+        $this->form_validation->set_rules('tgl', 'Tanggal', 'trim|required');
+        $this->form_validation->set_rules('nominal', 'Nominal', 'trim|required');
+        $this->form_validation->set_rules('keterangan', 'Keterangan kegunaan dana', 'trim|required');
+        $this->form_validation->set_rules('petugas', 'Petugas input data', 'trim|required');
+        if ($this->form_validation->run() == false) {
+            $this->load->view('templates/header', $data);
+            $this->load->view('templates/sidebar', $data);
+            $this->load->view('templates/topbar', $data);
+            $this->load->view('admin/transaksi-keluar', $data);
+            $this->load->view('templates/footer');
+        } else {
+            // insert data
+            if ($this->db->insert('transaksi_keluar', [
+                'petugas' => htmlspecialchars($this->input->post('petugas')),
+                'program' => htmlspecialchars($this->input->post('program')),
+                'penerima_nama' => htmlspecialchars($this->input->post('penerima_nama')),
+                'penerima_telp' => htmlspecialchars($this->input->post('penerima_telp')),
+                'penerima_alamat_instansi' => htmlspecialchars($this->input->post('penerima_alamat_instansi')),
+                'tgl' => htmlspecialchars($this->input->post('tgl')),
+                'nominal' => reset_rupiah($this->input->post('nominal')),
+                'keterangan' => htmlspecialchars($this->input->post('keterangan'))
+            ])) $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil menyimpan transaksi keluar.</div>');
+            else $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal menyimpan transaksi keluar.</div>');
+            redirect('admin/trskeluar');
+        }
+    }
+
+    public function updateTrsKeluar()
+    {
+        $this->form_validation->set_rules('idTrsKeluar', 'ID transaksi', 'trim|required');
+        $this->form_validation->set_rules('programEdit', 'Program', 'trim');
+        $this->form_validation->set_rules('penerima_namaEdit', 'Penanggungjawab penerima', 'trim|required');
+        $this->form_validation->set_rules('penerima_telpEdit', 'No. HP penanggung jawab', 'trim|required');
+        $this->form_validation->set_rules('penerima_alamat_instansiEdit', 'Alamat instansi penerima', 'trim|required');
+        $this->form_validation->set_rules('tglEdit', 'Tanggal', 'trim|required');
+        $this->form_validation->set_rules('nominalEdit', 'Nominal', 'trim|required');
+        $this->form_validation->set_rules('keteranganEdit', 'Keterangan kegunaan dana', 'trim|required');
+        if ($this->form_validation->run() == false) {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal update transaksi keluar.</div>');
+            redirect('admin/trskeluar');
+        } else {
+            // update data
+            $this->db->set([
+                'program' => htmlspecialchars($this->input->post('programEdit')),
+                'penerima_nama' => htmlspecialchars($this->input->post('penerima_namaEdit')),
+                'penerima_telp' => htmlspecialchars($this->input->post('penerima_telpEdit')),
+                'penerima_alamat_instansi' => htmlspecialchars($this->input->post('penerima_alamat_instansiEdit')),
+                'tgl' => htmlspecialchars($this->input->post('tglEdit')),
+                'nominal' => reset_rupiah($this->input->post('nominalEdit')),
+                'keterangan' => htmlspecialchars($this->input->post('keteranganEdit'))
+            ]);
+            $this->db->where('id', $this->input->post('idTrsKeluar'));
+            if ($this->db->update('transaksi_keluar')) $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil menyimpan transaksi keluar.</div>');
+            else $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal menyimpan transaksi keluar.</div>');
+            redirect('admin/trskeluar');
+        }
+    }
+
+    public function deleteTrsKeluar($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete('transaksi_keluar');
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Transaksi has been deleted.</div>');
+        redirect('admin/trskeluar');
     }
 }

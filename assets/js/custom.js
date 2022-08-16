@@ -370,3 +370,104 @@ $(document).on('click', '#editSubmenuFront', function () {
     $('#hiddenMfdId').val($(this).data('idmfd'));
 });
 
+// close add trs masuk
+$('.closeAddTrsMasukModal').click(function () {
+    $('#user_nama').val('');
+    $('#user_email').val('');
+    $('#user_telp').val('');
+    $('#nominal').val('');
+});
+
+// close edit trs masuk
+$('.closeEditTrsMasukModal').click(function () {
+    $('#user_namaEdit').val('');
+    $('#user_emailEdit').val('');
+    $('#user_telpEdit').val('');
+    $('#nominalEdit').val('');
+    let selectedStatus = $('#statusEdit option:contains(" (terakhir dipilih)")');
+    let textStatusSelected = $('#statusEdit option:contains(" (terakhir dipilih)")').text().split(' (terakhir dipilih)')[0];
+    selectedStatus.text(textStatusSelected).attr('selected', false);
+    let selectedProgram = $('#programEdit option:contains(" (terakhir dipilih)")');
+    let textProgramSelected = $('#programEdit option:contains(" (terakhir dipilih)")').text().split(' (terakhir dipilih)')[0];
+    selectedProgram.text(textProgramSelected).attr('selected', false);
+});
+
+// ketika tombol edit trs masuk diklik
+$(document).on('click', '#editTrsMasuk', function () {
+    $('#user_namaEdit').val($(this).data('nama'));
+    $('#user_emailEdit').val($(this).data('email'));
+    $('#user_telpEdit').val($(this).data('telp'));
+    $('#nominalEdit').val(convertToRupiahInt($(this).data('nominal')));
+    $('#statusEdit option:contains("' + $(this).data('status') + '")').text($(this).data('status') + ' (terakhir dipilih)').attr('selected', true);
+    $('#programEdit option:contains("' + $(this).data('program') + '")').text($(this).data('program') + ' (terakhir dipilih)').attr('selected', true);
+    $('#idTrsMasuk').val($(this).data('idtrsmasuk'));
+});
+
+// admin deleteTrsMAsuk
+$(document).on('click', '#delTrsMasuk', function () {
+    $('#cDelTrsMasuk').attr('href', $(this).data('href'));
+});
+
+// close add trs keluar
+$('.closeAddTrsKeluarModal').click(function () {
+    $('#penerima_nama').val('');
+    $('#penerima_telp').val('');
+    $('#penerima_alamat_instansi').val('');
+    $('#tgl').val('');
+    $('#nominal').val('');
+    $('#keterangan').val('');
+});
+
+// close edit trs keluar
+$('.closeEditTrsKeluarModal').click(function () {
+    let selectedProgram = $('#programEdit option:contains(" (terakhir dipilih)")');
+    let textProgramSelected = $('#programEdit option:contains(" (terakhir dipilih)")').text().split(' (terakhir dipilih)')[0];
+    selectedProgram.text(textProgramSelected).attr('selected', false);
+    $('#penerima_namaEdit').val('');
+    $('#penerima_telpEdit').val('');
+    $('#penerima_alamat_instansiEdit').val('');
+    $('#tglEdit').val('');
+    $('#nominalEdit').val('');
+    $('#keteranganEdit').val('');
+});
+
+// ketika tombol edit trs keluar diklik
+$(document).on('click', '#editTrsKeluar', function () {
+    $('#programEdit option:contains("' + $(this).data('program') + '")').text($(this).data('program') + ' (terakhir dipilih)').attr('selected', true);
+    $('#penerima_namaEdit').val($(this).data('penerima'));
+    $('#penerima_telpEdit').val($(this).data('telp'));
+    $('#penerima_alamat_instansiEdit').val($(this).data('alamat'));
+    $('#tglEdit').val($(this).data('tgl'));
+    $('#nominalEdit').val(convertToRupiahInt($(this).data('nominal')));
+    $('#keteranganEdit').val($(this).data('keterangan'));
+    $('#idTrsKeluar').val($(this).data('idtrskeluar'));
+});
+
+// ketika modal edit trs keluar muncul
+$('#editTrsKeluarModal').on('show.bs.modal', function () {
+    const programSelected = $('#editTrsKeluar').data('program');
+    const maksimalDana = $('#programEdit option:contains("' + programSelected + '")').data('maks');
+    $('#maksNominalTrsKeluarEdit').html(`<strong>${convertToRupiahInt(maksimalDana)}</strong>`);
+})
+
+// admin deleteTrsKeluar
+$(document).on('click', '#delTrsKeluar', function () {
+    $('#cDelTrsKeluar').attr('href', $(this).data('href'));
+});
+
+// ketika program trs keluar dipilih
+$('#program option, #programEdit option').click(function () {
+    $('#maksNominalTrsKeluar, #maksNominalTrsKeluarEdit').html(`<strong>${convertToRupiahInt($(this).data('maks'))}</strong>`);
+});
+
+// ketika nominal add trs keluar keyup
+$('#nominal').keyup(function () {
+    const maksimalDana = convertToAngka($('#maksNominalTrsKeluar').text());
+    if (convertToAngka($(this).val()) > maksimalDana) $(this).val(convertToRupiahInt(maksimalDana));
+});
+
+// ketika nominal edit trs keluar keyup
+$('#nominalEdit').keyup(function () {
+    const maksimalDana = convertToAngka($('#maksNominalTrsKeluarEdit').text());
+    if (convertToAngka($(this).val()) > maksimalDana) $(this).val(convertToRupiahInt(maksimalDana));
+});
