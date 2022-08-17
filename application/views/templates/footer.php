@@ -41,6 +41,7 @@
 <!-- Bootstrap core JavaScript-->
 <script src="<?= base_url('assets/'); ?>vendor/jquery/jquery.min.js"></script>
 <script src="<?= base_url('assets/'); ?>vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="<?= base_url(); ?>assets/vendor/bootstrap-select/bootstrap-select.min.js"></script>
 
 <!-- Core plugin JavaScript-->
 <script src="<?= base_url('assets/'); ?>vendor/jquery-easing/jquery.easing.min.js"></script>
@@ -199,7 +200,7 @@
                 });
             });
         </script>
-    <?php elseif ($this->uri->segment(1) == 'admin' && $this->uri->segment(2) == null && $totalSettlement['total'] > 0) : ?>
+    <?php elseif ($this->uri->segment(1) == 'admin' && $this->uri->segment(2) == null && $totalDana > 0) : ?>
         <script>
             $(document).ready(function() {
                 // Set new default font family and font color to mimic Bootstrap's default styling

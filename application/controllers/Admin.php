@@ -17,7 +17,7 @@ class Admin extends CI_Controller
         $data['identitas'] = $this->db->get('identitas')->row_array();
         $data['chart'] = $this->admin->getDataChart();
         $data['pie'] = $this->admin->getDataPie();
-        $data['totalSettlement'] = $this->admin->getTotalSettlement();
+        $data['totalDana'] = $this->admin->getTotalDana();
         $data['countPending'] = $this->admin->countStatusPending();
         $data['totalPending'] = $this->admin->getTotalNominalPending();
         $this->load->view('templates/header', $data);
@@ -480,11 +480,15 @@ class Admin extends CI_Controller
 
     public function trsMasuk()
     {
+        $this->load->model('Admin_model', 'admin');
         $data['title'] = 'Transaksi Masuk';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $data['identitas'] = $this->db->get('identitas')->row_array();
         $data['program'] = $this->db->select('nama_detailprogram')->get('program_detail')->result_array();
         $data['transaksi'] = $this->db->order_by('tgl', 'DESC')->get('transaksi_masuk')->result_array();
+        $data['yearMinMax'] = $this->admin->getYearLaporan();
+        $data['donatur'] = $this->admin->getDonaturLaporan();
+        $data['programCetak'] = $this->admin->getProgramWithSumDana();
         // set form validation
         $this->form_validation->set_rules('order_id', 'ID order', 'trim|required|is_unique[transaksi_masuk.order_id]', [
             'is_unique' => 'Id order ini sudah terdaftar.'
@@ -540,7 +544,8 @@ class Admin extends CI_Controller
                 'user_telp' => htmlspecialchars($this->input->post('user_telpEdit')),
                 'nominal' => reset_rupiah($this->input->post('nominalEdit')),
                 'status' => htmlspecialchars($this->input->post('statusEdit')),
-                'program' => htmlspecialchars($this->input->post('programEdit'))
+                'program' => htmlspecialchars($this->input->post('programEdit')),
+                'pdf_url' => htmlspecialchars($this->input->post('url_pdfEdit'))
             ]);
             $this->db->where('id', $this->input->post('idTrsMasuk'));
             if ($this->db->update('transaksi_masuk')) $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil menyimpan transaksi masuk.</div>');
@@ -565,6 +570,9 @@ class Admin extends CI_Controller
         $data['identitas'] = $this->db->get('identitas')->row_array();
         $data['program'] = $this->admin->getProgramWithSumDana();
         $data['transaksi'] = $this->db->order_by('tgl', 'DESC')->get('transaksi_keluar')->result_array();
+        $data['yearMinMax'] = $this->admin->getYearLaporan();
+        $data['petugas'] = $this->admin->getPetugasLaporan();
+        $data['programCetak'] = $this->admin->getProgramWithSumDana();
         $this->form_validation->set_rules('program', 'Program', 'trim');
         $this->form_validation->set_rules('penerima_nama', 'Penanggungjawab penerima', 'trim|required');
         $this->form_validation->set_rules('penerima_telp', 'No. HP penanggung jawab', 'trim|required');
@@ -582,6 +590,7 @@ class Admin extends CI_Controller
         } else {
             // insert data
             if ($this->db->insert('transaksi_keluar', [
+                'id' => $this->admin->autoId('transaksi_keluar', 'id', 'TRK'),
                 'petugas' => htmlspecialchars($this->input->post('petugas')),
                 'program' => htmlspecialchars($this->input->post('program')),
                 'penerima_nama' => htmlspecialchars($this->input->post('penerima_nama')),
@@ -651,5 +660,45 @@ class Admin extends CI_Controller
             else $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert"><strong>' . $order_id . '</strong> sekarang sudah <strong>' . $status->transaction_status . '</strong>, namun gagal update status di database.</div>');
         } else $this->session->set_flashdata('message', '<div class="alert alert-warning" role="alert"><strong>' . $order_id . '</strong> sekarang berstatus <strong>' . $status->transaction_status . '</strong></div>');
         redirect('admin/trsmasuk');
+    }
+
+    public function laporan()
+    {
+        $this->load->model('Admin_model', 'admin');
+        $data['title'] = 'Laporan';
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $data['identitas'] = $this->db->get('identitas')->row_array();
+
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('templates/topbar', $data);
+        $this->load->view('admin/laporan', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function laporanAction()
+    {
+        // echo '<pre>';
+        // print_r($this->input->post());
+        // echo '</pre>';
+        // die;
+        $this->load->model('Admin_model', 'admin');
+        $data['identitas'] = $this->db->get('identitas')->row_array();
+        $periode_lap = $this->input->post('periode_lap');
+        $jenis_trasaksi = $this->input->post('jenis_transaksi');
+        $program = $this->input->post('program');
+        $status = $this->input->post('status');
+        if ($jenis_trasaksi == 'Masuk') {
+            $user_nama = $this->input->post('user_nama');
+            $data['title'] = 'Laporan Transaksi Masuk' . ' ' . date('dmyhis', time());
+            $data['transaksi'] = $this->admin->dataReportTransaksiMasuk($program, $periode_lap, $user_nama, $status, $this->input->post());
+            $this->load->view('admin/laporan-masuk', $data);
+        } else if ($jenis_trasaksi == 'Keluar') {
+            $petugas = $this->input->post('petugas');
+            $data['title'] = 'Laporan Transaksi Keluar' . ' ' . date('dmyhis', time());
+            $data['transaksi'] = $this->admin->dataReportTransaksiKeluar($program, $periode_lap, $petugas, $this->input->post());
+            $this->load->view('admin/laporan-keluar', $data);
+        }
     }
 }

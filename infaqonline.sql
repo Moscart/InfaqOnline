@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 16, 2022 at 05:43 AM
+-- Generation Time: Aug 17, 2022 at 05:29 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.2.34
 
@@ -87,7 +87,7 @@ CREATE TABLE `menu_front` (
 
 INSERT INTO `menu_front` (`mf_id`, `title`, `url`, `is_active`) VALUES
 (1, 'Home', 'http://localhost/InfaqOnline/', 1),
-(2, 'Program', '#', 1);
+(2, 'Artikel', 'http://localhost/InfaqOnline/artikel', 1);
 
 -- --------------------------------------------------------
 
@@ -108,7 +108,7 @@ CREATE TABLE `menu_front_detail` (
 --
 
 INSERT INTO `menu_front_detail` (`mfd_id`, `parent_id`, `title`, `url`, `is_active`) VALUES
-(1, 2, 'Infak', 'http://localhost/InfaqOnline/donasi', 1);
+(1, 2, 'Infak', 'http://localhost/InfaqOnline/donasi', 0);
 
 -- --------------------------------------------------------
 
@@ -138,6 +138,7 @@ CREATE TABLE `program_detail` (
   `id_programdetail` int(11) NOT NULL,
   `id_program` int(11) NOT NULL,
   `nama_detailprogram` varchar(100) NOT NULL,
+  `deskripsi` text NOT NULL,
   `banner` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -145,8 +146,8 @@ CREATE TABLE `program_detail` (
 -- Dumping data for table `program_detail`
 --
 
-INSERT INTO `program_detail` (`id_programdetail`, `id_program`, `nama_detailprogram`, `banner`) VALUES
-(1, 1, 'Infak', 'infaq.jpeg');
+INSERT INTO `program_detail` (`id_programdetail`, `id_program`, `nama_detailprogram`, `deskripsi`, `banner`) VALUES
+(1, 1, 'Infak', '<p>Penggalangan infak akan digunakan untuk menjalankan kegiatan operasional masjid seperti,</p>\r\n\r\n<ol>\r\n	<li>bayar listrik</li>\r\n	<li>bayar pdam</li>\r\n	<li>pembelian alat kebersihan</li>\r\n</ol>', 'infaq.jpeg');
 
 -- --------------------------------------------------------
 
@@ -155,7 +156,7 @@ INSERT INTO `program_detail` (`id_programdetail`, `id_program`, `nama_detailprog
 --
 
 CREATE TABLE `transaksi_keluar` (
-  `id` int(11) NOT NULL,
+  `id` varchar(15) NOT NULL,
   `petugas` varchar(128) NOT NULL,
   `program` varchar(100) DEFAULT NULL,
   `penerima_nama` varchar(60) NOT NULL,
@@ -171,7 +172,7 @@ CREATE TABLE `transaksi_keluar` (
 --
 
 INSERT INTO `transaksi_keluar` (`id`, `petugas`, `program`, `penerima_nama`, `penerima_telp`, `penerima_alamat_instansi`, `tgl`, `nominal`, `keterangan`) VALUES
-(2, 'Admin', 'Infak', 'Bp. Sanusi', '086537824356', 'Indonesia', '2022-08-16', 250000, 'Bantu pembangunan masjid tahap I');
+('TRK220817001', 'Admin', 'Infak', 'Bp. Sanusi', '087234563894', 'Jl. Kapas Madya II No.64', '2022-08-17', 350000, 'Donasi pembangunan masjid tahap I');
 
 -- --------------------------------------------------------
 
@@ -181,6 +182,7 @@ INSERT INTO `transaksi_keluar` (`id`, `petugas`, `program`, `penerima_nama`, `pe
 
 CREATE TABLE `transaksi_masuk` (
   `id` int(11) NOT NULL,
+  `payment_type` varchar(30) DEFAULT NULL,
   `tgl` datetime NOT NULL,
   `order_id` int(11) NOT NULL,
   `user_nama` varchar(50) NOT NULL,
@@ -188,17 +190,26 @@ CREATE TABLE `transaksi_masuk` (
   `user_telp` varchar(15) DEFAULT NULL,
   `nominal` int(11) NOT NULL,
   `status` varchar(15) NOT NULL,
-  `program` varchar(100) DEFAULT NULL
+  `program` varchar(100) DEFAULT NULL,
+  `pdf_url` varchar(350) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `transaksi_masuk`
 --
 
-INSERT INTO `transaksi_masuk` (`id`, `tgl`, `order_id`, `user_nama`, `user_email`, `user_telp`, `nominal`, `status`, `program`) VALUES
-(1, '2022-08-15 20:26:02', 1947493830, 'User', 'user@gmail.com', '', 250000, 'settlement', 'Infak'),
-(2, '2022-08-15 20:34:12', 836550940, 'Hamba Allah', '', '', 10000, 'pending', 'Infak'),
-(3, '2022-08-16 03:35:38', 1234900917, 'User', 'user@gmail.com', '', 100000, 'settlement', 'Infak');
+INSERT INTO `transaksi_masuk` (`id`, `payment_type`, `tgl`, `order_id`, `user_nama`, `user_email`, `user_telp`, `nominal`, `status`, `program`, `pdf_url`) VALUES
+(1, NULL, '2022-08-15 20:26:02', 1947493830, 'User', 'user@gmail.com', '', 250000, 'settlement', 'Infak', NULL),
+(3, NULL, '2022-08-16 03:35:38', 1234900917, 'User', 'user@gmail.com', '', 100000, 'settlement', 'Infak', NULL),
+(4, 'bank_transfer', '2022-08-17 13:10:00', 1139106355, 'Anonymous', '', '', 10000, 'settlement', '', ''),
+(5, 'bank_transfer', '2022-08-17 13:11:08', 260026762, 'Anonymous', '', '', 10000, 'settlement', 'Infak', ''),
+(7, 'bank_transfer', '2022-08-17 13:17:22', 2071073145, 'Anonymous', '', '', 10000, 'settlement', 'Infak', ''),
+(9, 'bank_transfer', '2022-08-17 13:25:38', 1361395262, 'Anonymous', '', '', 10000, 'settlement', 'Infak', ''),
+(10, 'bank_transfer', '2022-08-17 13:26:53', 2145263383, 'Anonymous', '', '', 10000, 'settlement', 'Infak', ''),
+(11, 'bank_transfer', '2022-08-17 13:28:52', 173733355, 'Anonymous', '', '', 10000, 'settlement', 'Infak', ''),
+(12, 'bank_transfer', '2022-08-17 13:30:04', 323320558, 'Anonymous', '', '', 10000, 'settlement', 'Infak', ''),
+(13, 'bank_transfer', '2022-08-17 13:30:24', 1040773148, 'Anonymous', '', '', 10000, 'settlement', 'Infak', ''),
+(14, 'bank_transfer', '2022-08-17 13:37:24', 1826243934, 'User', 'user@gmail.com', '', 10000, 'settlement', 'Infak', '');
 
 -- --------------------------------------------------------
 
@@ -321,7 +332,8 @@ INSERT INTO `user_sub_menu` (`id`, `menu_id`, `title`, `url`, `icon`, `is_active
 (8, 3, 'Frontend Navbar', 'menu/frontendnav', 'fas fa-fw fa-link', 1),
 (9, 4, 'Dashboard', 'donatur', 'fas fa-fw fa-tachometer-alt', 1),
 (10, 1, 'Transaksi Masuk', 'admin/trsmasuk', 'fas fa-fw fa-hand-holding-usd', 1),
-(11, 1, 'Transaksi Keluar', 'admin/trskeluar', 'fas fa-fw fa-shopping-cart', 1);
+(11, 1, 'Transaksi Keluar', 'admin/trskeluar', 'fas fa-fw fa-shopping-cart', 1),
+(12, 1, 'Laporan', 'admin/laporan', 'fas fa-fw fa-book', 0);
 
 -- --------------------------------------------------------
 
@@ -454,16 +466,10 @@ ALTER TABLE `program_detail`
   MODIFY `id_programdetail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `transaksi_keluar`
---
-ALTER TABLE `transaksi_keluar`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
 -- AUTO_INCREMENT for table `transaksi_masuk`
 --
 ALTER TABLE `transaksi_masuk`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -493,7 +499,7 @@ ALTER TABLE `user_role`
 -- AUTO_INCREMENT for table `user_sub_menu`
 --
 ALTER TABLE `user_sub_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `user_token`

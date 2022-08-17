@@ -397,6 +397,7 @@ $('.closeEditTrsMasukModal').click(function () {
     let selectedProgram = $('#programEdit option:contains(" (terakhir dipilih)")');
     let textProgramSelected = $('#programEdit option:contains(" (terakhir dipilih)")').text().split(' (terakhir dipilih)')[0];
     selectedProgram.text(textProgramSelected).attr('selected', false);
+    $('#url_pdfEdit').val('');
 });
 
 // ketika tombol edit trs masuk diklik
@@ -408,6 +409,7 @@ $(document).on('click', '#editTrsMasuk', function () {
     $('#statusEdit option:contains("' + $(this).data('status') + '")').text($(this).data('status') + ' (terakhir dipilih)').attr('selected', true);
     $('#programEdit option:contains("' + $(this).data('program') + '")').text($(this).data('program') + ' (terakhir dipilih)').attr('selected', true);
     $('#idTrsMasuk').val($(this).data('idtrsmasuk'));
+    $('#url_pdfEdit').val($(this).data('urlpdf'));
 });
 
 // admin deleteTrsMAsuk
@@ -477,4 +479,125 @@ $('#nominal').keyup(function () {
 $('#nominalEdit').keyup(function () {
     const maksimalDana = convertToAngka($('#maksNominalTrsKeluarEdit').text());
     if (convertToAngka($(this).val()) > maksimalDana) $(this).val(convertToRupiahInt(maksimalDana));
+});
+
+// report param
+var id_tglakhir = 0;
+var id_bulanakhir = 0;
+var id_tahunakhir = 0;
+
+function allFieldReportDisable() {
+    $('#pilihTglSection').hide();
+    $('#pilihBulanSection').hide();
+    $('#pilihTahunSection').hide();
+
+    $('#label_tgl_akhir').prop('checked', false);
+    id_tglakhir = 0;
+    $('#per_tanggal1').prop('disabled', true);
+    $('#per_tanggal2').prop('disabled', true);
+
+    $('#label_bulan_akhir').prop('checked', false);
+    id_bulanakhir = 0;
+    $('#per_bulan1').prop('disabled', true);
+    $('#tahun_perbulan1').prop('disabled', true);
+    $('#per_bulan2').prop('disabled', true);
+    $('#tahun_perbulan2').prop('disabled', true);
+
+    $('#label_tahun_akhir').prop('checked', false);
+    id_tahunakhir = 0;
+    $('#per_tahun1').prop('disabled', true);
+    $('#per_tahun2').prop('disabled', true);
+}
+
+$('#pilihPeriodeHariIni, #pilihPeriodeBulanIni, #pilihPeriodeTahunIni').click(function () {
+    allFieldReportDisable();
+});
+
+$('#pilihPeriodePerTanggal').click(function () {
+    $('#pilihTglSection').show();
+    $('#per_tanggal1').prop('disabled', false);
+    $('#pilihBulanSection').hide();
+    $('#pilihTahunSection').hide();
+
+    $('#label_bulan_akhir').prop('checked', false);
+    id_bulanakhir = 0;
+    $('#per_bulan1').prop('disabled', true);
+    $('#tahun_perbulan1').prop('disabled', true);
+    $('#per_bulan2').prop('disabled', true);
+    $('#tahun_perbulan2').prop('disabled', true);
+
+    $('#label_tahun_akhir').prop('checked', false);
+    id_tahunakhir = 0;
+    $('#per_tahun1').prop('disabled', true);
+    $('#per_tahun2').prop('disabled', true);
+});
+
+$('#label_tgl_akhir').click(function () {
+    if (id_tglakhir == 0) {
+        $('#per_tanggal2').prop('disabled', false);
+        id_tglakhir = 1;
+    } else {
+        $('#per_tanggal2').prop('disabled', true);
+        $('#per_tanggal2').val('');
+        id_tglakhir = 0;
+    }
+});
+
+$('#pilihPeriodePerBulan').click(function () {
+    $('#per_bulan1').prop('disabled', false);
+    $('#tahun_perbulan1').prop('disabled', false);
+    $('#pilihTglSection').hide();
+    $('#pilihBulanSection').show();
+    $('#pilihTahunSection').hide();
+
+    $('#label_tgl_akhir').prop('checked', false);
+    id_tglakhir = 0;
+    $('#per_tanggal1').prop('disabled', true);
+    $('#per_tanggal2').prop('disabled', true);
+
+    $('#label_tahun_akhir').prop('checked', false);
+    id_tahunakhir = 0;
+    $('#per_tahun1').prop('disabled', true);
+    $('#per_tahun2').prop('disabled', true);
+});
+
+$('#label_bulan_akhir').click(function () {
+    if (id_bulanakhir == 0) {
+        $('#per_bulan2').prop('disabled', false);
+        $('#tahun_perbulan2').prop('disabled', false);
+        id_bulanakhir = 1;
+    } else {
+        $('#per_bulan2').prop('disabled', true);
+        $('#tahun_perbulan2').prop('disabled', true);
+        id_bulanakhir = 0;
+    }
+});
+
+$('#pilihPeriodePerTahun').click(function () {
+    $('#per_tahun1').prop('disabled', false);
+    $('#pilihTglSection').hide();
+    $('#pilihBulanSection').hide();
+    $('#pilihTahunSection').show();
+
+    $('#label_tgl_akhir').prop('checked', false);
+    id_tglakhir = 0;
+    $('#per_tanggal1').prop('disabled', true);
+    $('#per_tanggal2').prop('disabled', true);
+
+    $('#label_bulan_akhir').prop('checked', false);
+    id_bulanakhir = 0;
+    $('#per_bulan1').prop('disabled', true);
+    $('#tahun_perbulan1').prop('disabled', true);
+    $('#per_bulan2').prop('disabled', true);
+    $('#tahun_perbulan2').prop('disabled', true);
+});
+
+$('#label_tahun_akhir').click(function () {
+    if (id_tahunakhir == 0) {
+        $('#per_tahun2').prop('disabled', false);
+        id_tahunakhir = 1;
+    } else {
+        $('#per_tahun2').prop('disabled', true);
+        id_tahunakhir = 0;
+    }
 });

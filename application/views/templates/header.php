@@ -18,6 +18,7 @@
 
     <!-- Custom styles for this template-->
     <link href="<?= base_url('assets/css/sb-admin-2.min.css'); ?>" rel="stylesheet">
+    <link href="<?= base_url(); ?>assets/vendor/bootstrap-select/bootstrap-select.min.css" rel="stylesheet">
 
     <!-- dataTables -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap4.min.css" />

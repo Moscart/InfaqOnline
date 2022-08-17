@@ -18,8 +18,8 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Settlement</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= 'Rp ' . format_rupiah($totalSettlement['total']); ?></div>
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Saldo</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?= 'Rp ' . format_rupiah($totalDana); ?></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-wallet fa-2x text-gray-300"></i>
@@ -63,7 +63,7 @@
             </div>
         </div>
 
-        <?php if ($totalSettlement['total'] > 0) : ?>
+        <?php if ($totalDana > 0) : ?>
 
             <!-- rekap bulanan -->
             <div class="col-lg-8">

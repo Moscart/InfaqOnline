@@ -113,7 +113,7 @@
                                         <th scope="row" class="text-center"><?= $no; ?></th>
                                         <td>
                                             <?php if ($uwr['pdf_url'] != '') : ?>
-                                                <a href="<?= $uwr['pdf_url']; ?>" class="text-decoration-none" target="_blank"><?= $uwr['order_id']; ?>&nbsp;<i class="fas fa-external-link-alt" title="buka laporan pdf"></i></a>
+                                                <a href="<?= $uwr['pdf_url']; ?>" class="text-decoration-none" target="_blank" title="buka laporan pdf"><?= $uwr['order_id']; ?></a>
                                             <?php else : ?>
                                                 <?= $uwr['order_id']; ?>
                                             <?php endif; ?>

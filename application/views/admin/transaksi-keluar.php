@@ -19,7 +19,10 @@
                     <h6 class="mb-2 font-weight-bold text-primary">Form Tambah Transaksi</h6>
                     <div class="ml-auto">
                         <a href="" class="btn btn-sm btn-primary shadow-sm mb-1 mb-md-0" data-toggle="modal" data-target="#addTrsKeluarModal">
-                            <i class="fas fa-plus-circle"></i> Buka Form
+                            <i class="fas fa-plus-circle"></i> Tambah
+                        </a>
+                        <a href="" class="btn btn-sm btn-secondary shadow-sm mb-1 mb-md-0" data-toggle="modal" data-target="#cetakTrs">
+                            <i class="fas fa-print"></i> Cetak
                         </a>
                     </div>
                 </div>
@@ -234,6 +237,178 @@
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                 <a class="btn btn-primary" id="cDelTrsKeluar">Delete</a>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- cetak trs -->
+<div class="modal fade" id="cetakTrs" tabindex="-1" role="dialog" aria-labelledby="cetakTrsLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cetakTrsLabel">Cetak Transaksi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="<?= base_url('admin/laporanaction'); ?>" method="post">
+                <div class="modal-body" style="height: 230px; overflow-y: auto;">
+                    <div class="form-group row mb-3">
+                        <label for="periode_lap" class="col-sm-2 col-form-label">Pilih Periode</label>
+                        <div class="col-sm-10 row">
+                            <div class="col-sm-4 col-md-4 col-xl-2">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="pilihPeriodeHariIni" name="periode_lap" class="custom-control-input" value="hari_ini" checked>
+                                    <label class="custom-control-label" for="pilihPeriodeHariIni">Hari ini</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="pilihPeriodeBulanIni" name="periode_lap" class="custom-control-input" value="bulan_ini">
+                                    <label class="custom-control-label" for="pilihPeriodeBulanIni">Bulan ini</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="pilihPeriodeTahunIni" name="periode_lap" class="custom-control-input" value="tahun_ini">
+                                    <label class="custom-control-label" for="pilihPeriodeTahunIni">Tahun ini</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-xl-2">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="pilihPeriodePerTanggal" name="periode_lap" class="custom-control-input" value="pertanggal">
+                                    <label class="custom-control-label" for="pilihPeriodePerTanggal">Per Tanggal</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="pilihPeriodePerBulan" name="periode_lap" class="custom-control-input" value="perbulan">
+                                    <label class="custom-control-label" for="pilihPeriodePerBulan">Per Bulan</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="pilihPeriodePerTahun" name="periode_lap" class="custom-control-input" value="pertahun">
+                                    <label class="custom-control-label" for="pilihPeriodePerTahun">Per Tahun</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3" id="pilihTglSection" style="display: none;">
+                        <label for="pilihPeriode" class="col-sm-2 col-form-label">Pilih Tanggal
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="label_tgl_akhir" name="label_tgl_akhir" value="yes">
+                                <label class="custom-control-label" for="label_tgl_akhir">Tgl. Akhir</label>
+                            </div>
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" id="per_tanggal1" name="per_tanggal1" placeholder="Masukkan Tanggal Awal" title="Tanggal Awal" disabled>
+                            <input type="date" class="form-control mt-1" id="per_tanggal2" name="per_tanggal2" placeholder="Masukkan Tanggal Akhir" title="Tanggal Akhir" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3" id="pilihBulanSection" style="display: none;">
+                        <label for="pilihPeriode" class="col-sm-2 col-form-label">Pilih Bulan
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="label_bulan_akhir" name="label_bulan_akhir" value="yes">
+                                <label class="custom-control-label" for="label_bulan_akhir">Bulan Akhir</label>
+                            </div>
+                        </label>
+                        <div class="col-sm-10">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <select name="per_bulan1" id="per_bulan1" class="form-control" disabled>
+                                        <option value="01">Januari</option>
+                                        <option value="02">Februari</option>
+                                        <option value="03">Maret</option>
+                                        <option value="04">April</option>
+                                        <option value="05">Mei</option>
+                                        <option value="06">Juni</option>
+                                        <option value="07">Juli</option>
+                                        <option value="08">Agustus</option>
+                                        <option value="09">September</option>
+                                        <option value="10">Oktober</option>
+                                        <option value="11">November</option>
+                                        <option value="12">Desember</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mt-1 mt-md-0">
+                                    <select name="tahun_perbulan1" id="tahun_perbulan1" class="form-control" disabled>
+                                        <?php if ($yearMinMax['max_year'] != null && $yearMinMax['min_year'] != null) : for ($i = $yearMinMax['max_year']; $i >= $yearMinMax['min_year']; $i--) : ?>
+                                                <option value="<?= $i; ?>"><?= $i; ?></option>
+                                        <?php endfor;
+                                        endif; ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-8">
+                                    <select name="per_bulan2" id="per_bulan2" class="form-control mt-1" disabled>
+                                        <option value="01">Januari</option>
+                                        <option value="02">Februari</option>
+                                        <option value="03">Maret</option>
+                                        <option value="04">April</option>
+                                        <option value="05">Mei</option>
+                                        <option value="06">Juni</option>
+                                        <option value="07">Juli</option>
+                                        <option value="08">Agustus</option>
+                                        <option value="09">September</option>
+                                        <option value="10">Oktober</option>
+                                        <option value="11">November</option>
+                                        <option value="12">Desember</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mt-1 mt-md-0">
+                                    <select name="tahun_perbulan2" id="tahun_perbulan2" class="form-control mt-0 mt-md-1" disabled>
+                                        <?php if ($yearMinMax['max_year'] != null && $yearMinMax['min_year'] != null) : for ($i = $yearMinMax['max_year']; $i >= $yearMinMax['min_year']; $i--) : ?>
+                                                <option value="<?= $i; ?>"><?= $i; ?></option>
+                                        <?php endfor;
+                                        endif; ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3" id="pilihTahunSection" style="display: none;">
+                        <label for="pilihPeriode" class="col-sm-2 col-form-label">Pilih Tahun
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="label_tahun_akhir" name="label_tahun_akhir" value="yes">
+                                <label class="custom-control-label" for="label_tahun_akhir">Tahun Akhir</label>
+                            </div>
+                        </label>
+                        <div class="col-sm-10">
+                            <select name="per_tahun1" id="per_tahun1" class="form-control" disabled>
+                                <?php if ($yearMinMax['max_year'] != null && $yearMinMax['min_year'] != null) : for ($i = $yearMinMax['max_year']; $i >= $yearMinMax['min_year']; $i--) : ?>
+                                        <option value="<?= $i; ?>"><?= $i; ?></option>
+                                <?php endfor;
+                                endif; ?>
+                            </select>
+                            <select name="per_tahun2" id="per_tahun2" class="form-control mt-1" disabled>
+                                <?php if ($yearMinMax['max_year'] != null && $yearMinMax['min_year'] != null) : for ($i = $yearMinMax['max_year']; $i >= $yearMinMax['min_year']; $i--) : ?>
+                                        <option value="<?= $i; ?>"><?= $i; ?></option>
+                                <?php endfor;
+                                endif; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label for="petugas" class="col-sm-2 col-form-label">Petugas</label>
+                        <div class="col-sm-10">
+                            <select name="petugas" id="petugas" class="selectpicker form-control" data-live-search="true">
+                                <option value="semua">Semua</option>
+                                <?php foreach ($petugas as $a) : ?>
+                                    <option value="<?= $a['petugas']; ?>"><?= $a['petugas']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label for="program" class="col-sm-2 col-form-label">Program</label>
+                        <div class="col-sm-10">
+                            <select name="program" id="program" class="selectpicker form-control" data-live-search="true">
+                                <option value="semua">Semua</option>
+                                <?php foreach ($programCetak as $a) : ?>
+                                    <option value="<?= $a['nama_program']; ?>"><?= ($a['nama_program'] == '') ? 'Tidak Bernama' : $a['nama_program']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="jenis_transaksi" value="Keluar">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Cetak</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

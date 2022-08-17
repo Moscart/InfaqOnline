@@ -226,7 +226,7 @@ class Admin_model extends CI_Model
 
     public function getProgramWithSumDana()
     {
-        return $this->db->select('program AS nama_program, SUM(nominal) AS dana_program')->from('transaksi_masuk')->group_by('program')->get()->result_array();
+        return $this->db->select('DISTINCT(program) AS nama_program, SUM(nominal) AS dana_program')->from('transaksi_masuk')->where('program !=', '')->group_by('program')->get()->result_array();
     }
 
     public function showProgram()
@@ -269,9 +269,11 @@ class Admin_model extends CI_Model
         return $this->db->select('DISTINCT(status) AS status, COUNT(status) AS total')->from('transaksi_masuk')->group_by('status')->get()->result_array();
     }
 
-    public function getTotalSettlement()
+    public function getTotalDana()
     {
-        return $this->db->select('SUM(nominal) AS total')->from('transaksi_masuk')->where('status', 'settlement')->get()->row_array();
+        $settlement = $this->db->select('SUM(nominal) AS total_masuk')->from('transaksi_masuk')->where('status', 'settlement')->get()->row_array();
+        $keluar = $this->db->select('SUM(nominal) AS total_keluar')->from('transaksi_keluar')->get()->row_array();
+        return $settlement['total_masuk'] - $keluar['total_keluar'];
     }
 
     public function countStatusPending()
@@ -282,5 +284,245 @@ class Admin_model extends CI_Model
     public function getTotalNominalPending()
     {
         return $this->db->select('SUM(nominal) AS pending_total')->from('transaksi_masuk')->where('status', 'pending')->get()->row_array();
+    }
+
+    public function getYearLaporan()
+    {
+        $masuk = $this->db->select('MIN(YEAR(tgl)) AS min_year, MAX(YEAR(tgl)) AS max_year')->get('transaksi_masuk')->row_array();
+        $keluar = $this->db->select('MIN(YEAR(tgl)) AS min_year, MAX(YEAR(tgl)) AS max_year')->get('transaksi_keluar')->row_array();
+        $min_year = array($masuk['min_year'], $keluar['min_year']);
+        $min_year = min($min_year);
+        $max_year = array($masuk['max_year'], $keluar['max_year']);
+        $max_year = max($max_year);
+        return [
+            'min_year' => $min_year,
+            'max_year' => $max_year
+        ];
+    }
+
+    public function getDonaturLaporan()
+    {
+        return $this->db->select('DISTINCT(user_nama) AS nama')->group_by('user_nama')->get('transaksi_masuk')->result_array();
+    }
+
+    public function dataReportTransaksiMasuk($program, $periode_lap, $user_nama, $status, $post)
+    {
+        if ($user_nama == 'semua') {
+            $user_nama = '%';
+            $ket_donatur = 'Semua';
+        } else {
+            $ket_donatur = $user_nama;
+        }
+
+        if ($status == 'semua') {
+            $status = '%';
+            $ket_status = "Semua";
+        } else {
+            $status = '%' . $status . '%';
+            $ket_status = strtoupper(explode('%', $status)[1]);
+        }
+
+        if ($program == 'semua') {
+            $program = '%';
+            $ket_program = "Semua";
+        } else {
+            $ket_program = 'TIDAK BERNAMA';
+        }
+
+        if ($periode_lap == 'hari_ini') {
+            $ket_periode = date('d', time()) . ' ' . month(date('n', time()), 'mmmm') . ' ' . date('Y', time());
+            $query = "SELECT transaksi_masuk.order_id, transaksi_masuk.tgl, transaksi_masuk.user_nama, transaksi_masuk.nominal, transaksi_masuk.program, transaksi_masuk.status FROM transaksi_masuk WHERE DATE(transaksi_masuk.tgl) = CURDATE() AND transaksi_masuk.user_nama LIKE '$user_nama' AND transaksi_masuk.status LIKE '$status' AND transaksi_masuk.program LIKE '$program' ORDER BY transaksi_masuk.tgl ASC";
+        } else if ($periode_lap == 'bulan_ini') {
+            $ket_periode = month(date('n', time()), 'mmmm') . ' ' . date('Y', time());
+            $query = "SELECT transaksi_masuk.order_id, transaksi_masuk.tgl, transaksi_masuk.user_nama, transaksi_masuk.nominal, transaksi_masuk.program, transaksi_masuk.status FROM transaksi_masuk WHERE MONTH(DATE(transaksi_masuk.tgl)) = MONTH(CURDATE()) AND transaksi_masuk.user_nama LIKE '$user_nama' AND transaksi_masuk.status LIKE '$status' AND transaksi_masuk.program LIKE '$program' ORDER BY transaksi_masuk.tgl ASC";
+        } else if ($periode_lap == 'tahun_ini') {
+            $ket_periode = 'Tahun ' . date('Y', time());
+            $query = "SELECT transaksi_masuk.order_id, transaksi_masuk.tgl, transaksi_masuk.user_nama, transaksi_masuk.nominal, transaksi_masuk.program, transaksi_masuk.status FROM transaksi_masuk WHERE YEAR(DATE(transaksi_masuk.tgl)) = YEAR(CURDATE()) AND transaksi_masuk.user_nama LIKE '$user_nama' AND transaksi_masuk.status LIKE '$status' AND transaksi_masuk.program LIKE '$program' ORDER BY transaksi_masuk.tgl ASC";
+        } else if ($periode_lap == 'pertanggal') {
+            $cek_tgl = (isset($post['label_tgl_akhir'])) ? 'yes' : 'false';
+            $tgl_awal = $post['per_tanggal1'];
+            if ($cek_tgl == 'yes') {
+                $tgl_akhir = $post['per_tanggal2'];
+                $ket_periode = date("d", strtotime($tgl_awal)) . " " . month(date("n", strtotime($tgl_awal)), 'mmmm') . " " . date("Y", strtotime($tgl_awal)) . " s.d. " . date("d", strtotime($tgl_akhir)) . " " . month(date("n", strtotime($tgl_akhir)), 'mmmm') . " " . date("Y", strtotime($tgl_akhir));
+                $query = "SELECT transaksi_masuk.order_id, transaksi_masuk.tgl, transaksi_masuk.user_nama, transaksi_masuk.nominal, transaksi_masuk.program, transaksi_masuk.status FROM transaksi_masuk WHERE (DATE(transaksi_masuk.tgl) BETWEEN '$tgl_awal' AND '$tgl_akhir') AND transaksi_masuk.user_nama LIKE '$user_nama' AND transaksi_masuk.status LIKE '$status' AND transaksi_masuk.program LIKE '$program' ORDER BY transaksi_masuk.tgl ASC";
+            } else {
+                $ket_periode = date("d", strtotime($tgl_awal)) . " " . month(date("n", strtotime($tgl_awal)), 'mmmm') . " " . date("Y", strtotime($tgl_awal));
+                $query = "SELECT transaksi_masuk.order_id, transaksi_masuk.tgl, transaksi_masuk.user_nama, transaksi_masuk.nominal, transaksi_masuk.program, transaksi_masuk.status FROM transaksi_masuk WHERE DATE(transaksi_masuk.tgl) = '$tgl_awal' AND transaksi_masuk.user_nama LIKE '$user_nama' AND transaksi_masuk.status LIKE '$status' AND transaksi_masuk.program LIKE '$program' ORDER BY transaksi_masuk.tgl ASC";
+            }
+        } else if ($periode_lap == 'perbulan') {
+            $fm = array("Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember");
+            $cek_bln = (isset($post['label_bulan_akhir'])) ? 'yes' : 'false';
+            $bulan1 = $post['per_bulan1'];
+            $tahunbulan1 = $post['tahun_perbulan1'];
+            if ($cek_bln == 'yes') {
+                $bulan2 = $post['per_bulan2'];
+                $tahunbulan2 = $post['tahun_perbulan2'];
+                $tgl_awal = $tahunbulan1 . '-' . $bulan1 . '-01';
+                $tgl_akhir = $tahunbulan2 . '-' . $bulan2 . '-31';
+                $ket_periode =  $fm[$bulan1 - 1] . ' ' .  $tahunbulan1 . " s.d. " . $fm[$bulan2 - 1] . " " . $tahunbulan2;
+                $query = "SELECT transaksi_masuk.order_id, transaksi_masuk.tgl, transaksi_masuk.user_nama, transaksi_masuk.nominal, transaksi_masuk.program, transaksi_masuk.status FROM transaksi_masuk WHERE (DATE(transaksi_masuk.tgl) BETWEEN '$tgl_awal' AND '$tgl_akhir') AND transaksi_masuk.user_nama LIKE '$user_nama' AND transaksi_masuk.status LIKE '$status' AND transaksi_masuk.program LIKE '$program' ORDER BY transaksi_masuk.tgl ASC";
+            } else {
+                $ket_periode =  $fm[$bulan1 - 1] . " " . $tahunbulan1;
+                $query = "SELECT transaksi_masuk.order_id, transaksi_masuk.tgl, transaksi_masuk.user_nama, transaksi_masuk.nominal, transaksi_masuk.program, transaksi_masuk.status FROM transaksi_masuk WHERE (MONTH(DATE(transaksi_masuk.tgl)) = '$bulan1' AND YEAR(DATE(transaksi_masuk.tgl)) = '$tahunbulan1') AND transaksi_masuk.user_nama LIKE '$user_nama' AND transaksi_masuk.status LIKE '$status' AND transaksi_masuk.program LIKE '$program' ORDER BY transaksi_masuk.tgl ASC";
+            }
+        } else if ($periode_lap == 'pertahun') {
+            $cek_thn = (isset($post['label_tahun_akhir'])) ? 'yes' : 'false';
+            $per_tahun1 = $post['per_tahun1'];
+            if ($cek_thn == 'yes') {
+                $per_tahun2 = $post['per_tahun2'];
+                $ket_periode = 'Tahun ' . $per_tahun1 . ' s.d. ' . $per_tahun2;
+                $query = "SELECT transaksi_masuk.order_id, transaksi_masuk.tgl, transaksi_masuk.user_nama, transaksi_masuk.nominal, transaksi_masuk.program, transaksi_masuk.status FROM transaksi_masuk WHERE (YEAR(DATE(transaksi_masuk.tgl)) BETWEEN '$per_tahun1' AND '$per_tahun2') AND transaksi_masuk.user_nama LIKE '$user_nama' AND transaksi_masuk.status LIKE '$status' AND transaksi_masuk.program LIKE '$program' ORDER BY transaksi_masuk.tgl ASC";
+            } else {
+                $ket_periode = 'Tahun ' . $per_tahun1;
+                $query = "SELECT transaksi_masuk.order_id, transaksi_masuk.tgl, transaksi_masuk.user_nama, transaksi_masuk.nominal, transaksi_masuk.program, transaksi_masuk.status FROM transaksi_masuk WHERE YEAR(DATE(transaksi_masuk.tgl)) = '$per_tahun1' AND transaksi_masuk.user_nama LIKE '$user_nama' AND transaksi_masuk.status LIKE '$status' AND transaksi_masuk.program LIKE '$program' ORDER BY transaksi_masuk.tgl ASC";
+            }
+        }
+
+        $rows = $this->db->query($query)->num_rows();
+        if ($rows > 0) {
+            $tmpTotal = 0;
+            $data = array(
+                'periodeHeader' => $ket_periode,
+                'donaturHeader' =>  $ket_donatur,
+                'programHeader' => $ket_program,
+                'statusHeader' => $ket_status,
+                'dataTransaksi' => array(),
+                'total' => 'Rp 0'
+            );
+            $dataTrs = $this->db->query($query)->result_array();
+            foreach ($dataTrs as $d) {
+                $tmpTotal = $tmpTotal + $d['nominal'];
+                $add = [
+                    'order_id' => $d['order_id'],
+                    'tgl' => date('d', strtotime($d['tgl'])) . '/' . month(date('n', strtotime($d['tgl'])), 'mmm') . '/' . date('Y', strtotime($d['tgl'])),
+                    'user_nama' => $d['user_nama'],
+                    'program' => $d['program'],
+                    'nominal' => format_rupiah($d['nominal']),
+                    'status' => $d['status']
+                ];
+                array_push($data['dataTransaksi'], $add);
+            }
+            $data['total'] = 'Rp ' . format_rupiah($tmpTotal);
+        } else {
+            $data = array(
+                'periodeHeader' => $ket_periode,
+                'donaturHeader' =>  $ket_donatur,
+                'programHeader' => $ket_program,
+                'statusHeader' => $ket_status,
+                'dataTransaksi' => array(),
+                'total' => 'Rp 0'
+            );
+        }
+        return $data;
+    }
+
+    public function getPetugasLaporan()
+    {
+        return $this->db->select('DISTINCT(petugas) AS petugas')->get('transaksi_keluar')->result_array();
+    }
+
+    public function dataReportTransaksiKeluar($program, $periode_lap, $petugas, $post)
+    {
+        if ($petugas == 'semua') {
+            $petugas = '%';
+            $ket_petugas = 'Semua';
+        } else {
+            $ket_petugas = $petugas;
+        }
+
+        if ($program == 'semua') {
+            $program = '%';
+            $ket_program = "Semua";
+        } else {
+            $program = '%' . $program . '%';
+            $ket_program = 'TIDAK BERNAMA';
+        }
+
+        if ($periode_lap == 'hari_ini') {
+            $ket_periode = date('d', time()) . ' ' . month(date('n', time()), 'mmmm') . ' ' . date('Y', time());
+            $query = "SELECT transaksi_keluar.id, transaksi_keluar.tgl, transaksi_keluar.petugas, transaksi_keluar.nominal, transaksi_keluar.program, transaksi_keluar.keterangan, transaksi_keluar.penerima_nama, transaksi_keluar.penerima_telp, transaksi_keluar.penerima_alamat_instansi FROM transaksi_keluar WHERE DATE(transaksi_keluar.tgl) = CURDATE() AND transaksi_keluar.petugas LIKE '$petugas' AND transaksi_keluar.program LIKE '$program' ORDER BY transaksi_keluar.tgl ASC";
+        } else if ($periode_lap == 'bulan_ini') {
+            $ket_periode = month(date('n', time()), 'mmmm') . ' ' . date('Y', time());
+            $query = "SELECT transaksi_keluar.id, transaksi_keluar.tgl, transaksi_keluar.petugas, transaksi_keluar.nominal, transaksi_keluar.program, transaksi_keluar.keterangan, transaksi_keluar.penerima_nama, transaksi_keluar.penerima_telp, transaksi_keluar.penerima_alamat_instansi FROM transaksi_keluar WHERE MONTH(DATE(transaksi_keluar.tgl)) = MONTH(CURDATE()) AND transaksi_keluar.petugas LIKE '$petugas' AND transaksi_keluar.program LIKE '$program' ORDER BY transaksi_keluar.tgl ASC";
+        } else if ($periode_lap == 'tahun_ini') {
+            $ket_periode = 'Tahun ' . date('Y', time());
+            $query = "SELECT transaksi_keluar.id, transaksi_keluar.tgl, transaksi_keluar.petugas, transaksi_keluar.nominal, transaksi_keluar.program, transaksi_keluar.keterangan, transaksi_keluar.penerima_nama, transaksi_keluar.penerima_telp, transaksi_keluar.penerima_alamat_instansi FROM transaksi_keluar WHERE YEAR(DATE(transaksi_keluar.tgl)) = YEAR(CURDATE()) AND transaksi_keluar.petugas LIKE '$petugas' AND transaksi_keluar.program LIKE '$program' ORDER BY transaksi_keluar.tgl ASC";
+        } else if ($periode_lap == 'pertanggal') {
+            $cek_tgl = (isset($post['label_tgl_akhir'])) ? 'yes' : 'false';
+            $tgl_awal = $post['per_tanggal1'];
+            if ($cek_tgl == 'yes') {
+                $tgl_akhir = $post['per_tanggal2'];
+                $ket_periode = date("d", strtotime($tgl_awal)) . " " . month(date("n", strtotime($tgl_awal)), 'mmmm') . " " . date("Y", strtotime($tgl_awal)) . " s.d. " . date("d", strtotime($tgl_akhir)) . " " . month(date("n", strtotime($tgl_akhir)), 'mmmm') . " " . date("Y", strtotime($tgl_akhir));
+                $query = "SELECT transaksi_keluar.id, transaksi_keluar.tgl, transaksi_keluar.petugas, transaksi_keluar.nominal, transaksi_keluar.program, transaksi_keluar.keterangan, transaksi_keluar.penerima_nama, transaksi_keluar.penerima_telp, transaksi_keluar.penerima_alamat_instansi FROM transaksi_keluar WHERE (DATE(transaksi_keluar.tgl) BETWEEN '$tgl_awal' AND '$tgl_akhir') AND transaksi_keluar.petugas LIKE '$petugas' AND transaksi_keluar.program LIKE '$program' ORDER BY transaksi_keluar.tgl ASC";
+            } else {
+                $ket_periode = date("d", strtotime($tgl_awal)) . " " . month(date("n", strtotime($tgl_awal)), 'mmmm') . " " . date("Y", strtotime($tgl_awal));
+                $query = "SELECT transaksi_keluar.id, transaksi_keluar.tgl, transaksi_keluar.petugas, transaksi_keluar.nominal, transaksi_keluar.program, transaksi_keluar.keterangan, transaksi_keluar.penerima_nama, transaksi_keluar.penerima_telp, transaksi_keluar.penerima_alamat_instansi FROM transaksi_keluar WHERE DATE(transaksi_keluar.tgl) = '$tgl_awal' AND transaksi_keluar.petugas LIKE '$petugas' AND transaksi_keluar.program LIKE '$program' ORDER BY transaksi_keluar.tgl ASC";
+            }
+        } else if ($periode_lap == 'perbulan') {
+            $fm = array("Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember");
+            $cek_bln = (isset($post['label_bulan_akhir'])) ? 'yes' : 'false';
+            $bulan1 = $post['per_bulan1'];
+            $tahunbulan1 = $post['tahun_perbulan1'];
+            if ($cek_bln == 'yes') {
+                $bulan2 = $post['per_bulan2'];
+                $tahunbulan2 = $post['tahun_perbulan2'];
+                $tgl_awal = $tahunbulan1 . '-' . $bulan1 . '-01';
+                $tgl_akhir = $tahunbulan2 . '-' . $bulan2 . '-31';
+                $ket_periode =  $fm[$bulan1 - 1] . ' ' .  $tahunbulan1 . " s.d. " . $fm[$bulan2 - 1] . " " . $tahunbulan2;
+                $query = "SELECT transaksi_keluar.id, transaksi_keluar.tgl, transaksi_keluar.petugas, transaksi_keluar.nominal, transaksi_keluar.program, transaksi_keluar.keterangan, transaksi_keluar.penerima_nama, transaksi_keluar.penerima_telp, transaksi_keluar.penerima_alamat_instansi FROM transaksi_keluar WHERE (DATE(transaksi_keluar.tgl) BETWEEN '$tgl_awal' AND '$tgl_akhir') AND transaksi_keluar.petugas LIKE '$petugas' AND transaksi_keluar.program LIKE '$program' ORDER BY transaksi_keluar.tgl ASC";
+            } else {
+                $ket_periode =  $fm[$bulan1 - 1] . " " . $tahunbulan1;
+                $query = "SELECT transaksi_keluar.id, transaksi_keluar.tgl, transaksi_keluar.petugas, transaksi_keluar.nominal, transaksi_keluar.program, transaksi_keluar.keterangan, transaksi_keluar.penerima_nama, transaksi_keluar.penerima_telp, transaksi_keluar.penerima_alamat_instansi FROM transaksi_keluar WHERE (MONTH(DATE(transaksi_keluar.tgl)) = '$bulan1' AND YEAR(DATE(transaksi_keluar.tgl)) = '$tahunbulan1') AND transaksi_keluar.petugas LIKE '$petugas' AND transaksi_keluar.program LIKE '$program' ORDER BY transaksi_keluar.tgl ASC";
+            }
+        } else if ($periode_lap == 'pertahun') {
+            $cek_thn = (isset($post['label_tahun_akhir'])) ? 'yes' : 'false';
+            $per_tahun1 = $post['per_tahun1'];
+            if ($cek_thn == 'yes') {
+                $per_tahun2 = $post['per_tahun2'];
+                $ket_periode = 'Tahun ' . $per_tahun1 . ' s.d. ' . $per_tahun2;
+                $query = "SELECT transaksi_keluar.id, transaksi_keluar.tgl, transaksi_keluar.petugas, transaksi_keluar.nominal, transaksi_keluar.program, transaksi_keluar.keterangan, transaksi_keluar.penerima_nama, transaksi_keluar.penerima_telp, transaksi_keluar.penerima_alamat_instansi FROM transaksi_keluar WHERE (YEAR(DATE(transaksi_keluar.tgl)) BETWEEN '$per_tahun1' AND '$per_tahun2') AND transaksi_keluar.petugas LIKE '$petugas' AND transaksi_keluar.program LIKE '$program' ORDER BY transaksi_keluar.tgl ASC";
+            } else {
+                $ket_periode = 'Tahun ' . $per_tahun1;
+                $query = "SELECT transaksi_keluar.id, transaksi_keluar.tgl, transaksi_keluar.petugas, transaksi_keluar.nominal, transaksi_keluar.program, transaksi_keluar.keterangan, transaksi_keluar.penerima_nama, transaksi_keluar.penerima_telp, transaksi_keluar.penerima_alamat_instansi FROM transaksi_keluar WHERE YEAR(DATE(transaksi_keluar.tgl)) = '$per_tahun1' AND transaksi_keluar.petugas LIKE '$petugas' AND transaksi_keluar.program LIKE '$program' ORDER BY transaksi_keluar.tgl ASC";
+            }
+        }
+
+        $rows = $this->db->query($query)->num_rows();
+        if ($rows > 0) {
+            $tmpTotal = 0;
+            $data = array(
+                'periodeHeader' => $ket_periode,
+                'petugasHeader' =>  $ket_petugas,
+                'programHeader' => $ket_program,
+                'dataTransaksi' => array(),
+                'total' => 'Rp 0'
+            );
+            $dataTrs = $this->db->query($query)->result_array();
+            foreach ($dataTrs as $d) {
+                $tmpTotal = $tmpTotal + $d['nominal'];
+                $add = [
+                    'id' => $d['id'],
+                    'tgl' => date('d', strtotime($d['tgl'])) . '/' . month(date('n', strtotime($d['tgl'])), 'mmm') . '/' . date('Y', strtotime($d['tgl'])),
+                    'penerima_nama' => $d['penerima_nama'],
+                    'penerima_telp' => $d['penerima_telp'],
+                    'penerima_alamat_instansi' => $d['penerima_alamat_instansi'],
+                    'keterangan' => $d['keterangan'],
+                    'petugas' => $d['petugas'],
+                    'program' => $d['program'],
+                    'nominal' => format_rupiah($d['nominal'])
+                ];
+                array_push($data['dataTransaksi'], $add);
+            }
+            $data['total'] = 'Rp ' . format_rupiah($tmpTotal);
+        } else {
+            $data = array(
+                'periodeHeader' => $ket_periode,
+                'petugasHeader' =>  $ket_petugas,
+                'programHeader' => $ket_program,
+                'dataTransaksi' => array(),
+                'total' => 'Rp 0'
+            );
+        }
+        return $data;
     }
 }
