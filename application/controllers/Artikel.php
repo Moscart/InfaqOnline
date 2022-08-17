@@ -11,6 +11,7 @@ class Artikel extends CI_Controller
         $data['frontendNav'] = $this->menu->showFrontendNav();
         if (isset($slug)) {
             $data['artikel'] = $this->db->get_where('artikel', ['link' => $slug])->row_array();
+            $this->db->update('artikel', ['dilihat' => $data['artikel']['dilihat'] + 1], ['link' => $slug]);
             $this->load->view('artikel_detail', $data);
         } else {
             $data['artikel'] = $this->db->get('artikel')->result_array();

@@ -2,15 +2,11 @@
     <main>
         <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
-                <div class="carousel-item active banner-container">
-                    <img src="https://www.seekpng.com/png/detail/423-4235598_no-image-for-noimage-icon.png" class="d-block w-100 banner-content" alt="...">
-                </div>
-                <div class="carousel-item banner-container">
-                    <img src="https://www.seekpng.com/png/detail/423-4235598_no-image-for-noimage-icon.png" class="d-block w-100 banner-content" alt="...">
-                </div>
-                <div class="carousel-item banner-container">
-                    <img src="https://t3.ftcdn.net/jpg/04/62/93/66/360_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg" class="d-block w-100 banner-content" alt="...">
-                </div>
+                <?php foreach ($artikel as $a) : ?>
+                    <div class="carousel-item active banner-container">
+                        <img src="<?= base_url('assets/img/artikel/') . $a['banner']; ?>" class="d-block w-100 banner-content" alt="Banner <?= $a['judul']; ?>">
+                    </div>
+                <?php endforeach; ?>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -42,37 +38,23 @@
                             </div>
                         </div>
                         <div class="card-body fw-bold text-muted">
-                            Rp<span class="fs-1 text-white">1.000.000</span>
+                            Rp<span class="fs-1 text-white"><?= format_rupiah($saldo); ?></span>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6 col-12">
                     <h3 class="fw-bolder text-uppercase fs-4">Infaq Terbaru</h3>
                     <div class="row gy-1">
-                        <div class="col-12">
-                            <div class="bg-dark fs-7 text-white rounded-pill p-2">
-                                <div class="row px-3">
-                                    <div class="col-6 align-self-center fw-bold">20/08/2022 22:23</div>
-                                    <div class="col-6 text-end fw-bold text-muted">Rp<span class="text-warning fs-6">100.000</span></div>
+                        <?php foreach ($lastDanaMasuk as $ldm) : ?>
+                            <div class="col-12">
+                                <div class="bg-dark fs-7 text-white rounded-pill p-2">
+                                    <div class="row px-3">
+                                        <div class="col-6 align-self-center fw-bold"><?= date('d', strtotime($ldm['tgl'])) . '/' . month(date('n', strtotime($ldm['tgl'])), 'mmm') . '/' . date('Y', strtotime($ldm['tgl'])); ?></div>
+                                        <div class="col-6 text-end fw-bold text-muted">Rp<span class="text-warning fs-6"><?= format_rupiah($ldm['nominal']); ?></span></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="bg-dark fs-7 text-white rounded-pill p-2">
-                                <div class="row px-3">
-                                    <div class="col-6 align-self-center fw-bold">20/08/2022 22:23</div>
-                                    <div class="col-6 text-end fw-bold text-muted">Rp<span class="text-warning fs-6">100.000</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="bg-dark fs-7 text-white rounded-pill p-2">
-                                <div class="row px-3">
-                                    <div class="col-6 align-self-center fw-bold">20/08/2022 22:23</div>
-                                    <div class="col-6 text-end fw-bold text-muted">Rp<span class="text-warning fs-6">100.000</span></div>
-                                </div>
-                            </div>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>

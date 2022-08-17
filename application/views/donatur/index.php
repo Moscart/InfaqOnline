@@ -99,6 +99,7 @@
                                 <tr class="text-center">
                                     <th style="width: 5%;" scope="col">#</th>
                                     <th scope="col">ID Transaksi</th>
+                                    <th scope="col">Payment Type</th>
                                     <th scope="col">Tanggal</th>
                                     <th scope="col">Nominal</th>
                                     <th scope="col">Program</th>
@@ -118,6 +119,7 @@
                                                 <?= $uwr['order_id']; ?>
                                             <?php endif; ?>
                                         </td>
+                                        <td><?= $uwr['payment_type']; ?></td>
                                         <td>
                                             <?= date('d', strtotime($uwr['tgl'])) . ' ' . month(date('n', strtotime($uwr['tgl'])), 'mmm') . ' ' . date('Y', strtotime($uwr['tgl'])) . ', ' . date('H:i', strtotime($uwr['tgl'])); ?>
                                         </td>
@@ -134,6 +136,7 @@
                                 <tr class="text-center">
                                     <th style="width: 5%;" scope="col">#</th>
                                     <th scope="col">ID Transaksi</th>
+                                    <th scope="col">Payment Type</th>
                                     <th scope="col">Tanggal</th>
                                     <th scope="col">Nominal</th>
                                     <th scope="col">Program</th>

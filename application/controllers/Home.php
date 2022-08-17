@@ -13,6 +13,8 @@ class Home extends CI_Controller
 		$data['nav'] = "home";
 		$data['frontendNav'] = $this->menu->showFrontendNav();
 		$data['program'] = $this->admin->showProgram();
+		$data['saldo'] = $this->admin->getTotalDana();
+		$data['lastDanaMasuk'] = $this->db->select('tgl, nominal')->order_by('tgl', 'DESC')->get('transaksi_masuk', 3)->result_array();
 		$this->load->view('home', $data);
 	}
 }

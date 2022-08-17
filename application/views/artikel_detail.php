@@ -9,7 +9,7 @@
                 </div>
                 <div class="card-body d-flex flex-column p-4">
                     <h5 class="card-title fw-bold fs-3"><?= $artikel['judul']; ?></h5>
-                    <h6 class="text-muted"><?= $artikel['tgl_upload']; ?></h6>
+                    <h6 class="text-muted"><i class="fas fa-calendar-alt"></i> <?= date('d', strtotime($artikel['tgl_upload'])) . ', ' . month(date('n', strtotime($artikel['tgl_upload'])), 'mmmm') . ' ' . date('Y', strtotime($artikel['tgl_upload'])) . ' ' . date('H:i', strtotime($artikel['tgl_upload'])); ?> | <i class="fas fa-eye"></i> <?= number_format($artikel['dilihat'], 0, ",", "."); ?></h6>
                     <div class="mt-4">
                         <?= $artikel['isi']; ?>
                     </div>
