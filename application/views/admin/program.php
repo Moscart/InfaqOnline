@@ -97,7 +97,7 @@
                                             <img src="<?= base_url('assets/img/program/') . $uwr['banner']; ?>" alt="banner <?= $uwr['nama_detailprogram']; ?>" class="img-thumbnail" style="width: 100px;">
                                         </td>
                                         <td class="text-center">
-                                            <a href="" class="btn btn-sm mb-1 btn-success" data-idprogramdetail="<?= $uwr['id_programdetail']; ?>" data-nama="<?= $uwr['nama_detailprogram']; ?>" data-idprogram="<?= $uwr['id_program']; ?>" data-program="<?= $uwr['nama_program']; ?>" data-banner="<?= $uwr['banner']; ?>" data-toggle="modal" data-target="#editSubProgramModal" id="editSubProgram">Edit</a>
+                                            <a href="" class="btn btn-sm mb-1 btn-success" data-idprogramdetail="<?= $uwr['id_programdetail']; ?>" data-nama="<?= $uwr['nama_detailprogram']; ?>" data-idprogram="<?= $uwr['id_program']; ?>" data-program="<?= $uwr['nama_program']; ?>" data-banner="<?= $uwr['banner']; ?>" data-deskripsi="<?= $uwr['deskripsi']; ?>" data-toggle="modal" data-target="#editSubProgramModal" id="editSubProgram">Edit</a>
                                             <a href="" data-href="<?= base_url('admin/deletesubprogram/') . $uwr['id_programdetail']; ?>" class="btn btn-sm mb-1 btn-danger" data-toggle="modal" id="delSubProgram" data-target="#deleteSubProgramModal">Delete</a>
                                         </td>
                                     </tr>
@@ -200,6 +200,10 @@
                             <label class="custom-file-label" for="bannerSubProgram" data-browse="Browse">Pilih file</label>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="deskripsi">Deskripsi <span class="text-danger">*</span></label>
+                        <textarea name="deskripsi" class="form-control" id="deskripsi" rows="3"></textarea>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="token" value="<?= base64_encode('add'); ?>">
@@ -247,6 +251,10 @@
                             <label class="custom-file-label" for="bannerSubProgramEdit" data-browse="Browse">Pilih file</label>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="deskripsiEdit">Deskripsi <span class="text-danger">*</span></label>
+                        <textarea name="deskripsiEdit" class="form-control" id="deskripsiEdit" rows="3"></textarea>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="token" value="<?= base64_encode('edit'); ?>">
@@ -278,3 +286,6 @@
         </div>
     </div>
 </div>
+
+<!-- declare here but call in cutom.js -->
+<script src="//cdn.ckeditor.com/4.19.0/full/ckeditor.js"></script>

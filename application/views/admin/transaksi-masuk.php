@@ -42,6 +42,7 @@
                                 <tr class="text-center">
                                     <th style="width: 5%;" scope="col">#</th>
                                     <th scope="col">ID Transaksi</th>
+                                    <th scope="col">Payment Type</th>
                                     <th scope="col">Tanggal</th>
                                     <th scope="col">Nama</th>
                                     <th scope="col">Email</th>
@@ -58,9 +59,16 @@
                                 foreach ($transaksi as $uwr) : ?>
                                     <tr>
                                         <th scope="row" class="text-center"><?= $no; ?></th>
-                                        <td><?= $uwr['order_id']; ?></td>
                                         <td>
-                                            <?= date('d', strtotime($uwr['tgl'])) . ' ' . month(date('n', strtotime($uwr['tgl'])), 'mmm') . ' ' . date('Y', strtotime($uwr['tgl'])) . ', ' . date('H:i', strtotime($uwr['tgl'])); ?>
+                                            <?php if ($uwr['pdf_url'] != '') : ?>
+                                                <a href="<?= $uwr['pdf_url']; ?>" class="text-decoration-none" target="_blank"><?= $uwr['order_id']; ?>&nbsp;<i class="fas fa-external-link-alt" title="buka laporan pdf"></i></a>
+                                            <?php else : ?>
+                                                <?= $uwr['order_id']; ?>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td><?= $uwr['payment_type']; ?></td>
+                                        <td>
+                                            <?= date('d', strtotime($uwr['tgl'])) . ' ' . month(date('n', strtotime($uwr['tgl'])), 'mmm') . ' ' . date('Y', strtotime($uwr['tgl'])) . ', ' . date('H:i:s', strtotime($uwr['tgl'])); ?>
                                         </td>
                                         <td><?= $uwr['user_nama']; ?></td>
                                         <td><?= $uwr['user_email']; ?></td>
@@ -71,6 +79,9 @@
                                             <span class="badge badge-<?= ($uwr['status'] == 'capture' || $uwr['status'] == 'settlement') ? 'info' : 'warning'; ?>"><?= strtoupper($uwr['status']); ?></span>
                                         </td>
                                         <td class="text-center">
+                                            <?php if ($uwr['status'] == 'capture' || $uwr['status'] == 'pending') : ?>
+                                                <a href="<?= base_url('admin/cekstatustransaksi/') . $uwr['order_id']; ?>" class="btn btn-sm mb-1 btn-dark" id="delTrsMasuk">Cek</a>
+                                            <?php endif; ?>
                                             <a href="" class="btn btn-sm mb-1 btn-success" data-toggle="modal" data-target="#editTrsMasukModal" id="editTrsMasuk" data-idtrsmasuk="<?= $uwr['id']; ?>" data-nama="<?= $uwr['user_nama']; ?>" data-email="<?= $uwr['user_email']; ?>" data-telp="<?= $uwr['user_telp']; ?>" data-nominal="<?= $uwr['nominal']; ?>" data-program="<?= $uwr['program']; ?>" data-status="<?= $uwr['status']; ?>">Edit</a>
                                             <a href="" data-href="<?= base_url('admin/deletetrsmasuk/') . $uwr['id']; ?>" class="btn btn-sm mb-1 btn-danger" data-toggle="modal" id="delTrsMasuk" data-target="#deleteTrsMasukModal">Delete</a>
                                         </td>
@@ -82,6 +93,7 @@
                                 <tr class="text-center">
                                     <th style="width: 5%;" scope="col">#</th>
                                     <th scope="col">ID Transaksi</th>
+                                    <th scope="col">Payment Type</th>
                                     <th scope="col">Tanggal</th>
                                     <th scope="col">Nama</th>
                                     <th scope="col">Email</th>

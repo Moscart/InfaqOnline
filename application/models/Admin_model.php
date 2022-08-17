@@ -178,7 +178,8 @@ class Admin_model extends CI_Model
                 $data = [
                     'id_program' => $post['id_program'],
                     'nama_detailprogram' => $post['nama_detailprogram'],
-                    'banner' => $banner
+                    'banner' => $banner,
+                    'deskripsi' => $post['deskripsi']
                 ];
                 $resp =  ($this->db->insert('program_detail', $data)) ? 'ok' : 'errInsert';
             } else $resp = 'errFoto';
@@ -200,7 +201,8 @@ class Admin_model extends CI_Model
                     $data   = [
                         'id_program' => $post['id_programEdit'],
                         'nama_detailprogram' => $post['nama_detailprogramEdit'],
-                        'banner' => $banner
+                        'banner' => $banner,
+                        'deskripsi' => $post['deskripsiEdit']
                     ];
                 } else $banner = false;
             } else {
@@ -208,7 +210,8 @@ class Admin_model extends CI_Model
                 $data = [
                     'id_program' => $post['id_programEdit'],
                     'nama_detailprogram' => $post['nama_detailprogramEdit'],
-                    'banner' => $post['bannerSubProgramOld']
+                    'banner' => $post['bannerSubProgramOld'],
+                    'deskripsi' => $post['deskripsiEdit']
                 ];
             }
             // jika upload berhasil update db
@@ -243,12 +246,13 @@ class Admin_model extends CI_Model
 
     private function _getProgramDetail($id_program)
     {
-        $detailProgram =  $this->db->select('nama_detailprogram, banner')->from('program_detail')->where('id_program', $id_program)->get()->result_array();
+        $detailProgram =  $this->db->select('nama_detailprogram, banner, deskripsi')->from('program_detail')->where('id_program', $id_program)->get()->result_array();
         $data = [];
         foreach ($detailProgram as $dp) {
             $add = [
                 'nama_detailprogram' => $dp['nama_detailprogram'],
-                'banner_detailprogram' => base_url('assets/img/program/') . $dp['banner']
+                'banner_detailprogram' => base_url('assets/img/program/') . $dp['banner'],
+                'deskripsi_detailprogram' => $dp['deskripsi']
             ];
             array_push($data, $add);
         }

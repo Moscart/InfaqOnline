@@ -20,6 +20,7 @@ class Post extends CI_Controller
     public function addTransaksiMasuk()
     {
         // set form validation
+        $this->form_validation->set_rules('payment_type', 'Payment type', 'trim');
         $this->form_validation->set_rules('order_id', 'ID order', 'trim|required|is_unique[transaksi_masuk.order_id]', [
             'is_unique' => 'Id order ini sudah terdaftar.'
         ]);
@@ -30,6 +31,7 @@ class Post extends CI_Controller
         $this->form_validation->set_rules('nominal', 'Nominal', 'trim|required');
         $this->form_validation->set_rules('status', 'Status', 'trim|required');
         $this->form_validation->set_rules('program', 'Program', 'trim');
+        $this->form_validation->set_rules('pdf_url', 'PDF URL', 'trim');
         if ($this->form_validation->run() == false) {
             echo json_encode([
                 'response' => [
@@ -37,6 +39,13 @@ class Post extends CI_Controller
                     'description' => 'kesalahan saat validasi inputan'
                 ],
                 'ketentuan_post' => [
+                    'payment_type' => [
+                        'type' => 'varchar',
+                        'maxlength' => '30',
+                        'syntax' => '',
+                        'example' => 'bank_transfer',
+                        'validation' => 'trim'
+                    ],
                     'order_id' => [
                         'type' => 'int',
                         'maxlength' => '11',
@@ -108,11 +117,19 @@ class Post extends CI_Controller
                         'example' => 'Infak',
                         'validation' => 'trim'
                     ],
+                    'pdf_url' => [
+                        'type' => 'varchar',
+                        'maxlength' => '300',
+                        'syntax' => '',
+                        'example' => 'https://app.sandbox.midtrans.com/snap/v1/transactions/20375d85-5410-43cc-92fb-ce4244e7e4b7/pdf',
+                        'validation' => 'trim'
+                    ]
                 ]
             ]);
         } else {
             // insert data
             if ($this->db->insert('transaksi_masuk', [
+                'payment_type' => htmlspecialchars($this->input->post('payment_type')),
                 'order_id' => htmlspecialchars($this->input->post('order_id')),
                 'tgl' => htmlspecialchars($this->input->post('tgl')),
                 'user_nama' => htmlspecialchars($this->input->post('user_nama')),
@@ -120,17 +137,19 @@ class Post extends CI_Controller
                 'user_telp' => htmlspecialchars($this->input->post('user_telp')),
                 'nominal' => reset_rupiah($this->input->post('nominal')),
                 'status' => htmlspecialchars($this->input->post('status')),
-                'program' => htmlspecialchars($this->input->post('program'))
+                'program' => htmlspecialchars($this->input->post('program')),
+                'pdf_url' => $this->input->post('pdf_url')
             ])) echo json_encode([
                 'response' => [
                     'code' => 201,
                     'description' => 'Berhasil menyimpan data transaksi masuk'
                 ],
             ]);
+            // else var_dump($this->db->last_query());
             else echo json_encode([
                 'response' => [
                     'code' => 501,
-                    'description' => 'kesalahan saat input database'
+                    'description' => 'kesalahan di database'
                 ],
             ]);
         }

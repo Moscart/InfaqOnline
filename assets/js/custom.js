@@ -258,6 +258,11 @@ $('#bannerSubProgram').change(function (e) {
     }
 });
 
+// rubah textarea ke ckeditor
+$('#newSubProgramModal').on('show.bs.modal', function () {
+    CKEDITOR.replace('deskripsi');
+});
+
 // admin ketika close modl addSubProgram
 $('.closeAddSubProgramModal').click(function () {
     $('#previewBannerSubProgram').attr('src', windowOrigin + 'assets/img/default-banner-infaq-online-4x4.jpg');
@@ -306,6 +311,8 @@ $(document).on('click', '#editSubProgram', function () {
     $('#id_programEdit option:contains("' + $(this).data('program') + '")').text($(this).data('program') + ' (terakhir dipilih)').attr('selected', true);
     $('#nama_detailprogramEdit').val($(this).data('nama'));
     $('#hiddenIdSubProgram').val($(this).data('idprogramdetail'));
+    $('#deskripsiEdit').text($(this).data('deskripsi'));
+    CKEDITOR.replace('deskripsiEdit');
 });
 
 // admin ketika close modl editSubProgram

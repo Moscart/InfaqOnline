@@ -444,6 +444,7 @@ class Admin extends CI_Controller
         if (base64_decode($this->input->post('token')) == 'add') {
             $this->form_validation->set_rules('id_program', 'Parent program', 'trim|required');
             $this->form_validation->set_rules('nama_detailprogram', 'Nama sub program', 'trim|required');
+            $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'trim|required');
             if ($this->form_validation->run() == false) {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal menyimpan sub program.</div>');
                 redirect('admin/program');
@@ -454,6 +455,7 @@ class Admin extends CI_Controller
         } else if (base64_decode($this->input->post('token')) == 'edit') {
             $this->form_validation->set_rules('id_programEdit', 'Parent program', 'trim|required');
             $this->form_validation->set_rules('nama_detailprogramEdit', 'Nama sub program', 'trim|required');
+            $this->form_validation->set_rules('deskripsiEdit', 'Deskripsi', 'trim|required');
             if ($this->form_validation->run() == false) {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Gagal menyimpan sub program.</div>');
                 redirect('admin/program');
@@ -503,6 +505,7 @@ class Admin extends CI_Controller
         } else {
             // insert data
             if ($this->db->insert('transaksi_masuk', [
+                'payment_type' => 'input_manual',
                 'order_id' => htmlspecialchars($this->input->post('order_id')),
                 'tgl' => htmlspecialchars($this->input->post('tgl')),
                 'user_nama' => htmlspecialchars($this->input->post('user_nama')),
@@ -630,5 +633,23 @@ class Admin extends CI_Controller
         $this->db->delete('transaksi_keluar');
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Transaksi has been deleted.</div>');
         redirect('admin/trskeluar');
+    }
+
+    public function cekStatusTransaksi($order_id)
+    {
+        $params = array('server_key' => SERVER_KEY, 'production' => false);
+        $this->load->library('midtrans');
+        $this->midtrans->config($params);
+        $status = $this->midtrans->status($order_id);
+        if ($status->transaction_status == 'settlement') {
+            $this->db->set([
+                'status' => 'settlement',
+                'pdf_url' => ''
+            ]);
+            $this->db->where('order_id', $order_id);
+            if ($this->db->update('transaksi_masuk')) $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert"><strong>' . $order_id . '</strong> sekarang sudah <strong>' . $status->transaction_status . '</strong>.</div>');
+            else $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert"><strong>' . $order_id . '</strong> sekarang sudah <strong>' . $status->transaction_status . '</strong>, namun gagal update status di database.</div>');
+        } else $this->session->set_flashdata('message', '<div class="alert alert-warning" role="alert"><strong>' . $order_id . '</strong> sekarang berstatus <strong>' . $status->transaction_status . '</strong></div>');
+        redirect('admin/trsmasuk');
     }
 }

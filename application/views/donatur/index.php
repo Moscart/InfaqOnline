@@ -111,7 +111,13 @@
                                 foreach ($transaksi as $uwr) : ?>
                                     <tr>
                                         <th scope="row" class="text-center"><?= $no; ?></th>
-                                        <td><?= $uwr['order_id']; ?></td>
+                                        <td>
+                                            <?php if ($uwr['pdf_url'] != '') : ?>
+                                                <a href="<?= $uwr['pdf_url']; ?>" class="text-decoration-none" target="_blank"><?= $uwr['order_id']; ?>&nbsp;<i class="fas fa-external-link-alt" title="buka laporan pdf"></i></a>
+                                            <?php else : ?>
+                                                <?= $uwr['order_id']; ?>
+                                            <?php endif; ?>
+                                        </td>
                                         <td>
                                             <?= date('d', strtotime($uwr['tgl'])) . ' ' . month(date('n', strtotime($uwr['tgl'])), 'mmm') . ' ' . date('Y', strtotime($uwr['tgl'])) . ', ' . date('H:i', strtotime($uwr['tgl'])); ?>
                                         </td>
