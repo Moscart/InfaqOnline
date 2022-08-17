@@ -122,7 +122,7 @@
                     <div class="input-group mb-3">
                         <span class="input-group-text">Rp</span>
                         <div class="form-floating">
-                            <input type="number" class="form-control" min="1" id="nominal" placeholder="Masukkan Nominal" onkeyup="convertToRupiah(this);" data-program="" data-nama="<?= ($this->session->userdata('email')) ? $user['name'] : ''; ?>" data-email="<?= ($this->session->userdata('email')) ? $user['email'] : ''; ?>" data-telp="<?= ($this->session->userdata('email')) ? $user['no_telp'] : ''; ?>">
+                            <input type="text" class="form-control" min="1" id="nominal" placeholder="Masukkan Nominal" onkeyup="convertToRupiah(this);" data-program="" data-nama="<?= ($this->session->userdata('email')) ? $user['name'] : ''; ?>" data-email="<?= ($this->session->userdata('email')) ? $user['email'] : ''; ?>" data-telp="<?= ($this->session->userdata('email')) ? $user['no_telp'] : ''; ?>">
                             <label for="nominal">Nominal</label>
                         </div>
                     </div>
