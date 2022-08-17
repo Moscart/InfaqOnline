@@ -125,7 +125,7 @@
                         <select name="program" class="form-control" id="program">
                             <option value="#" selected disabled>Pilih program</option>
                             <?php foreach ($program as $p) : ?>
-                                <option value="<?= $p['nama_program']; ?>" data-maks="<?= $p['dana_program']; ?>"><?= $p['nama_program']; ?></option>
+                                <option value="<?= $p['nama_program']; ?>" data-maks="<?= $p['dana_program']; ?>"><?= ($p['nama_program'] == '') ? 'Tidak Bernama' : $p['nama_program']; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -182,7 +182,7 @@
                         <select name="programEdit" class="form-control" id="programEdit">
                             <option value="#" selected disabled>Pilih program</option>
                             <?php foreach ($program as $p) : ?>
-                                <option value="<?= $p['nama_program']; ?>" data-maks="<?= $p['dana_program']; ?>"><?= $p['nama_program']; ?></option>
+                                <option value="<?= $p['nama_program']; ?>" data-maks="<?= $p['dana_program']; ?>"><?= ($p['nama_program'] == '') ? 'Tidak Bernama' : $p['nama_program']; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>

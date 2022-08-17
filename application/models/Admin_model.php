@@ -226,7 +226,7 @@ class Admin_model extends CI_Model
 
     public function getProgramWithSumDana()
     {
-        return $this->db->select('DISTINCT(program) AS nama_program, SUM(nominal) AS dana_program')->from('transaksi_masuk')->where('program !=', '')->group_by('program')->get()->result_array();
+        return $this->db->select('DISTINCT(program) AS nama_program, SUM(nominal) AS dana_program')->from('transaksi_masuk')->group_by('program')->get()->result_array();
     }
 
     public function showProgram()
