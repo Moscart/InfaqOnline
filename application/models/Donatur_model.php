@@ -25,6 +25,6 @@ class Donatur_model extends CI_Model
 
     public function getHistoryDonatur($email)
     {
-        return $this->db->select('tgl, payment_type, order_id, nominal, status, program, pdf_url')->from('transaksi_masuk')->where('user_email', $email)->get()->result_array();
+        return $this->db->select('tgl, payment_type, order_id, nominal, status, program, pdf_url')->from('transaksi_masuk')->where('user_email', $email)->order_by('tgl', 'DESC')->get()->result_array();
     }
 }
