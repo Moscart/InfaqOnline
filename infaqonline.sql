@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 17, 2022 at 05:29 PM
+-- Generation Time: Aug 18, 2022 at 06:13 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.2.34
 
@@ -33,7 +33,7 @@ CREATE TABLE `artikel` (
   `link` varchar(150) NOT NULL,
   `tgl_upload` datetime NOT NULL,
   `judul` varchar(100) NOT NULL,
-  `banner` varchar(250) NOT NULL DEFAULT 'default-banner-infaq-online-4x4.jpg',
+  `banner` varchar(500) NOT NULL DEFAULT 'default-banner-infaq-online-4x4.jpg',
   `isi` text NOT NULL,
   `dilihat` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -43,7 +43,8 @@ CREATE TABLE `artikel` (
 --
 
 INSERT INTO `artikel` (`artikel_id`, `user_email`, `link`, `tgl_upload`, `judul`, `banner`, `isi`, `dilihat`) VALUES
-(1, 'admin@gmail.com', 'test-posting-dan-edit-artikel', '2022-08-14 20:16:54', 'Test Posting dan Edit Artikel', 'blog-header-design.jpg', '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi suscipit libero ratione, similique voluptatem vel, pariatur quibusdam, expedita provident perspiciatis repudiandae ipsam aperiam vero praesentium amet facilis autem ullam explicabo.</p>', 0);
+(1, 'admin@gmail.com', 'test-posting-dan-edit-artikel', '2022-08-14 20:16:54', 'Test Posting dan Edit Artikel', 'blog-header-design.jpg', '<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi suscipit libero ratione, similique voluptatem vel, pariatur quibusdam, expedita provident perspiciatis repudiandae ipsam aperiam vero praesentium amet facilis autem ullam explicabo.</p>', 9),
+(2, 'admin@gmail.com', 'ini-artikel-kedua', '2022-08-18 07:36:51', 'Ini Artikel Kedua', 'mix.jpg', '<p>lorem ipsum sit dolor amet</p>', 1);
 
 -- --------------------------------------------------------
 
@@ -57,16 +58,17 @@ CREATE TABLE `identitas` (
   `no_telp` varchar(15) NOT NULL,
   `alamat` varchar(250) NOT NULL,
   `nama_pimpinan` varchar(100) NOT NULL,
-  `favicon` varchar(250) NOT NULL,
-  `icon` varchar(100) NOT NULL
+  `favicon` varchar(500) NOT NULL,
+  `icon` varchar(100) NOT NULL,
+  `logo` varchar(500) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `identitas`
 --
 
-INSERT INTO `identitas` (`id_iden`, `nama_instansi`, `no_telp`, `alamat`, `nama_pimpinan`, `favicon`, `icon`) VALUES
-(1, 'Masjid Fikom UDB Surakarta', '(0271) 719552', 'Fakultas Ilmu Komputer Universitas Duta Bangsa, Jl. Bhayangkara No.55, Tipes, Kec. Serengan, Kota Surakarta, Jawa Tengah 57154', 'Takmir Masjid Fikom UDB Surakarta', 'default.ico', 'hand-holding-usd');
+INSERT INTO `identitas` (`id_iden`, `nama_instansi`, `no_telp`, `alamat`, `nama_pimpinan`, `favicon`, `icon`, `logo`) VALUES
+(1, 'Masjid Fikom UDB Surakarta', '(0271) 719552', 'Fakultas Ilmu Komputer Universitas Duta Bangsa, Jl. Bhayangkara No.55, Tipes, Kec. Serengan, Kota Surakarta, Jawa Tengah 57154', 'Takmir Masjid Fikom UDB Surakarta', 'default.ico', 'hand-holding-usd', 'kisspng-sadaqah-islam-android-application-package-baitul-m-5c87ac0e0bd907_1445821615523952780485-removebg-preview.png');
 
 -- --------------------------------------------------------
 
@@ -139,7 +141,7 @@ CREATE TABLE `program_detail` (
   `id_program` int(11) NOT NULL,
   `nama_detailprogram` varchar(100) NOT NULL,
   `deskripsi` text NOT NULL,
-  `banner` varchar(250) NOT NULL
+  `banner` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -199,17 +201,20 @@ CREATE TABLE `transaksi_masuk` (
 --
 
 INSERT INTO `transaksi_masuk` (`id`, `payment_type`, `tgl`, `order_id`, `user_nama`, `user_email`, `user_telp`, `nominal`, `status`, `program`, `pdf_url`) VALUES
-(1, NULL, '2022-08-15 20:26:02', 1947493830, 'User', 'user@gmail.com', '', 250000, 'settlement', 'Infak', NULL),
-(3, NULL, '2022-08-16 03:35:38', 1234900917, 'User', 'user@gmail.com', '', 100000, 'settlement', 'Infak', NULL),
-(4, 'bank_transfer', '2022-08-17 13:10:00', 1139106355, 'Anonymous', '', '', 10000, 'settlement', '', ''),
+(4, 'bank_transfer', '2022-09-08 13:10:00', 1139106355, 'Anonymous', '', '', 10000, 'settlement', '', ''),
 (5, 'bank_transfer', '2022-08-17 13:11:08', 260026762, 'Anonymous', '', '', 10000, 'settlement', 'Infak', ''),
-(7, 'bank_transfer', '2022-08-17 13:17:22', 2071073145, 'Anonymous', '', '', 10000, 'settlement', 'Infak', ''),
+(7, 'bank_transfer', '2022-07-14 13:17:22', 2071073145, 'Anonymous', '', '', 10000, 'settlement', 'Infak', ''),
 (9, 'bank_transfer', '2022-08-17 13:25:38', 1361395262, 'Anonymous', '', '', 10000, 'settlement', 'Infak', ''),
 (10, 'bank_transfer', '2022-08-17 13:26:53', 2145263383, 'Anonymous', '', '', 10000, 'settlement', 'Infak', ''),
 (11, 'bank_transfer', '2022-08-17 13:28:52', 173733355, 'Anonymous', '', '', 10000, 'settlement', 'Infak', ''),
 (12, 'bank_transfer', '2022-08-17 13:30:04', 323320558, 'Anonymous', '', '', 10000, 'settlement', 'Infak', ''),
 (13, 'bank_transfer', '2022-08-17 13:30:24', 1040773148, 'Anonymous', '', '', 10000, 'settlement', 'Infak', ''),
-(14, 'bank_transfer', '2022-08-17 13:37:24', 1826243934, 'User', 'user@gmail.com', '', 10000, 'settlement', 'Infak', '');
+(14, 'bank_transfer', '2022-08-17 13:37:24', 1826243934, 'User', 'user@gmail.com', '', 10000, 'settlement', 'Infak', ''),
+(15, 'bank_transfer', '2022-08-18 12:20:15', 114832540, 'Anonymous', '', '', 10000, 'settlement', 'Infak', ''),
+(16, 'bank_transfer', '2022-08-18 12:25:46', 499685363, 'User', 'user@gmail.com', '', 10000, 'settlement', 'Infak', ''),
+(17, 'bank_transfer', '2022-08-18 16:32:35', 2020653190, 'Anonymous', '', '', 10000, 'settlement', 'Infak', ''),
+(18, 'bank_transfer', '2022-08-18 16:35:06', 273405613, 'Anonymous', '', '', 10000, 'settlement', 'Infak', ''),
+(19, 'bank_transfer', '2022-08-18 16:41:25', 882423789, 'Anonymous', '', '', 10000, 'settlement', 'Infak', '');
 
 -- --------------------------------------------------------
 
@@ -439,7 +444,7 @@ ALTER TABLE `user_token`
 -- AUTO_INCREMENT for table `artikel`
 --
 ALTER TABLE `artikel`
-  MODIFY `artikel_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `artikel_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `menu_front`
@@ -469,7 +474,7 @@ ALTER TABLE `program_detail`
 -- AUTO_INCREMENT for table `transaksi_masuk`
 --
 ALTER TABLE `transaksi_masuk`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `user`
