@@ -247,7 +247,7 @@
                                 <i class="fas fa-question-circle"></i>
                             </abbr>
                         </label>
-                        <input type="text" name="url_pdfEdit" class="form-control" id="url_pdfEdit" placeholder="08.." autocomplete="off" maxlength="15">
+                        <input type="text" name="url_pdfEdit" class="form-control" id="url_pdfEdit" placeholder=".." autocomplete="off" maxlength="15">
                     </div>
                 </div>
                 <div class="modal-footer">

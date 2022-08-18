@@ -261,13 +261,22 @@ class Admin_model extends CI_Model
 
     public function getDataChart()
     {
-        $masuk = $this->db->query("SELECT DATE_FORMAT(transaksi_masuk.tgl , '%m') AS bulan, YEAR(transaksi_masuk.tgl) AS tahun, SUM(transaksi_masuk.nominal) AS nominal FROM transaksi_masuk WHERE transaksi_masuk.status = 'settlement' GROUP BY MONTH(transaksi_masuk.tgl) ORDER BY transaksi_masuk.tgl ASC LIMIT 12")->result_array();
-        $keluar = $this->db->query("SELECT DATE_FORMAT(transaksi_keluar.tgl , '%m') AS bulan, YEAR(transaksi_keluar.tgl) AS tahun, SUM(transaksi_keluar.nominal) AS nominal FROM transaksi_keluar GROUP BY MONTH(transaksi_keluar.tgl) ORDER BY transaksi_keluar.tgl ASC LIMIT 12")->result_array();
-        return [
-            'masuk' => $masuk,
-            'keluar' => $keluar
+        $angkaBulan = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+        $thisYear = date('Y', time());
+        $data = [
+            'tahun' => ['Jan ' . $thisYear, 'Feb ' . $thisYear, 'Mar ' . $thisYear, 'Apr ' . $thisYear, 'Mei ' . $thisYear, 'Jun ' . $thisYear, 'Jul ' . $thisYear, 'Agu ' . $thisYear, 'Sep ' . $thisYear, 'Okt ' . $thisYear, 'Nov ' . $thisYear, 'Des ' . $thisYear],
+            'masuk' => [],
+            'keluar' => []
         ];
-        // return $this->db->query("SELECT DATE_FORMAT(transaksi_masuk.tgl , '%m') AS bulan, YEAR(transaksi_masuk.tgl) AS tahun, SUM(transaksi_masuk.nominal) AS nominal FROM transaksi_masuk WHERE transaksi_masuk.status = 'settlement' GROUP BY MONTH(transaksi_masuk.tgl) ORDER BY transaksi_masuk.tgl ASC LIMIT 12")->result_array();
+        foreach ($angkaBulan as $ab) {
+            $masuk = $this->db->query("SELECT SUM(transaksi_masuk.nominal) AS nominal FROM transaksi_masuk WHERE transaksi_masuk.status = 'settlement' AND DATE_FORMAT(transaksi_masuk.tgl , '%m') = '$ab' AND YEAR(transaksi_masuk.tgl) = '$thisYear'")->row_array();
+            array_push($data['masuk'], ($masuk['nominal'] == '') ? 0 : $masuk['nominal']);
+        }
+        foreach ($angkaBulan as $ab) {
+            $keluar = $this->db->query("SELECT SUM(transaksi_keluar.nominal) AS nominal FROM transaksi_keluar WHERE DATE_FORMAT(transaksi_keluar.tgl , '%m') = '$ab' AND YEAR(transaksi_keluar.tgl) = '$thisYear'")->row_array();
+            array_push($data['keluar'], ($keluar['nominal'] == '') ? 0 : $keluar['nominal']);
+        }
+        return $data;
     }
 
     public function getDataPie()

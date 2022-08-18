@@ -23,7 +23,7 @@
                         <!-- form edit identitas -->
                         <form action="<?= base_url('admin/identitas'); ?>" method="post" class="mb-3">
                             <div class="form-group">
-                                <label for="namaInstansi">Nama Organisasi</label>
+                                <label for="namaInstansi">Nama Instansi</label>
                                 <input type="text" class="form-control" id="namaInstansi" name="namaInstansi" placeholder="Nama Organisasi..." value="<?= $identitas['nama_instansi']; ?>" required>
                                 <?= form_error('namaInstansi', '<small class="text-danger pl-1">', '</small>'); ?>
                             </div>

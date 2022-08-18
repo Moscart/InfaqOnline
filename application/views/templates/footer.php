@@ -219,13 +219,13 @@
                 var myLineChart = new Chart(ctx, {
                     type: 'line',
                     data: {
-                        labels: [<?php foreach ($chart['masuk'] as $dc) {
-                                        echo '"' . monthSqlToIndo($dc['bulan']) . ' ' . $dc['tahun'] . '",';
+                        labels: [<?php foreach ($chart['tahun'] as $dc) {
+                                        echo '"' . $dc . '",';
                                     } ?>],
                         datasets: [{
                                 label: "Masuk",
                                 lineTension: 0.3,
-                                backgroundColor: "rgba(78, 115, 223, 0.05)",
+                                backgroundColor: "rgba(78, 115, 223, 0.1)",
                                 borderColor: "rgba(78, 115, 223, 1)",
                                 pointRadius: 3,
                                 pointBackgroundColor: "rgba(78, 115, 223, 1)",
@@ -236,13 +236,13 @@
                                 pointHitRadius: 10,
                                 pointBorderWidth: 2,
                                 data: [<?php foreach ($chart['masuk'] as $dc) {
-                                            echo '"' . $dc['nominal'] . '",';
+                                            echo '"' . $dc . '",';
                                         } ?>],
                             },
                             {
                                 label: "Keluar",
                                 lineTension: 0.3,
-                                backgroundColor: "rgba(214, 117, 76, 0.5)",
+                                backgroundColor: "rgba(214, 117, 76, 0.1)",
                                 borderColor: "rgba(215, 103, 51, 1)",
                                 pointRadius: 3,
                                 pointBackgroundColor: "rgba(215, 103, 51, 1)",
@@ -253,7 +253,7 @@
                                 pointHitRadius: 10,
                                 pointBorderWidth: 2,
                                 data: [<?php foreach ($chart['keluar'] as $dc) {
-                                            echo '"' . $dc['nominal'] . '",';
+                                            echo '"' . $dc . '",';
                                         } ?>],
                             }
                         ],

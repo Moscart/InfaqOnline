@@ -49,7 +49,7 @@
                             <div class="col-12">
                                 <div class="bg-dark fs-7 text-white rounded-pill p-2">
                                     <div class="row px-3">
-                                        <div class="col-6 align-self-center fw-bold"><?= date('d', strtotime($ldm['tgl'])) . '/' . month(date('n', strtotime($ldm['tgl'])), 'mmm') . '/' . date('Y', strtotime($ldm['tgl'])); ?></div>
+                                        <div class="col-6 align-self-center fw-bold"><?= date('d', strtotime($ldm['tgl'])) . '/' . month(date('n', strtotime($ldm['tgl'])), 'mmm') . '/' . date('y', strtotime($ldm['tgl'])) . ' ' . date('H:i', strtotime($ldm['tgl'])); ?></div>
                                         <div class="col-6 text-end fw-bold text-muted">Rp<span class="text-warning fs-6"><?= format_rupiah($ldm['nominal']); ?></span></div>
                                     </div>
                                 </div>

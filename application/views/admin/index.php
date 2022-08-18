@@ -66,7 +66,7 @@
         <?php if ($totalDana > 0) : ?>
 
             <!-- rekap bulanan -->
-            <div class="col-lg-8">
+            <div class="col-lg-9">
                 <!-- Collapsable role -->
                 <div class="card shadow mb-4">
                     <!-- Card Header - Accordion -->
@@ -85,7 +85,7 @@
             </div>
 
             <!-- status transaksi -->
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Accordion -->
                     <a href="#collapseStatusTransaksi" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseStatusTransaksi">
