@@ -2,7 +2,7 @@
     <main>
         <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
-                <?php foreach ($artikel as $a) : ?>
+                <?php foreach ($banner as $a) : ?>
                     <div class="carousel-item active banner-container">
                         <img src="<?= base_url('assets/img/artikel/') . $a['banner']; ?>" class="d-block w-100 banner-content" alt="Banner <?= $a['judul']; ?>">
                     </div>
