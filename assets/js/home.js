@@ -148,7 +148,7 @@ $(document).on('click', "input[name='list-nominal']", function () {
 
 // ketika nominal dikeitk nominal dan sama dengan list nominal maka trigger checked
 $('#nominal').keyup(function () {
-    if (parseInt($(this).val()) < 0 && $(this).val() != '') {
+    if (parseInt($(this).val()) <= 0 && $(this).val() != '') {
         $(this).val('');
     }
     $.each($('input[name="list-nominal"]'), function () {
