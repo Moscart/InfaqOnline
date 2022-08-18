@@ -9,7 +9,7 @@ class Home extends CI_Controller
 		$this->load->model('Admin_model', 'admin');
 		if ($this->session->userdata('email')) $data['user'] = $this->db->select('name, email, no_telp')->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 		$data['identitas'] = $this->db->get('identitas')->row_array();
-		$data['banner'] = $this->db->select('banner')->order_by('RAND()')->get('artikel', 3)->result_array();
+		$data['banner'] = $this->db->select('banner, judul')->order_by('RAND()')->get('artikel', 3)->result_array();
 		$data['artikel'] = $this->db->get('artikel', 3)->result_array();
 		$data['nav'] = "home";
 		$data['frontendNav'] = $this->menu->showFrontendNav();

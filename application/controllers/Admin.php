@@ -679,10 +679,6 @@ class Admin extends CI_Controller
 
     public function laporanAction()
     {
-        // echo '<pre>';
-        // print_r($this->input->post());
-        // echo '</pre>';
-        // die;
         $this->load->model('Admin_model', 'admin');
         $data['identitas'] = $this->db->get('identitas')->row_array();
         $periode_lap = $this->input->post('periode_lap');
