@@ -82,9 +82,10 @@
                                             <span class="badge badge-<?= ($uwr['status'] == 'capture' || $uwr['status'] == 'settlement') ? 'info' : 'warning'; ?>"><?= strtoupper($uwr['status']); ?></span>
                                         </td>
                                         <td class="text-center">
-                                            <?php if ($uwr['status'] == 'capture' || $uwr['status'] == 'pending') : ?>
-                                                <a href="<?= base_url('admin/cekstatustransaksi/') . $uwr['order_id']; ?>" class="btn btn-sm mb-1 btn-dark" id="delTrsMasuk">Cek</a>
-                                            <?php endif; ?>
+                                            <!-- <?php if ($uwr['status'] == 'capture' || $uwr['status'] == 'pending') : ?>
+                                                <a href="<?= base_url('admin/cekstatustransaksi/') . $uwr['order_id']; ?>" class="btn btn-sm mb-1 btn-dark" id="cekTrsMasuk">Cek</a>
+                                                <?php endif; ?> -->
+                                            <a href="<?= base_url('admin/cekstatustransaksi/') . $uwr['order_id']; ?>" class="btn btn-sm mb-1 btn-dark" id="cekTrsMasuk">Cek</a>
                                             <a href="" class="btn btn-sm mb-1 btn-success" data-toggle="modal" data-target="#editTrsMasukModal" id="editTrsMasuk" data-idtrsmasuk="<?= $uwr['id']; ?>" data-nama="<?= $uwr['user_nama']; ?>" data-email="<?= $uwr['user_email']; ?>" data-telp="<?= $uwr['user_telp']; ?>" data-nominal="<?= $uwr['nominal']; ?>" data-program="<?= $uwr['program']; ?>" data-status="<?= $uwr['status']; ?>" data-urlpdf="<?= $uwr['pdf_url']; ?>">Edit</a>
                                             <a href="" data-href="<?= base_url('admin/deletetrsmasuk/') . $uwr['id']; ?>" class="btn btn-sm mb-1 btn-danger" data-toggle="modal" id="delTrsMasuk" data-target="#deleteTrsMasukModal">Delete</a>
                                         </td>

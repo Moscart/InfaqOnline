@@ -130,6 +130,43 @@ $('#editUserModal').on('hidden.bs.modal', function () {
     $('#enablePass').prop('checked', false).parent().show();
 });
 
+// preview logo in identitas
+$('#logoInstansi').change(function (e) {
+    let allowedTypes = ['image/gif', 'image/png', 'image/jpg', 'image/jpeg'];
+    let allowedSize = ['8388608']; //8 MB limit
+
+    let file = e.target.files[0];
+    let fileType = file.type;
+    let fileSize = file.size;
+
+    // jika format file diluar kriteria
+    if (!allowedTypes.includes(fileType)) {
+        $('#logoInstansi').next('.custom-file-label').removeClass('selected').html('Pilih file');
+        document.getElementById('previewLogoInstansi').src = `${windowOrigin}assets/img/default-banner-infaq-online-4x4.jpg`;
+        $('#isiErrorNotifModal').html(`Maaf ya, silakan pilih file yang valid (<strong>${allowedTypes.join(', ')}</strong>). File Anda : ${fileType}`);
+        $('#errorNotifModal').modal('show');
+        return false;
+    }
+    // jika file lebih besar dari ketentuan size
+    else if (fileSize > allowedSize) {
+        $('#logoInstansi').next('.custom-file-label').removeClass('selected').html('Pilih file');
+        document.getElementById('previewLogoInstansi').src = `${windowOrigin}assets/img/default-banner-infaq-online-4x4.jpg`;
+        $('#isiErrorNotifModal').html(`Ukuran file terlalu besar, maksimal ukuran yg disarankan <stong>${formatBytes(alloweSize)}</strong>`);
+        $('#errorNotifModal').modal('show');
+        return false;
+    }
+    // tampilkan preview gambar jika syarat terpenuhi 
+    else {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            // get loaded data and render thumbnail.
+            document.getElementById('previewLogoInstansi').src = e.target.result;
+        };
+        // read the image file as a data URL.
+        reader.readAsDataURL(this.files[0]);
+    }
+});
+
 // menu/editMenu
 $(document).on('click', '#editMenu', function () {
     $('#editMenu_id').val($(this).data('menuid'));
@@ -415,6 +452,10 @@ $(document).on('click', '#editTrsMasuk', function () {
 // admin deleteTrsMAsuk
 $(document).on('click', '#delTrsMasuk', function () {
     $('#cDelTrsMasuk').attr('href', $(this).data('href'));
+});
+
+$(document).on('click', '#cekTrsMasuk', function () {
+    $(this).addClass('disabled').html(`<div class="spinner-border spinner-border-sm text-light" role="status"><span class="sr-only">Loading...</span></div>`);
 });
 
 // close add trs keluar

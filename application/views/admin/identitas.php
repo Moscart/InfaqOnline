@@ -21,7 +21,18 @@
                 <div class="collapse show" id="collapseIdentitasUmum">
                     <div class="card-body">
                         <!-- form edit identitas -->
-                        <form action="<?= base_url('admin/identitas'); ?>" method="post" class="mb-3">
+                        <form action="<?= base_url('admin/identitas'); ?>" method="post" enctype="multipart/form-data">
+                            <div class="form-group mb-3 text-center">
+                                <img src="<?= ($identitas['logo'] == '') ? base_url('assets/img/default-banner-infaq-online-4x4.jpg') : base_url('assets/img/logo/') . $identitas['logo']; ?>" alt="logo <?= $identitas['nama_instansi']; ?>" class="img-thumbnail w-25" id="previewLogoInstansi">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="logoInstansi">Logo</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="logoInstansi" name="logoInstansi">
+                                    <label class="custom-file-label" for="logoInstansi" data-browse="Browse">Pilih file</label>
+                                </div>
+                                <?= form_error('banner', '<small class="text-danger pl-1">', '</small>'); ?>
+                            </div>
                             <div class="form-group">
                                 <label for="namaInstansi">Nama Instansi</label>
                                 <input type="text" class="form-control" id="namaInstansi" name="namaInstansi" placeholder="Nama Organisasi..." value="<?= $identitas['nama_instansi']; ?>" required>
@@ -42,13 +53,21 @@
                                 <input type="text" class="form-control" id="namaPimpinan" name="namaPimpinan" placeholder="Pemilik Apotek..." value="<?= $identitas['nama_pimpinan']; ?>" required>
                                 <?= form_error('namaPimpinan', '<small class="text-danger pl-1">', '</small>'); ?>
                             </div>
-
                             <div class="form-group">
                                 <input type="hidden" name="typePost" value="<?= base64_encode('umum'); ?>">
+                                <input type="hidden" name="logoOld" value="<?= $identitas['logo']; ?>">
                                 <button type="submit" class="btn btn-block btn-primary">Edit</button>
                             </div>
-
                         </form>
+                        <?php if ($identitas['logo'] != '') : ?>
+                            <form action="<?= base_url('admin/identitas'); ?>" method="post" class="mt-n2">
+                                <div class="form-group">
+                                    <input type="hidden" name="typePost" value="<?= base64_encode('deleteLogo'); ?>">
+                                    <input type="hidden" name="logoOld" value="<?= $identitas['logo']; ?>">
+                                    <button type="submit" class="btn btn-block btn-danger">Delete Logo</button>
+                                </div>
+                            </form>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -128,3 +147,21 @@
 
 </div>
 <!-- End of Main Content -->
+
+<!-- modal error upload gambar -->
+<div class="modal fade" id="errorNotifModal" tabindex="-1" role="dialog" aria-labelledby="errorNotifModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorNotifModalTitle">Halo...</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="isiErrorNotifModal"> </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

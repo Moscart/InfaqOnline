@@ -12,7 +12,7 @@
     <!-- Content Row -->
     <div class="row mb-3">
 
-        <!-- add trs masuk -->
+        <!-- add trs keluar -->
         <div class="col-lg-12 mb-3">
             <div class="card shadow">
                 <div class="my-auto card-body py-3 d-sm-flex align-items-center justify-content-between">

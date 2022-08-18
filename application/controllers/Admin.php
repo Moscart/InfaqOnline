@@ -234,6 +234,17 @@ class Admin extends CI_Controller
                     $alamat = htmlspecialchars($this->input->post('alamat'));
                     $no_telp = htmlspecialchars($this->input->post('noTelp'));
                     $pemilik = htmlspecialchars($this->input->post('namaPimpinan'));
+                    // for logo
+                    if ($_FILES['logoInstansi']['name']) {
+                        $config['allowed_types'] = 'ico|jpg|jpeg|png|webp';
+                        $config['max_size']     = '8192'; //in KB
+                        $config['upload_path'] = './assets/img/logo/';
+                        $this->load->library('upload', $config);
+                        if ($this->upload->do_upload('logoInstansi')) {
+                            if ($this->input->post('logoOld') != '' || $this->upload->data('file_name') != $this->input->post('logoOld')) unlink(FCPATH . 'assets/img/logo/' . $this->input->post('logoOld'));
+                        }
+                    }
+                    $this->db->set('logo', ($_FILES['logoInstansi']['name']) ? $this->upload->data('file_name') : $this->input->post('logoOld'));
                     $this->db->set('nama_instansi', $nama);
                     $this->db->set('alamat', $alamat);
                     $this->db->set('no_telp', $no_telp);
@@ -297,6 +308,14 @@ class Admin extends CI_Controller
                     } else {
                         $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert"><strong>Gagal memperbarui icon.</div>');
                     }
+                    break;
+                case 'deleteLogo':
+                    if (unlink(FCPATH . 'assets/img/logo/' . $this->input->post('logoOld'))) {
+                        $this->db->set('logo', '');
+                        $this->db->where('id_iden', 1);
+                        if ($this->db->update('identitas')) $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Berhasil hapus logo, coba llagi nantit.</div>');
+                        else $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert"><strong>Gagal hapus logo, coba llagi nanti.</div>');
+                    } else $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert"><strong>Gagal hapus logo, coba llagi nanti.</div>');
                     break;
             }
             redirect('admin/identitas');
