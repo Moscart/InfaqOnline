@@ -200,7 +200,14 @@
                 });
             });
         </script>
-    <?php elseif ($this->uri->segment(1) == 'admin' && $this->uri->segment(2) == null && $totalDana > 0) : ?>
+    <?php elseif ($this->uri->segment(1) == 'admin' && $this->uri->segment(2) == null && $totalDana > 0) :
+
+        // echo '<pre>';
+        // print_r($chart);
+        // echo '</pre>';
+        // die;
+
+    ?>
         <script>
             $(document).ready(function() {
                 // Set new default font family and font color to mimic Bootstrap's default styling
@@ -212,26 +219,44 @@
                 var myLineChart = new Chart(ctx, {
                     type: 'line',
                     data: {
-                        labels: [<?php foreach ($chart as $dc) {
+                        labels: [<?php foreach ($chart['masuk'] as $dc) {
                                         echo '"' . monthSqlToIndo($dc['bulan']) . ' ' . $dc['tahun'] . '",';
                                     } ?>],
                         datasets: [{
-                            label: "Total",
-                            lineTension: 0.3,
-                            backgroundColor: "rgba(78, 115, 223, 0.05)",
-                            borderColor: "rgba(78, 115, 223, 1)",
-                            pointRadius: 3,
-                            pointBackgroundColor: "rgba(78, 115, 223, 1)",
-                            pointBorderColor: "rgba(78, 115, 223, 1)",
-                            pointHoverRadius: 3,
-                            pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-                            pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-                            pointHitRadius: 10,
-                            pointBorderWidth: 2,
-                            data: [<?php foreach ($chart as $dc) {
-                                        echo '"' . $dc['nominal'] . '",';
-                                    } ?>],
-                        }],
+                                label: "Masuk",
+                                lineTension: 0.3,
+                                backgroundColor: "rgba(78, 115, 223, 0.05)",
+                                borderColor: "rgba(78, 115, 223, 1)",
+                                pointRadius: 3,
+                                pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                                pointBorderColor: "rgba(78, 115, 223, 1)",
+                                pointHoverRadius: 3,
+                                pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                                pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                                pointHitRadius: 10,
+                                pointBorderWidth: 2,
+                                data: [<?php foreach ($chart['masuk'] as $dc) {
+                                            echo '"' . $dc['nominal'] . '",';
+                                        } ?>],
+                            },
+                            {
+                                label: "Keluar",
+                                lineTension: 0.3,
+                                backgroundColor: "rgba(214, 117, 76, 0.5)",
+                                borderColor: "rgba(215, 103, 51, 1)",
+                                pointRadius: 3,
+                                pointBackgroundColor: "rgba(215, 103, 51, 1)",
+                                pointBorderColor: "rgba(215, 103, 51, 1)",
+                                pointHoverRadius: 3,
+                                pointHoverBackgroundColor: "rgba(215, 103, 51, 1)",
+                                pointHoverBorderColor: "rgba(215, 103, 51, 1)",
+                                pointHitRadius: 10,
+                                pointBorderWidth: 2,
+                                data: [<?php foreach ($chart['keluar'] as $dc) {
+                                            echo '"' . $dc['nominal'] . '",';
+                                        } ?>],
+                            }
+                        ],
                     },
                     options: {
                         maintainAspectRatio: false,
