@@ -2,7 +2,7 @@
 <footer class="sticky-footer bg-white">
     <div class="container my-auto">
         <div class="copyright text-center my-auto">
-            Made With <i class="fas fa-heart text-danger"></i> Infaq Online<br><?= $identitas['nama_instansi']; ?>
+            Made With <i class="fas fa-heart text-danger"></i> Infak Online<br><?= $identitas['nama_instansi']; ?>
         </div>
     </div>
 </footer>

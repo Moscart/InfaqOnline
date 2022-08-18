@@ -8,8 +8,8 @@ INFAQ ONLINE - web based application with 3rd-party payment gateway (midtrans)
 Abstract
 *******************
 
-- Kehadiran internet memudahkan kegiatan manusia salah satunya dalam beribadah khususnya berinfaq/sodakoh.
-- Diperlukan portal/wadah untuk mempermudah infaq bagi orang-orang yang ingin bersedekah.
+- Kehadiran internet memudahkan kegiatan manusia salah satunya dalam beribadah khususnya berinfak/sodakoh.
+- Diperlukan portal/wadah untuk mempermudah infak bagi orang-orang yang ingin bersedekah.
 - Dibuatkan sebuah aplikasi berbasis web dengan fitur rest api, agar kedepannya aplikasi ini bisa dikembangkan
 tidak hanya dalam bentuk web tetapi bisa juga untuk android, atau basis aplikasi lainnya.
 

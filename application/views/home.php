@@ -22,7 +22,7 @@
                 <div class="col-lg-6 col-12">
                     <div class="card shadow bg-dark border-0 position-relative">
                         <div class="w-max pe-4 mt-4 p-3 rounded-start rounded-pill bg-warning fs-7 fw-bold text-uppercase">
-                            Total Infaq
+                            Total Infak
                         </div>
                         <div class="position-absolute text-white end-0 top-0">
                             <div class="row gx-2 me-3">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6 col-12">
-                    <h3 class="fw-bolder text-uppercase fs-4">Infaq Terbaru</h3>
+                    <h3 class="fw-bolder text-uppercase fs-4">Infak Terbaru</h3>
                     <div class="row gy-1">
                         <?php foreach ($lastDanaMasuk as $ldm) : ?>
                             <div class="col-12">
@@ -87,7 +87,7 @@
                     <img src="https://img.freepik.com/premium-vector/love-charity-giving-donation-via-volunteer-team-worked-together-help-collect-donations-poster-banner-flat-design-illustration_2175-2450.jpg?w=2000" class="w-100 rounded-5 shadow" alt="">
                 </div>
                 <div class="col-lg-4 col-12 my-auto">
-                    <div class="fs-4 fw-bold text-center mb-2">INFAQ</div>
+                    <div class="fs-4 fw-bold text-center mb-2">INFAK</div>
                     <div class="text-center text-center mb-3">
                         Berbagi dengan orang lain adalah bentuk terbaik dari mensyukuri apa yang telah kita dapatkan. Infak lebih mudah dan terpercaya di sini.
                     </div>
