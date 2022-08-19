@@ -20,9 +20,8 @@
             <a class="navbar-brand" href="<?= base_url(); ?>">
                 <?php if ($identitas['logo'] != '') : ?>
                     <img src="<?= base_url('assets/img/logo/') . $identitas['logo']; ?>" alt="Logo <?= $identitas['nama_instansi']; ?>" width="24" height="24" class="d-inline-block align-text-top">
-                    <?= $identitas['nama_instansi']; ?>
-                <?php else : echo $identitas['nama_instansi'];
-                endif; ?>
+                <?php endif; ?>
+                <?= $identitas['nama_instansi']; ?>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>

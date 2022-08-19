@@ -677,7 +677,12 @@ class Admin extends CI_Controller
             $this->db->where('order_id', $order_id);
             if ($this->db->update('transaksi_masuk')) $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert"><strong>' . $order_id . '</strong> sekarang sudah <strong>' . $status->transaction_status . '</strong>.</div>');
             else $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert"><strong>' . $order_id . '</strong> sekarang sudah <strong>' . $status->transaction_status . '</strong>, namun gagal update status di database.</div>');
-        } else $this->session->set_flashdata('message', '<div class="alert alert-warning" role="alert"><strong>' . $order_id . '</strong> sekarang berstatus <strong>' . $status->transaction_status . '</strong></div>');
+        } else {
+            if ($status->pdf_url == null) $this->db->update('transaksi_masuk', [
+                'status' => $status->transaction_status, 'pdf_url' => ''
+            ], 'order_id', $order_id);
+            $this->session->set_flashdata('message', '<div class="alert alert-warning" role="alert"><strong>' . $order_id . '</strong> sekarang berstatus <strong>' . $status->transaction_status . '</strong></div>');
+        }
         redirect('admin/trsmasuk');
     }
 
